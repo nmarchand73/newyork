@@ -2,7 +2,7 @@ import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./styles.css";
 
-type Borough = "Queens" | "Manhattan" | "Brooklyn" | "Liberty Island";
+type Borough = "Queens" | "Manhattan" | "Brooklyn" | "New York Harbor";
 type Category = "Incontournable" | "Musée" | "Parc" | "Quartier" | "Pause" | "Transport";
 type Filter = "Tous" | Borough | "Incontournables" | "Musées" | "Quartiers";
 
@@ -80,7 +80,7 @@ const heroImage =
   "https://commons.wikimedia.org/wiki/Special:FilePath/Manhattan_Skyline_from_Brooklyn_Bridge_Park_November_2021.jpg";
 const heroImageQuery = "Manhattan skyline Brooklyn Bridge Park New York City";
 const commonsApiUrl = "https://commons.wikimedia.org/w/api.php";
-const commonsCacheKey = "nyc-2026-commons-image-cache-v7";
+const commonsCacheKey = "nyc-2026-commons-image-cache-v8";
 const commonsCacheMaxAgeMs = 1000 * 60 * 60 * 24 * 14;
 
 const sites: Site[] = [
@@ -88,14 +88,15 @@ const sites: Site[] = [
     id: "hotel",
     title: "Wingate by Wyndham Long Island City",
     image:
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Long_Island_City_from_the_East_River.jpg",
+      "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/b5/46/53/exterior.jpg?w=1200&h=800&s=1",
+    imageQuery: "Wingate by Wyndham Long Island City 38-70 12th Street",
     description:
       "Votre base familiale à Long Island City : Wingate by Wyndham Long Island City, 38-70 12th Street, Queens, NY 11101.",
-    tip: "Gardez cette fiche comme point de repère : retour simple en métro, pause possible en journée et départ aéroport depuis l'hôtel.",
+    tip: "Gardez cette fiche comme point de repère : adresse prête pour taxi/VTC, retour en métro à vérifier selon la ligne et départ aéroport depuis l'hôtel.",
     borough: "Queens",
     category: "Transport",
     duration: "Base séjour",
-    map: { label: "🏨", lat: 40.7578, lng: -73.9419 },
+    map: { label: "🏨", lat: 40.7567, lng: -73.9427 },
   },
   {
     id: "fireworks",
@@ -104,7 +105,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/Macy%27s_4th_of_July_Fireworks_2011_-_New_York_City.jpg",
     description:
       "À voir seulement si tout le monde garde de l'énergie après l'arrivée. La foule est très importante autour des grands points de vue.",
-    tip: "Depuis Queens, privilégier une vue locale plutôt qu'un grand déplacement le soir de l'arrivée.",
+    tip: "Le soir de l'arrivée, ne viser le feu d'artifice que si le lieu officiel 2026 et l'énergie familiale le permettent.",
     borough: "Manhattan",
     category: "Incontournable",
     duration: "Option soirée",
@@ -115,7 +116,7 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Gantry_Plaza_State_Park_2012.jpg",
     description:
       "Vue magnifique sur la skyline depuis Long Island City, très proche de l'hôtel et facile à refaire plusieurs fois.",
-    tip: "Parfait le premier soir, le matin du départ ou au coucher du soleil.",
+    tip: "Très pratique depuis Long Island City : parfait pour une sortie courte au coucher du soleil ou une pause sans traverser Manhattan.",
     borough: "Queens",
     category: "Parc",
     duration: "45 min",
@@ -127,7 +128,7 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/1_times_square_night_2013.jpg",
     description:
       "Le New York lumineux et spectaculaire : écrans géants, magasins, ambiance permanente. Idéal pour le premier contact avec Manhattan.",
-    tip: "Meilleur moment : fin d'après-midi ou soirée.",
+    tip: "Passage court conseillé : fin d'après-midi ou soirée pour les lumières, mais éviter d'y rester longtemps si la foule fatigue les enfants.",
     borough: "Manhattan",
     category: "Incontournable",
     duration: "45 min",
@@ -139,7 +140,7 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Bryant_Park_New_York_City.jpg",
     description:
       "Parc agréable derrière la bibliothèque, parfait pour une pause fraîcheur, un café ou quelques photos.",
-    tip: "À combiner avec la New York Public Library.",
+    tip: "Bonne pause entre Times Square et la bibliothèque ; viser une table à l'ombre ou un passage court selon la chaleur.",
     borough: "Manhattan",
     category: "Pause",
     duration: "30 min",
@@ -151,9 +152,9 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/New_York_Public_Library_-_Main_Branch.jpg",
     description:
       "Magnifique bâtiment Beaux-Arts, entrée impressionnante, lions iconiques et salles historiques.",
-    tip: "Visite courte possible : 30 à 45 minutes.",
+    tip: "Visite courte possible, mais vérifier les salles ouvertes si vous voulez voir la Rose Main Reading Room.",
     borough: "Manhattan",
-    category: "Musée",
+    category: "Incontournable",
     duration: "45 min",
   },
   {
@@ -162,8 +163,8 @@ const sites: Site[] = [
     image:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Grand_Central_Terminal_Main_Concourse_Jan_2006.jpg",
     description:
-      "Grande gare mythique avec plafond étoilé, architecture spectaculaire et food court pratique.",
-    tip: "Pause idéale si météo chaude ou pluie.",
+      "Grande gare mythique avec plafond astronomique, architecture spectaculaire et Dining Concourse pratique.",
+    tip: "Pause idéale si météo chaude ou pluie ; vérifier les horaires des commerces si vous comptez y manger.",
     borough: "Manhattan",
     category: "Transport",
     duration: "30 min",
@@ -175,7 +176,7 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Rockefeller_Center_New_York.jpg",
     description:
       "Complexe emblématique de Midtown : Channel Gardens, patinoire hors saison transformée, boutiques et animations.",
-    tip: "Très photogénique autour de la 5th Avenue.",
+    tip: "À faire en passage entre la 5th Avenue, St. Patrick's Cathedral et Top of the Rock plutôt qu'en visite longue.",
     borough: "Manhattan",
     category: "Incontournable",
     duration: "30 min",
@@ -186,7 +187,7 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Top_of_the_Rock_View.jpg",
     description:
       "Observatoire avec vue très lisible sur Central Park et l'Empire State Building. Bon choix en famille.",
-    tip: "Réserver un créneau proche du coucher du soleil si possible.",
+    tip: "Réserver un créneau à l'avance ; le coucher du soleil est très demandé et plus fatigant avec les files.",
     borough: "Manhattan",
     category: "Incontournable",
     duration: "1 h 30",
@@ -198,10 +199,10 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Statue_of_Liberty_7.jpg",
     description:
       "Symbole de New York et des États-Unis. Le ferry donne aussi de superbes vues sur Manhattan.",
-    tip: "Réserver le bateau tôt ; éviter les sacs volumineux.",
-    borough: "Liberty Island",
+    tip: "Réserver tôt via Statue City Cruises et éviter les sacs volumineux à cause des contrôles de sécurité.",
+    borough: "New York Harbor",
     category: "Incontournable",
-    duration: "3 h",
+    duration: "2 h 30",
     map: { label: "11", lat: 40.6892, lng: -74.0445 },
   },
   {
@@ -210,10 +211,10 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Ellis_Island_Main_Building.jpg",
     description:
       "Musée de l'immigration, émouvant et intéressant pour comprendre l'histoire des arrivées à New York.",
-    tip: "Prévoir 1 h à 1 h 30 selon l'intérêt des enfants.",
-    borough: "Liberty Island",
+    tip: "Prévoir une visite sélective : Great Hall, exposition principale et audio-guide si les enfants accrochent.",
+    borough: "New York Harbor",
     category: "Musée",
-    duration: "1 h 30",
+    duration: "1 h 15",
   },
   {
     id: "wall-street",
@@ -221,7 +222,7 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/New_York_Stock_Exchange_Front.jpg",
     description:
       "Quartier financier : New York Stock Exchange, Federal Hall, rues étroites et ambiance business.",
-    tip: "Visite courte, surtout pour les photos.",
+    tip: "À garder court : rues étroites, beaucoup de monde en semaine, intérêt surtout photo et histoire.",
     borough: "Manhattan",
     category: "Quartier",
     duration: "30 min",
@@ -233,7 +234,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/Oculus_World_Trade_Center_Transportation_Hub.jpg",
     description:
       "Architecture blanche spectaculaire, centre commercial et gare sous le World Trade Center.",
-    tip: "Très pratique pour une pause climatisée.",
+    tip: "Bon refuge en cas de chaleur ou pluie, avec accès pratique aux transports et au centre commercial.",
     borough: "Manhattan",
     category: "Transport",
     duration: "30 min",
@@ -245,7 +246,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/National_September_11_Memorial_%26_Museum.jpg",
     description:
       "Lieu de mémoire sobre et impressionnant, avec les deux bassins à l'emplacement des tours.",
-    tip: "Avec ados : expliquer avant la visite pour donner du contexte.",
+    tip: "Avec enfants/ados, expliquer le lieu avant d'arriver et garder le passage sobre et pas trop long.",
     borough: "Manhattan",
     category: "Incontournable",
     duration: "45 min",
@@ -257,7 +258,7 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Bridge_Postdlf.jpg",
     description:
       "Traversée iconique à pied avec vues sur Manhattan, câbles et skyline.",
-    tip: "Commencer côté Manhattan et terminer à DUMBO.",
+    tip: "Commencer côté Manhattan si vous voulez finir par DUMBO, en gardant eau et casquettes à portée.",
     borough: "Brooklyn",
     category: "Incontournable",
     duration: "1 h",
@@ -270,7 +271,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/Manhattan_Bridge_from_Dumbo_Brooklyn.jpg",
     description:
       "Quartier photo incontournable, notamment Washington Street avec le Manhattan Bridge.",
-    tip: "Très fréquenté : venir matin ou fin de journée.",
+    tip: "Très fréquenté autour de Washington Street : venir tôt ou accepter une photo rapide sans attendre la scène parfaite.",
     borough: "Brooklyn",
     category: "Quartier",
     duration: "1 h",
@@ -282,7 +283,7 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Janes_Carousel_Brooklyn.jpg",
     description:
       "Carrousel vintage sous verrière, au bord de l'East River. Même sans monter, le lieu est beau.",
-    tip: "À combiner avec Brooklyn Bridge Park.",
+    tip: "À combiner avec Brooklyn Bridge Park ; vérifier horaires si vous promettez un tour de carrousel.",
     borough: "Brooklyn",
     category: "Pause",
     duration: "20 min",
@@ -294,7 +295,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Bridge_Park_Manhattan_Skyline.jpg",
     description:
       "Grand parc au bord de l'eau avec vues magnifiques sur Lower Manhattan.",
-    tip: "Parfait pour repos, glace, photos et coucher de soleil.",
+    tip: "Parfait pour repos, glace et skyline ; prévoir le retour avant que tout le monde soit épuisé.",
     borough: "Brooklyn",
     category: "Parc",
     duration: "1 h",
@@ -306,7 +307,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/Central_Park_New_York_City_New_York_23_crop.jpg",
     description:
       "Le grand bol d'air de Manhattan : lacs, pelouses, ponts, artistes de rue.",
-    tip: "Ne pas vouloir tout faire : viser une zone.",
+    tip: "Ne pas vouloir tout faire : choisir une zone et garder de l'eau, surtout en juillet.",
     borough: "Manhattan",
     category: "Parc",
     duration: "2 h",
@@ -319,7 +320,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/Bethesda_Terrace_and_Fountain,_Central_Park.jpg",
     description:
       "Un des plus beaux endroits de Central Park : fontaine, arcade, musiciens, vue sur le lac.",
-    tip: "Très beau en milieu de matinée.",
+    tip: "Très beau en milieu de matinée, mais rester flexible car la zone peut être très fréquentée.",
     borough: "Manhattan",
     category: "Parc",
     duration: "30 min",
@@ -331,10 +332,10 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/American_Museum_of_Natural_History_New_York_City.jpg",
     description:
       "Dinosaures, planétarium, baleine bleue : excellent choix avec enfants et ados.",
-    tip: "Choisir 2 ou 3 zones, pas tout le musée.",
+    tip: "Choisir 2 ou 3 zones maximum et réserver le planétarium séparément seulement si la famille en a vraiment envie.",
     borough: "Manhattan",
     category: "Musée",
-    duration: "2 h 30",
+    duration: "Option 2 h 30",
     map: { label: "5", lat: 40.7813, lng: -73.9735 },
   },
   {
@@ -344,10 +345,10 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/Metropolitan_Museum_of_Art_%28The_Met%29_-_Central_Park.jpg",
     description:
       "Immense musée d'art : Égypte, armures, peinture européenne, rooftop selon saison.",
-    tip: "À préférer si la famille aime l'histoire et l'art.",
+    tip: "À préférer si la famille aime l'histoire et l'art ; sinon garder AMNH comme option plus accessible avec enfants.",
     borough: "Manhattan",
     category: "Musée",
-    duration: "2 h",
+    duration: "Option 2 h",
     map: { label: "6", lat: 40.7794, lng: -73.9632 },
   },
   {
@@ -356,7 +357,7 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Hudson_Yards_from_High_Line_2019.jpg",
     description:
       "Quartier moderne, buildings récents, accès direct à la High Line.",
-    tip: "Bon point de départ avec la ligne 7.",
+    tip: "Bon point de départ avec la ligne 7, avant de descendre la High Line vers Chelsea.",
     borough: "Manhattan",
     category: "Quartier",
     duration: "45 min",
@@ -368,11 +369,11 @@ const sites: Site[] = [
     image:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Vessel_%28structure%29_from_Hudson_Yards.jpg",
     description:
-      "Structure monumentale de Hudson Yards, très photogénique depuis l'extérieur.",
-    tip: "Vérifier les conditions d'accès avant visite.",
+      "Structure monumentale de Hudson Yards, à voir depuis la plaza ou avec billet si l'accès intérieur est ouvert.",
+    tip: "Vérifier horaires, billets et règles d'accès sur le site officiel le jour de la visite.",
     borough: "Manhattan",
-    category: "Incontournable",
-    duration: "20 min",
+    category: "Quartier",
+    duration: "15-30 min",
   },
   {
     id: "high-line",
@@ -381,7 +382,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/High_Line_20th_Street_looking_downtown.jpg",
     description:
       "Ancienne voie ferrée transformée en promenade végétalisée au-dessus des rues.",
-    tip: "Marcher de Hudson Yards vers Chelsea Market.",
+    tip: "Marcher de Hudson Yards vers Chelsea Market pour finir sur une pause déjeuner/clim plus facile.",
     borough: "Manhattan",
     category: "Parc",
     duration: "1 h 15",
@@ -393,18 +394,18 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Chelsea_Market,_NYC.jpg",
     description:
       "Marché couvert avec food stalls, boutiques et ambiance industrielle.",
-    tip: "Très pratique pour déjeuner en famille.",
+    tip: "Très pratique pour déjeuner, mais choisir un point de rendez-vous car le marché peut être dense.",
     borough: "Manhattan",
     category: "Pause",
-    duration: "1 h",
+    duration: "1 h 15",
   },
   {
     id: "little-island",
     title: "Little Island",
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Little_Island_New_York_City.jpg",
     description:
-      "Parc suspendu sur l'Hudson, original et agréable pour une pause.",
-    tip: "À faire après Chelsea Market si tout le monde a encore envie de marcher.",
+      "Parc public construit sur des piliers au-dessus de l'Hudson, original et agréable pour une pause.",
+    tip: "À garder optionnel après Chelsea Market ; vérifier l'accès si événement ou forte affluence.",
     borough: "Manhattan",
     category: "Parc",
     duration: "45 min",
@@ -415,10 +416,10 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/MoMA_PS1_courtyard.jpg",
     description:
       "Centre d'art contemporain à Long Island City, plus alternatif que les grands musées classiques.",
-    tip: "À faire si vous voulez une visite courte et locale.",
+    tip: "À faire seulement si une exposition vous intéresse ; vérifier horaires et jours d'ouverture avant de partir.",
     borough: "Queens",
     category: "Musée",
-    duration: "1 h",
+    duration: "Option 1 h",
   },
   {
     id: "flushing",
@@ -426,10 +427,10 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Main_Street_Flushing_Queens_NY.jpg",
     description:
       "Quartier vivant du Queens, connu pour sa cuisine asiatique et son ambiance très différente de Manhattan.",
-    tip: "Y aller avec la ligne 7 jusqu'au terminus Flushing-Main St.",
+    tip: "Y aller avec la ligne 7 jusqu'à Flushing-Main St et choisir une adresse food avant d'arriver.",
     borough: "Queens",
     category: "Quartier",
-    duration: "2 h",
+    duration: "Option 2 h",
     map: { label: "15", lat: 40.759, lng: -73.8297 },
   },
   {
@@ -438,10 +439,10 @@ const sites: Site[] = [
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Astoria_Park_Hell_Gate_Bridge.jpg",
     description:
       "Quartier agréable du Queens, restaurants grecs, Astoria Park et vue sur les ponts.",
-    tip: "Bonne option dîner plus calme.",
+    tip: "Bonne option dîner plus locale ; vérifier le retour métro selon l'heure et la fatigue.",
     borough: "Queens",
     category: "Quartier",
-    duration: "1 h 30",
+    duration: "Option soirée",
     map: { label: "16", lat: 40.7797, lng: -73.922 },
   },
   {
@@ -451,7 +452,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/SoHo_Cast_Iron_Historic_District.jpg",
     description:
       "Boutiques, façades cast-iron, rues animées et très photogéniques.",
-    tip: "Prévoir du temps libre pour shopping.",
+    tip: "Prévoir du temps libre, mais fixer un point de rendez-vous si le groupe se sépare pour les boutiques.",
     borough: "Manhattan",
     category: "Quartier",
     duration: "1 h",
@@ -464,7 +465,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/Canal_Street_Chinatown_New_York_City.jpg",
     description:
       "Rues denses, restaurants, snacks, marchés et ambiance unique.",
-    tip: "Idéal pour déjeuner simple et dépaysant.",
+    tip: "Idéal pour un déjeuner/snack, avec un peu de souplesse car certaines adresses sont petites ou très fréquentées.",
     borough: "Manhattan",
     category: "Quartier",
     duration: "1 h",
@@ -477,7 +478,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/Mulberry_Street_Little_Italy_New_York.jpg",
     description:
       "Petite zone historique autour de Mulberry Street, restaurants italiens et décor touristique.",
-    tip: "À voir en passant depuis Chinatown.",
+    tip: "À voir en passage court depuis Chinatown, sans en faire une étape longue.",
     borough: "Manhattan",
     category: "Quartier",
     duration: "30 min",
@@ -489,7 +490,7 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/Washington_Square_Park_Arch.jpg",
     description:
       "Parc vivant de Greenwich Village, arche célèbre, musiciens, étudiants et ambiance locale.",
-    tip: "Très bon final après SoHo/Chinatown.",
+    tip: "Très bon final après SoHo/Chinatown pour s'asseoir, observer l'ambiance et laisser retomber le rythme.",
     borough: "Manhattan",
     category: "Parc",
     duration: "45 min",
@@ -497,10 +498,10 @@ const sites: Site[] = [
   {
     id: "airport",
     title: "Aéroport / départ",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/JFK_Airport_Terminal_4.jpg",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/AirTrain_JFK_Terminal_4.jpg",
     description:
       "Dernier jour dédié au départ : check-out, transfert et marge confortable pour les contrôles. Aucun autre programme n'est prévu.",
-    tip: "Point placé sur JFK par défaut ; à ajuster si le vol part de LaGuardia ou Newark.",
+    tip: "Point placé sur JFK par défaut ; confirmer l'aéroport, le terminal et le temps de trajet la veille du départ.",
     borough: "Queens",
     category: "Transport",
     duration: "Départ",
@@ -514,10 +515,11 @@ const days: DayPlan[] = [
     date: "Samedi 4 juillet",
     title: "Arrivée, douanes et installation",
     image:
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Macy%27s_4th_of_July_Fireworks_2011_-_New_York_City.jpg",
-    summary: "Arrivée à 19 h : prévoyez 2 h à 2 h 30 pour douanes, bagages et transfert.",
+      "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/b5/46/53/exterior.jpg?w=1200&h=800&s=1",
+    summary:
+      "Jour d'atterrissage : on ne cherche pas à “visiter New York”, on réussit l'arrivée. Objectif réaliste : passer les contrôles, récupérer les bagages, rejoindre l'hôtel, manger simple si besoin et garder Gantry ou le feu d'artifice comme bonus uniquement si tout le monde tient encore debout.",
     route:
-      "JFK = AirTrain + métro ; LaGuardia = bus + métro ; Newark = train + métro. Arrivée probable hôtel : 21 h 30-22 h 30.",
+      "JFK -> AirTrain + métro ou taxi/VTC -> hôtel. Recalculer dans Google Maps à l'atterrissage avec bagages et fatigue.",
     siteIds: ["hotel", "gantry", "fireworks"],
     layout: "full",
   },
@@ -526,8 +528,9 @@ const days: DayPlan[] = [
     date: "Dimanche 5 juillet",
     title: "Midtown spectaculaire",
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/1_times_square_night_2013.jpg",
-    summary: "Premier vrai contact avec Manhattan, entre lumières, architecture et vue panoramique.",
-    route: "Queensboro Plaza -> 7/N/W vers Manhattan.",
+    summary:
+      "Première vraie journée Manhattan : on commence par l'énergie pure de Times Square, puis on alterne pauses, beaux bâtiments et grands halls pour éviter l'overdose. La récompense du jour, c'est Top of the Rock : voir enfin la ville d'en haut, avec Central Park d'un côté et l'Empire State en face.",
+    route: "Hôtel -> Queensboro Plaza -> 7/N/W -> Times Square / Midtown. Retour par 7/N/W ou F selon position.",
     siteIds: ["times-square", "bryant", "library", "grand-central", "rockefeller", "top-rock"],
   },
   {
@@ -535,8 +538,9 @@ const days: DayPlan[] = [
     date: "Lundi 6 juillet",
     title: "Statue & Lower Manhattan",
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Statue_of_Liberty_7.jpg",
-    summary: "Une journée historique : ferry, Liberty Island, Ellis Island et Financial District.",
-    route: "21 St-Queensbridge -> F/M, puis R/W ou 4/5 vers Bowling Green / Whitehall.",
+    summary:
+      "Journée histoire grandeur nature : ferry dans le port, Statue de la Liberté, Ellis Island, puis retour dans le Manhattan financier. C'est plus dense qu'une journée photo : prévoir de la marge pour la sécurité, les files, le bateau et les émotions au 9/11 Memorial.",
+    route: "Hôtel -> 21 St-Queensbridge -> F + R/W ou 4/5 -> Whitehall / Bowling Green. Puis ferry Statue City Cruises.",
     siteIds: ["liberty", "ellis", "wall-street", "oculus", "memorial911"],
   },
   {
@@ -544,8 +548,9 @@ const days: DayPlan[] = [
     date: "Mardi 7 juillet",
     title: "Brooklyn Bridge & DUMBO",
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Bridge_Postdlf.jpg",
-    summary: "Traversée à pied, photos à DUMBO et pause au bord de l'East River.",
-    route: "Queensboro Plaza -> 7 jusqu'à Grand Central, puis 4/5/6 vers Brooklyn Bridge-City Hall.",
+    summary:
+      "Une des journées les plus ciné du voyage : traverser le Brooklyn Bridge à pied, arriver dans les rues pavées de DUMBO, faire les photos iconiques puis ralentir dans Brooklyn Bridge Park. Le bon rythme : marcher, shooter, boire, s'asseoir, puis profiter de la skyline.",
+    route: "Hôtel -> Queensboro Plaza -> 7 -> Grand Central -> 4/5/6 -> Brooklyn Bridge-City Hall. Traversée Manhattan -> Brooklyn.",
     siteIds: ["brooklyn-bridge", "dumbo", "carousel", "bbpark"],
   },
   {
@@ -554,8 +559,9 @@ const days: DayPlan[] = [
     title: "Central Park + musée",
     image:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Central_Park_New_York_City_New_York_23_crop.jpg",
-    summary: "Matinée verte, puis choix entre dinosaures, art ou pause légère selon l'énergie.",
-    route: "21 St-Queensbridge -> F/M vers 57 St ou Lexington Av/63 St.",
+    summary:
+      "Journée respiration : Central Park sert de grand reset au milieu du séjour. Ensuite, on choisit franchement : dinosaures et baleine bleue à l'AMNH, chefs-d'oeuvre au Met, ou simplement une pause plus légère si la fatigue monte.",
+    route: "Hôtel -> 21 St-Queensbridge -> F -> 57 St ou Lexington Av/63 St. Ensuite marche vers Central Park, puis musée choisi.",
     siteIds: ["central-park", "bethesda", "amnh", "met"],
   },
   {
@@ -564,8 +570,9 @@ const days: DayPlan[] = [
     title: "High Line, Chelsea & Hudson Yards",
     image:
       "https://commons.wikimedia.org/wiki/Special:FilePath/High_Line_20th_Street_looking_downtown.jpg",
-    summary: "Quartier moderne, promenade suspendue, déjeuner facile et pause au bord de l'Hudson.",
-    route: "Queensboro Plaza -> 7 direct jusqu'à 34 St-Hudson Yards.",
+    summary:
+      "New York version moderne : tours de Hudson Yards, Vessel en repère visuel, puis High Line au-dessus des rues. La journée marche bien parce qu'elle descend naturellement vers Chelsea Market pour manger, puis Little Island si le groupe veut encore de l'air et des vues sur l'Hudson.",
+    route: "Hôtel -> Queensboro Plaza -> 7 direct -> 34 St-Hudson Yards. Puis à pied : Hudson Yards -> High Line -> Chelsea Market.",
     siteIds: ["hudson-yards", "vessel", "high-line", "chelsea-market", "little-island"],
   },
   {
@@ -573,8 +580,9 @@ const days: DayPlan[] = [
     date: "Vendredi 10 juillet",
     title: "Queens local & skyline",
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Gantry_Plaza_State_Park_2012.jpg",
-    summary: "Une journée plus souple côté Queens, parfaite pour respirer entre deux grosses visites.",
-    route: "Marche locale ; Flushing par 7, Astoria par N/W.",
+    summary:
+      "Journée volontairement plus libre : on reste côté Queens pour retrouver de l'air, des quartiers plus locaux et moins de pression. Gantry donne la skyline, MoMA PS1 donne l'option art, Flushing l'option food adventure, Astoria l'option soirée plus calme.",
+    route: "Long Island City local. Gantry à pied/VTC court ; Flushing par 7 ; Astoria par N/W. Choisir 1 ou 2 options.",
     siteIds: ["gantry", "moma-ps1", "flushing", "astoria"],
   },
   {
@@ -583,17 +591,19 @@ const days: DayPlan[] = [
     title: "SoHo, Chinatown, Little Italy",
     image:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Canal_Street_Chinatown_New_York_City.jpg",
-    summary: "Rues animées, shopping, snacks, façades photogéniques et final dans Greenwich Village.",
-    route: "21 St-Queensbridge -> F/M vers Broadway-Lafayette.",
+    summary:
+      "Dernière vraie journée en ville : moins de monuments, plus d'ambiance. SoHo pour les façades et boutiques, Chinatown pour les snacks, Little Italy en passage court, puis Washington Square Park pour finir sur une scène très New York : musique, étudiants, fontaine et vie de rue.",
+    route: "Hôtel -> 21 St-Queensbridge -> F -> Broadway-Lafayette. À pied : SoHo -> Chinatown / Little Italy -> Washington Square.",
     siteIds: ["soho", "chinatown", "little-italy", "washington-square"],
   },
   {
     id: "day-12",
     date: "Dimanche 12 juillet",
     title: "Départ vers l'aéroport",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/JFK_Airport_Terminal_4.jpg",
-    summary: "Pas de visite ce jour-là : garder la matinée simple, check-out, transfert et marge pour l'aéroport.",
-    route: "Quitter l'hôtel environ 4 h avant un vol international, plus si bagages ou correspondances compliquées.",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/AirTrain_JFK_Terminal_4.jpg",
+    summary:
+      "Jour de départ : on protège la fin du voyage. Pas de visite ajoutée, pas de sprint inutile : petit-déj, sacs, check-out, trajet aéroport et marge. L'objectif est simple : arriver calme, avec batteries chargées, passeports prêts et souvenirs encore frais.",
+    route: "Hôtel -> JFK par taxi/VTC ou métro + AirTrain. Départ hôtel environ 4 h avant vol international, à ajuster avec Google Maps.",
     siteIds: ["hotel", "airport"],
   },
 ];
@@ -603,7 +613,7 @@ const filters: Filter[] = [
   "Manhattan",
   "Brooklyn",
   "Queens",
-  "Liberty Island",
+  "New York Harbor",
   "Incontournables",
   "Musées",
   "Quartiers",
@@ -622,13 +632,13 @@ const dayColors = [
 
 const siteById = new Map(sites.map((site) => [site.id, site]));
 const commonsSearchTerms = new Map<string, string>([
-  ["hotel", "Long Island City Queens skyline hotel"],
+  ["hotel", "Wingate by Wyndham Long Island City 38-70 12th Street"],
   ["fireworks", "File:Fireworks over the East Village of New York City.JPG"],
   ["gantry", "File:Pepsi-Cola sign in Gantry Plaza State Park, Long Island City, New York.jpg"],
   ["times-square", "File:Times Square at night- Manhattan, New York City, United States of America (9867854326).jpg"],
   ["bryant", "File:Bryant Park New York (11599442025).jpg"],
   ["library", "File:New York Public Library Main Branch Exterior.jpg"],
-  ["grand-central", "File:Grand Central Terminal Main Concourse Jan 2006.jpg"],
+  ["grand-central", "File:Grand Central Station Main Concourse Jan 2006.jpg"],
   ["rockefeller", "Rockefeller Center Prometheus"],
   ["top-rock", "File:Top of the Rock, New York, United States (Unsplash NvGwP hw1iw).jpg"],
   ["liberty", "File:Statue of Liberty 7.jpg"],
@@ -656,14 +666,14 @@ const commonsSearchTerms = new Map<string, string>([
   ["chinatown", "File:Chinatown, New York City - panoramio.jpg"],
   ["little-italy", "File:Mulberry Street NYC c1900 LOC 3g04637u edit.jpg"],
   ["washington-square", "File:Washington Square Park Arch, New York City (5269029966).jpg"],
-  ["airport", "File:Airtrain Terminal 4 JFK NY1.jpg"],
+  ["airport", "File:AirTrain JFK Terminal 4.jpg"],
 ]);
 const siteHighlights = new Map<string, string[]>([
   [
     "hotel",
     [
       "Adresse à garder sous la main : 38-70 12th Street, Long Island City, Queens, NY 11101.",
-      "Repérer les deux stations utiles : 21 St-Queensbridge pour F/M et Queensboro Plaza pour 7/N/W.",
+      "Repérer les deux stations utiles : 21 St-Queensbridge pour F et Queensboro Plaza pour 7/N/W.",
       "Prévoir le retour hôtel comme pause possible les jours très chauds.",
       "Sauvegarder l'adresse dans Google Maps / Apple Plans pour taxis et VTC.",
       "Le dernier jour, partir depuis l'hôtel directement vers l'aéroport, sans visite ajoutée.",
@@ -684,7 +694,7 @@ const siteHighlights = new Map<string, string[]>([
     [
       "Photographier la skyline depuis les anciens portiques Gantry.",
       "Marcher jusqu'au panneau Pepsi-Cola, très photogénique au coucher du soleil.",
-      "Repérer l'Empire State Building et le Chrysler Building de l'autre côté de l'East River.",
+      "Repérer l'Empire State Building et le siège de l'ONU de l'autre côté de l'East River.",
       "Faire une pause glace ou boisson à Long Island City avant de rentrer.",
       "Revenir de nuit pour les reflets lumineux sur Manhattan.",
     ],
@@ -723,10 +733,10 @@ const siteHighlights = new Map<string, string[]>([
     "grand-central",
     [
       "Se placer au centre du Main Concourse pour le plafond zodiacal.",
-      "Repérer l'horloge opale du kiosque d'information.",
+      "Repérer l'horloge à quatre faces du kiosque d'information.",
       "Tester la Whispering Gallery près de l'Oyster Bar.",
       "Chercher les glands et feuilles de chêne, symboles Vanderbilt.",
-      "Faire une pause au food court si chaleur ou pluie.",
+      "Faire une pause au Dining Concourse si chaleur ou pluie.",
     ],
   ],
   [
@@ -752,11 +762,11 @@ const siteHighlights = new Map<string, string[]>([
   [
     "liberty",
     [
-      "Prendre un ferry tôt via Statue City Cruises, vendeur officiel.",
+      "Prendre un ferry via Statue City Cruises, seul vendeur officiel pour Liberty Island et Ellis Island.",
       "Faire le tour de Liberty Island pour voir la statue sous plusieurs angles.",
       "Visiter le Statue of Liberty Museum et voir la torche originale.",
-      "Monter au Liberty Vista pour la vue sur le port si accessible.",
-      "Réserver très en avance si vous voulez pedestal ou crown access.",
+      "Monter sur la terrasse du Statue of Liberty Museum pour la vue sur le port si elle est accessible.",
+      "Réserver très en avance pour pedestal ou crown access, qui sont limités et soumis à sécurité supplémentaire.",
     ],
   ],
   [
@@ -766,7 +776,7 @@ const siteHighlights = new Map<string, string[]>([
       "Monter dans le Great Hall / Registry Room, coeur historique du musée.",
       "Voir Through America's Gate pour comprendre le parcours des immigrants.",
       "Passer devant l'American Immigrant Wall of Honor à l'extérieur.",
-      "Utiliser l'audio-guide inclus pour donner du contexte aux enfants.",
+      "Utiliser l'audio-guide du musée si disponible pour donner du contexte aux enfants.",
     ],
   ],
   [
@@ -803,7 +813,7 @@ const siteHighlights = new Map<string, string[]>([
     "brooklyn-bridge",
     [
       "Commencer côté Manhattan pour finir à DUMBO.",
-      "Marcher sur la voie piétonne en restant attentif aux vélos.",
+      "Rester sur la promenade piétonne et suivre la signalisation sur le pont.",
       "S'arrêter au milieu pour les câbles et la skyline.",
       "Photographier Lower Manhattan depuis l'approche Brooklyn.",
       "Partir tôt le matin ou en fin de journée pour éviter la foule forte.",
@@ -866,7 +876,7 @@ const siteHighlights = new Map<string, string[]>([
       "Voir la baleine bleue dans le Hall of Ocean Life.",
       "Passer par le Rose Center / Hayden Planetarium si vous prenez le billet adapté.",
       "Choisir 2 ou 3 halls maximum pour éviter la saturation.",
-      "Utiliser la boutique ou le food court comme pause familiale.",
+      "Utiliser la boutique ou les cafés du musée comme pause familiale.",
     ],
   ],
   [
@@ -894,7 +904,7 @@ const siteHighlights = new Map<string, string[]>([
     [
       "Photographier la structure depuis la base.",
       "Chercher les reflets cuivrés selon l'heure de la journée.",
-      "Vérifier l'accès intérieur avant la visite, les règles peuvent changer.",
+      "Vérifier horaires, billets et règles d'accès sur le site officiel avant la visite.",
       "Le combiner avec Hudson Yards plutôt que d'en faire une visite séparée.",
       "Utiliser ce point comme départ clair pour la High Line.",
     ],
@@ -1010,13 +1020,50 @@ const siteHighlights = new Map<string, string[]>([
     ],
   ],
 ]);
+const teenTips = new Map<string, string>([
+  ["hotel", "Mission : épingle l'hôtel dans Maps et repère la station la plus simple. Si tu retrouves le chemin sans aide, tu deviens navigateur du jour."],
+  ["fireworks", "À jouer comme une mission repérage : vérifier le spot officiel 2026, la foule annoncée et le plan retour. Si ça sent la galère, skyline locale et dodo."],
+  ["gantry", "Défi photo : prendre la skyline avec les anciens portiques et le panneau Pepsi dans la même série. C'est le spot LIC facile qui fait très carte postale."],
+  ["times-square", "Version ado : 20 minutes chrono, une photo sur les marches TKTS, un écran géant préféré, puis sortie avant l'overdose de foule et de mascottes."],
+  ["bryant", "Pause stratégique : chaises mobiles, tables à l'ombre, toilettes, recharge mentale. C'est le sas de décompression entre néons et architecture."],
+  ["library", "À vendre comme décor de film : lions à l'entrée, marbre de l'Astor Hall, ambiance presque Poudlard si les salles historiques sont ouvertes."],
+  ["grand-central", "Mini-jeu : trouver le plafond zodiacal peint à l'envers, l'horloge à quatre faces et tester la Whispering Gallery comme un vieux bug acoustique."],
+  ["rockefeller", "Spot repères : Prometheus, Channel Gardens, Radio City. Cherche l'angle le plus ciné avant de monter à Top of the Rock."],
+  ["top-rock", "Moment photo premium : Empire State en face, Central Park au nord, terrasse sans vitre au 70e. Batterie chargée obligatoire."],
+  ["liberty", "Anecdote utile : la torche originale est dans le musée. Défi : trouver l'angle où la statue paraît énorme sans contre-plongée ratée."],
+  ["ellis", "À rendre vivant : imaginer le passage dans le Great Hall avec nom, langue, papiers et stress du contrôle. C'est plus fort si on suit un parcours réel."],
+  ["wall-street", "Format ado efficace : NYSE, Federal Hall, Trinity Church, puis stop. Bonus si quelqu'un explique pourquoi une rue aussi courte pèse autant."],
+  ["oculus", "Spot ultra graphique : lignes blanches, symétrie, vidéos verticales. Défi : faire une photo qui donne l'impression d'être dans un vaisseau spatial."],
+  ["memorial911", "À annoncer clairement : ici, pas de mode selfie. On observe les noms, l'eau, le Survivor Tree, et on garde le ton respectueux."],
+  ["brooklyn-bridge", "Défi marche : choisir trois pauses photo max, sinon la traversée n'avance jamais. Meilleur souvenir si tout le monde garde de l'eau."],
+  ["dumbo", "Le cliché Washington Street est assumé : Manhattan Bridge dans l'axe, pavés, briques. À toi de faire mieux que la photo Instagram standard."],
+  ["carousel", "Même si c'est plutôt enfantin, le combo carrousel vintage + skyline + verrière marche bien en photo. Sinon, pause rapide waterfront."],
+  ["bbpark", "Temps libre utile : skyline, snack, banc, coucher de soleil. Prends 10 minutes pour trouver ton meilleur cadrage de Manhattan."],
+  ["central-park", "Plutôt que 'marcher dans un parc', lancer une quête : The Mall, Bow Bridge ou Bethesda. Un objectif clair évite la balade interminable."],
+  ["bethesda", "Le plafond en tuiles Minton et les musiciens sous l'arcade donnent souvent le meilleur moment. S'arrêter et écouter deux minutes."],
+  ["amnh", "Mode best-of : T. rex, baleine bleue de 94 pieds, météorites/espace. Chacun choisit un hall, personne ne subit tout le musée."],
+  ["met", "Ne pas vendre ça comme 'un musée d'art' vague : Temple of Dendur, armures, rooftop si ouvert. Trois hits, pas marathon."],
+  ["hudson-yards", "Ambiance ville futuriste : tours, The Shed, Vessel, métro 7. Bon moment pour parler urbanisme sans appeler ça un cours."],
+  ["vessel", "À traiter comme objet bizarre de Manhattan : sculpture, escalier, polémique, sécurité. Photo depuis la base si l'accès ne motive pas."],
+  ["high-line", "Promenade à scanner : anciens rails, art public, vues entre immeubles. Mission : repérer le meilleur street-view vivant."],
+  ["chelsea-market", "Plan efficace : chacun repère une option food, puis vote rapide. Point de rendez-vous obligatoire, sinon tout le monde se perd dans les stands."],
+  ["little-island", "Parc OVNI sur pilotis : chemins qui montent, vues Hudson, amphithéâtre. Bien en pause courte après le bruit de Chelsea Market."],
+  ["moma-ps1", "À pitch comme labo d'art contemporain, pas musée classique. Si l'expo ne les accroche pas en 20 minutes, on garde l'énergie pour Queens."],
+  ["flushing", "Mission food crawl : bubble tea, dumplings, bakery, supermarché asiatique. Le but est de tester, pas de cocher un monument."],
+  ["astoria", "Soirée plus locale : pont Hell Gate, East River, dîner grec/méditerranéen. Bon contraste après les journées Manhattan très touristiques."],
+  ["soho", "Quartier shopping/photo : cast-iron, vitrines, escaliers de secours. Autonomie possible avec horaire précis et point de ralliement."],
+  ["chinatown", "Mission snack : trouver dumplings, bakery ou boisson à partager. Encore mieux si tu choisis un truc inconnu à goûter."],
+  ["little-italy", "À garder en mode mini-scène : Mulberry Street, enseignes, dessert éventuel. Le vrai intérêt est le contraste avec Chinatown juste à côté."],
+  ["washington-square", "Ambiance campus/NYU : arche, fontaine, musiciens, joueurs d'échecs. Bon spot pour juste rester et regarder la ville vivre."],
+  ["airport", "Check avant départ : passeport, chargeur, écouteurs, batterie, gourde vide. Si tu oublies un câble, tu dépends des autres."],
+]);
 const dayBySiteId = buildDayBySiteId();
-const completedKey = "nyc-2026-completed-sites";
 
 let currentFilter: Filter = "Tous";
 let currentSearch = "";
 let imageObserver: IntersectionObserver | null = null;
 const observedImages = new WeakSet<HTMLImageElement>();
+const commonsImageRequests = new Map<string, Promise<CommonsImage[]>>();
 let tripMap: L.Map | null = null;
 
 const app = document.querySelector<HTMLDivElement>("#app");
@@ -1030,7 +1077,7 @@ app.innerHTML = `
     <div class="hero-content">
       <p class="eyebrow">Planning familial interactif · 4 → 12 juillet 2026</p>
       <h1>New York en famille</h1>
-      <p>Un programme dynamique depuis le Wingate by Wyndham Long Island City, 38-70 12th Street, Queens : carte, filtres, fiches détaillées, photos chargées depuis Wikimedia Commons et checklist sauvegardée dans le navigateur.</p>
+      <p>Un programme dynamique depuis le Wingate by Wyndham Long Island City, 38-70 12th Street, Queens : carte, filtres, fiches détaillées, photos chargées depuis Wikimedia Commons et liens Google Maps.</p>
       <div class="hero-actions">
         <a class="btn" href="#carte">Voir la carte</a>
         <a class="btn" href="#planning">Voir le planning</a>
@@ -1041,7 +1088,7 @@ app.innerHTML = `
   <main class="wrap">
     <section class="notice">
       <div><strong>Hôtel :</strong> Wingate by Wyndham Long Island City, <strong>38-70 12th Street, Long Island City, Queens, NY 11101</strong>.</div>
-      <div><strong>Base transport :</strong> stations utiles : <strong>21 St-Queensbridge</strong> pour F/M et <strong>Queensboro Plaza</strong> pour 7, N, W.</div>
+      <div><strong>Base transport :</strong> stations utiles : <strong>21 St-Queensbridge</strong> pour F et <strong>Queensboro Plaza</strong> pour 7, N, W.</div>
       <div class="tip">Démarrez vers 9 h-9 h 30, gardez une vraie pause déjeuner et rentrez à l'hôtel si chaleur ou fatigue.</div>
     </section>
     <section class="stats" aria-label="Résumé du voyage">
@@ -1099,7 +1146,7 @@ app.innerHTML = `
       <h2>Lignes à retenir</h2>
       <div class="chips">
         <span class="chip">7 : Queens ↔ Grand Central / Times Sq / Hudson Yards</span>
-        <span class="chip">F/M : Queensbridge ↔ Midtown / Downtown</span>
+        <span class="chip">F : Queensbridge ↔ Midtown / Downtown</span>
         <span class="chip">N/W : Queensboro Plaza ↔ Midtown</span>
         <span class="chip">4/5/6 : axe Est de Manhattan</span>
         <span class="chip">R/W : accès Bowling Green / Whitehall</span>
@@ -1137,7 +1184,7 @@ function renderDay(day: DayPlan, index: number): string {
       <div class="day-media">
         ${renderDynamicImage({
           alt: day.title,
-          fallbackImage: day.image,
+          fallbackImage: getDayFallbackImage(day),
           query: getDayImageQuery(day),
           slot: 0,
         })}
@@ -1412,12 +1459,11 @@ function renderSites(): void {
     return;
   }
 
-  const completedSites = readCompletedSites();
   const normalizedSearch = normalize(currentSearch);
   const visibleSites = sites.filter((site) => matchesFilter(site) && matchesSearch(site, normalizedSearch));
 
   list.innerHTML = visibleSites
-    .map((site) => renderSite(site, completedSites.has(site.id)))
+    .map((site) => renderSite(site))
     .join("");
   emptyState.classList.toggle("is-visible", visibleSites.length === 0);
   bindImageFallbacks();
@@ -1437,7 +1483,7 @@ function renderDynamicImage({
   slot: number;
   className?: string;
 }): string {
-  return `<img class="${className ?? ""} dynamic-image is-loading" src="${createPlaceholderImage(alt)}" alt="${escapeHtml(alt)}" loading="lazy" tabindex="0" data-lightbox-image data-image-query="${escapeHtml(query)}" data-image-slot="${slot}" data-fallback-image="${escapeHtml(fallbackImage)}">`;
+  return `<img class="${className ?? ""} dynamic-image is-loading" src="${escapeHtml(fallbackImage)}" alt="${escapeHtml(alt)}" loading="lazy" tabindex="0" data-lightbox-image data-image-query="${escapeHtml(query)}" data-image-slot="${slot}" data-fallback-image="${escapeHtml(fallbackImage)}" data-original-image="${escapeHtml(fallbackImage)}">`;
 }
 
 function getSiteImageQuery(site: Site, slot = 0): string {
@@ -1445,8 +1491,10 @@ function getSiteImageQuery(site: Site, slot = 0): string {
     return site.imageQuery;
   }
 
-  if (slot === 0) {
-    return commonsSearchTerms.get(site.id) ?? site.title;
+  const curatedImage = commonsSearchTerms.get(site.id);
+
+  if (curatedImage) {
+    return curatedImage;
   }
 
   if (slot === 1) {
@@ -1456,24 +1504,42 @@ function getSiteImageQuery(site: Site, slot = 0): string {
   return `${site.title} ${site.category} travel photo New York`;
 }
 
+function getSiteFallbackImage(site: Site): string {
+  const curatedImage = commonsSearchTerms.get(site.id);
+
+  if (curatedImage?.startsWith("File:")) {
+    return createPlaceholderImage(site.title);
+  }
+
+  return site.image;
+}
+
 function getDayImageQuery(day: DayPlan): string {
   const firstSite = day.siteIds.map((siteId) => siteById.get(siteId)).find(Boolean);
   return day.imageQuery ?? (firstSite ? getSiteImageQuery(firstSite) : `${day.title} New York City`);
 }
 
-function renderSite(site: Site, isCompleted: boolean): string {
+function getDayFallbackImage(day: DayPlan): string {
+  const firstSite = day.siteIds.map((siteId) => siteById.get(siteId)).find(Boolean);
+  return firstSite ? getSiteFallbackImage(firstSite) : day.image;
+}
+
+function renderSite(site: Site): string {
   const actionItems = getSiteHighlights(site);
+  const teenTip = getTeenTip(site);
   const currentLocationUrl = buildGoogleMapsCurrentLocationRouteUrl(site);
 
   return `
     <article class="site" id="${site.id}">
-      ${renderDynamicImage({
-        alt: site.title,
-        className: "cover",
-        fallbackImage: site.image,
-        query: getSiteImageQuery(site, 0),
-        slot: 0,
-      })}
+      <div class="site-media">
+        ${renderDynamicImage({
+          alt: site.title,
+          className: "cover",
+          fallbackImage: getSiteFallbackImage(site),
+          query: getSiteImageQuery(site, 0),
+          slot: 0,
+        })}
+      </div>
       <div class="content">
         <div class="site-card-header">
           <div>
@@ -1498,24 +1564,7 @@ function renderSite(site: Site, isCompleted: boolean): string {
           </ol>
         </div>
         <p class="tip tip-card"><b>Conseil famille :</b> ${escapeHtml(site.tip)}</p>
-        <label class="check-row">
-          <input type="checkbox" data-site-id="${site.id}" ${isCompleted ? "checked" : ""}>
-          Marquer comme préparé / réservé
-        </label>
-        <div class="photos">
-          ${renderDynamicImage({
-            alt: `${site.title} photo 1`,
-            fallbackImage: site.image,
-            query: getSiteImageQuery(site, 1),
-            slot: 1,
-          })}
-          ${renderDynamicImage({
-            alt: `${site.title} photo 2`,
-            fallbackImage: site.image,
-            query: getSiteImageQuery(site, 2),
-            slot: 2,
-          })}
-        </div>
+        <p class="tip tip-card teen-tip-card"><b>Mission ados :</b> ${escapeHtml(teenTip)}</p>
       </div>
     </article>
   `;
@@ -1530,6 +1579,13 @@ function getSiteHighlights(site: Site): string[] {
       "Vérifier les horaires avant de partir.",
       "Garder un plan retour simple vers le métro.",
     ]
+  );
+}
+
+function getTeenTip(site: Site): string {
+  return (
+    teenTips.get(site.id) ??
+    "Choisis un rôle simple : meilleur spot photo, itinéraire Google Maps ou repérage de la prochaine pause."
   );
 }
 
@@ -1553,22 +1609,6 @@ function bindInteractions(): void {
       });
       renderSites();
     });
-  });
-
-  document.querySelector<HTMLDivElement>("#site-list")?.addEventListener("change", (event) => {
-    const input = event.target;
-
-    if (!(input instanceof HTMLInputElement) || !input.dataset.siteId) {
-      return;
-    }
-
-    const completedSites = readCompletedSites();
-    if (input.checked) {
-      completedSites.add(input.dataset.siteId);
-    } else {
-      completedSites.delete(input.dataset.siteId);
-    }
-    localStorage.setItem(completedKey, JSON.stringify([...completedSites]));
   });
 
   document.addEventListener("click", (event) => {
@@ -1721,21 +1761,6 @@ function matchesSearch(site: Site, normalizedSearch: string): boolean {
   return haystack.includes(normalizedSearch);
 }
 
-function readCompletedSites(): Set<string> {
-  const rawValue = localStorage.getItem(completedKey);
-
-  if (!rawValue) {
-    return new Set();
-  }
-
-  try {
-    const value = JSON.parse(rawValue);
-    return Array.isArray(value) ? new Set(value.filter((item) => typeof item === "string")) : new Set();
-  } catch {
-    return new Set();
-  }
-}
-
 function hydrateDynamicImages(root: ParentNode = document): void {
   const images = [...root.querySelectorAll<HTMLImageElement>("img[data-image-query]")];
 
@@ -1818,7 +1843,13 @@ async function getCommonsImages(query: string): Promise<CommonsImage[]> {
     return cachedImages;
   }
 
-  try {
+  const pendingRequest = commonsImageRequests.get(normalizedQuery);
+
+  if (pendingRequest) {
+    return pendingRequest;
+  }
+
+  const request = (async () => {
     const imagesByUrl = new Map<string, CommonsImage>();
 
     for (const requestUrl of buildCommonsRequestUrls(query)) {
@@ -1852,10 +1883,17 @@ async function getCommonsImages(query: string): Promise<CommonsImage[]> {
       writeCommonsImageCache(normalizedQuery, images);
     }
     return images;
-  } catch (error) {
-    console.warn("Impossible de charger les images Commons", error);
-    return [];
-  }
+  })()
+    .catch((error) => {
+      console.warn("Impossible de charger les images Commons", error);
+      return [];
+    })
+    .finally(() => {
+      commonsImageRequests.delete(normalizedQuery);
+    });
+
+  commonsImageRequests.set(normalizedQuery, request);
+  return request;
 }
 
 function buildCommonsRequestUrls(query: string): string[] {

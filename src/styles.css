@@ -252,10 +252,13 @@ select {
 
 .details {
   grid-template-columns: repeat(3, 1fr);
+  align-items: stretch;
 }
 
 .day,
 .site {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--line);
   border-top: 5px solid var(--day-color, var(--line));
@@ -275,6 +278,7 @@ select {
   width: 100%;
   height: 220px;
   object-fit: cover;
+  object-position: center;
   background: #dbeafe;
 }
 
@@ -290,7 +294,13 @@ select {
 }
 
 .day-media {
+  overflow: hidden;
   min-height: 100%;
+}
+
+.site-media {
+  flex: 0 0 auto;
+  overflow: hidden;
 }
 
 .day-media img {
@@ -322,7 +332,9 @@ select {
 .dynamic-image {
   transition:
     filter 0.25s ease,
-    opacity 0.25s ease;
+    opacity 0.25s ease,
+    transform 4s ease,
+    object-position 4s ease;
 }
 
 .dynamic-image.is-loading {
@@ -330,8 +342,41 @@ select {
   filter: saturate(0.8);
 }
 
+.day-media:hover .dynamic-image,
+.day-media:focus-within .dynamic-image,
+.day-media:active .dynamic-image,
+.site-media:hover .dynamic-image,
+.site-media:focus-within .dynamic-image,
+.site-media:active .dynamic-image {
+  object-position: 56% 44%;
+  transform: scale(1.1);
+  transform-origin: center;
+  will-change: transform, object-position;
+}
+
 .content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   padding: 20px;
+}
+
+.site {
+  min-height: 930px;
+}
+
+.site > .content > p:not(.tip-card) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.tip-card {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
 }
 
 .date {
@@ -390,6 +435,7 @@ select {
 }
 
 .top-five-card {
+  flex: 1;
   background: linear-gradient(180deg, #f8fafc, #ffffff);
 }
 
@@ -429,6 +475,17 @@ select {
 
 .tip-card b {
   color: #92400e;
+}
+
+.teen-tip-card {
+  margin-top: 8px;
+  border-color: #c7d2fe;
+  background: #eef2ff;
+  color: #312e81;
+}
+
+.teen-tip-card b {
+  color: #4338ca;
 }
 
 .full {
@@ -657,21 +714,6 @@ select {
   font-weight: 800;
 }
 
-.photos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.photos img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 14px;
-  background: #dbeafe;
-}
-
 img[data-lightbox-image] {
   cursor: zoom-in;
 }
@@ -757,22 +799,6 @@ img[data-lightbox-image]:focus-visible {
   font-weight: 800;
 }
 
-.check-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-  color: #334155;
-  font-size: 0.92rem;
-  font-weight: 800;
-}
-
-.check-row input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent);
-}
-
 .toplink {
   flex: 0 0 auto;
   font-size: 0.9rem;
@@ -804,6 +830,24 @@ img[data-lightbox-image]:focus-visible {
   text-align: center;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .dynamic-image {
+    transition:
+      filter 0.25s ease,
+      opacity 0.25s ease;
+  }
+
+  .day-media:hover .dynamic-image,
+  .day-media:focus-within .dynamic-image,
+  .day-media:active .dynamic-image,
+  .site-media:hover .dynamic-image,
+  .site-media:focus-within .dynamic-image,
+  .site-media:active .dynamic-image {
+    object-position: center;
+    transform: none;
+  }
+}
+
 @media (max-width: 980px) {
   .stats,
   .itinerary-grid,
@@ -821,6 +865,10 @@ img[data-lightbox-image]:focus-visible {
   .itinerary-card,
   .itinerary-card.full {
     grid-template-columns: 1fr;
+  }
+
+  .site {
+    min-height: auto;
   }
 
   .hero {
@@ -848,14 +896,6 @@ img[data-lightbox-image]:focus-visible {
 
   .stats {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .photos {
-    grid-template-columns: 1fr;
-  }
-
-  .photos img {
-    height: 210px;
   }
 
   .ny-map {
