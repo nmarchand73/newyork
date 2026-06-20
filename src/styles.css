@@ -58,6 +58,12 @@ select {
       center / cover;
 }
 
+.hero.is-loading-image {
+  background:
+    linear-gradient(180deg, rgba(11, 18, 32, 0.18), rgba(11, 18, 32, 0.8)),
+    linear-gradient(135deg, #0f766e, #1f2937);
+}
+
 .hero-content {
   max-width: 1060px;
 }
@@ -246,7 +252,8 @@ select {
   box-shadow: var(--shadow);
 }
 
-.day.is-active {
+.day.is-active,
+.site.is-active {
   outline: 3px solid rgba(15, 118, 110, 0.28);
 }
 
@@ -257,6 +264,17 @@ select {
   height: 220px;
   object-fit: cover;
   background: #dbeafe;
+}
+
+.dynamic-image {
+  transition:
+    filter 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.dynamic-image.is-loading {
+  opacity: 0.78;
+  filter: saturate(0.8);
 }
 
 .content {
@@ -307,6 +325,14 @@ select {
   font-size: 0.95rem;
 }
 
+.image-credit {
+  display: inline-flex;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
 .full {
   grid-column: span 3;
 }
@@ -332,108 +358,74 @@ select {
   overflow: hidden;
   border: 1px solid #cbd5e1;
   border-radius: 22px;
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 38%, #ecfeff 38%, #ecfeff 100%);
+  background: #dbeafe;
 }
 
-.borough {
-  position: absolute;
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  border-radius: 28px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+.ny-map .leaflet-container,
+.leaflet-container {
+  font: inherit;
 }
 
-.manhattan {
-  top: 8%;
-  left: 48%;
-  width: 16%;
-  height: 78%;
-  background: rgba(248, 250, 252, 0.86);
-  transform: rotate(14deg);
+.ny-map .leaflet-control-layers,
+.ny-map .leaflet-control-scale-line,
+.ny-map .leaflet-popup-content-wrapper {
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
 }
 
-.brooklyn {
-  top: 59%;
-  left: 47%;
-  width: 30%;
-  height: 25%;
-  background: rgba(254, 249, 195, 0.78);
-  transform: rotate(-8deg);
+.ny-map .leaflet-popup-content {
+  min-width: 170px;
+  margin: 12px 14px;
 }
 
-.queens {
-  top: 26%;
-  left: 63%;
-  width: 28%;
-  height: 42%;
-  background: rgba(220, 252, 231, 0.82);
-  transform: rotate(6deg);
-}
-
-.map-label,
-.water-label {
-  position: absolute;
-  color: rgba(15, 23, 42, 0.48);
-  font-weight: 900;
-  letter-spacing: 0.02em;
-}
-
-.water-label {
-  top: 48%;
-  left: 8%;
-  transform: rotate(-18deg);
-}
-
-.map-label {
-  font-size: 0.82rem;
-}
-
-.pin {
-  position: absolute;
-  z-index: 4;
+.map-marker {
   display: grid;
+  place-items: center;
   width: 34px;
   height: 34px;
-  place-items: center;
   color: white;
   border: 3px solid white;
   border-radius: 50% 50% 50% 0;
   background: #ef4444;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.28);
   font-size: 0.76rem;
   font-weight: 900;
-  transform: translate(-50%, -100%) rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
-.pin span {
+.map-marker span {
   transform: rotate(45deg);
 }
 
-.pin:hover,
-.pin:focus {
-  scale: 1.16;
+.queens-marker {
   background: var(--accent);
-  text-decoration: none;
 }
 
-.pin::after {
-  position: absolute;
-  top: 2px;
-  left: 30px;
-  padding: 5px 8px;
-  color: white;
-  white-space: nowrap;
-  pointer-events: none;
-  content: attr(data-name);
-  background: #0f172a;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  opacity: 0;
-  transform: rotate(45deg);
+.map-popup {
+  display: grid;
+  gap: 5px;
 }
 
-.pin:hover::after,
-.pin:focus::after {
-  opacity: 1;
+.map-popup b {
+  color: var(--accent-strong);
+  font-size: 1rem;
+}
+
+.map-popup span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.map-popup a,
+.map-credit {
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.map-credit {
+  margin: 14px 0 0;
+  color: var(--muted);
 }
 
 .map-list {
