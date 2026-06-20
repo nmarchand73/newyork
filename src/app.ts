@@ -42,7 +42,6 @@ type CommonsImage = {
   thumbUrl: string;
   originalUrl: string;
   descriptionUrl: string;
-  credit: string;
 };
 
 type CommonsImageCache = Record<
@@ -81,11 +80,23 @@ const heroImage =
   "https://commons.wikimedia.org/wiki/Special:FilePath/Manhattan_Skyline_from_Brooklyn_Bridge_Park_November_2021.jpg";
 const heroImageQuery = "Manhattan skyline Brooklyn Bridge Park New York City";
 const commonsApiUrl = "https://commons.wikimedia.org/w/api.php";
-const commonsCacheKey = "nyc-2026-commons-image-cache-v3";
+const commonsCacheKey = "nyc-2026-commons-image-cache-v7";
 const commonsCacheMaxAgeMs = 1000 * 60 * 60 * 24 * 14;
-const placeholderImage = createPlaceholderImage("Chargement photo");
 
 const sites: Site[] = [
+  {
+    id: "hotel",
+    title: "Wingate by Wyndham Long Island City",
+    image:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Long_Island_City_from_the_East_River.jpg",
+    description:
+      "Votre base familiale à Long Island City : Wingate by Wyndham Long Island City, 38-70 12th Street, Queens, NY 11101.",
+    tip: "Gardez cette fiche comme point de repère : retour simple en métro, pause possible en journée et départ aéroport depuis l'hôtel.",
+    borough: "Queens",
+    category: "Transport",
+    duration: "Base séjour",
+    map: { label: "🏨", lat: 40.7578, lng: -73.9419 },
+  },
   {
     id: "fireworks",
     title: "Feu d'artifice du 4 juillet",
@@ -108,7 +119,7 @@ const sites: Site[] = [
     borough: "Queens",
     category: "Parc",
     duration: "45 min",
-    map: { label: "H", lat: 40.7476, lng: -73.957 },
+    map: { label: "0", lat: 40.7476, lng: -73.957 },
   },
   {
     id: "times-square",
@@ -483,6 +494,18 @@ const sites: Site[] = [
     category: "Parc",
     duration: "45 min",
   },
+  {
+    id: "airport",
+    title: "Aéroport / départ",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/JFK_Airport_Terminal_4.jpg",
+    description:
+      "Dernier jour dédié au départ : check-out, transfert et marge confortable pour les contrôles. Aucun autre programme n'est prévu.",
+    tip: "Point placé sur JFK par défaut ; à ajuster si le vol part de LaGuardia ou Newark.",
+    borough: "Queens",
+    category: "Transport",
+    duration: "Départ",
+    map: { label: "✈", lat: 40.6413, lng: -73.7781 },
+  },
 ];
 
 const days: DayPlan[] = [
@@ -495,7 +518,7 @@ const days: DayPlan[] = [
     summary: "Arrivée à 19 h : prévoyez 2 h à 2 h 30 pour douanes, bagages et transfert.",
     route:
       "JFK = AirTrain + métro ; LaGuardia = bus + métro ; Newark = train + métro. Arrivée probable hôtel : 21 h 30-22 h 30.",
-    siteIds: ["gantry", "fireworks"],
+    siteIds: ["hotel", "gantry", "fireworks"],
     layout: "full",
   },
   {
@@ -567,11 +590,11 @@ const days: DayPlan[] = [
   {
     id: "day-12",
     date: "Dimanche 12 juillet",
-    title: "Dernière balade & départ",
+    title: "Départ vers l'aéroport",
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/JFK_Airport_Terminal_4.jpg",
-    summary: "Dernières photos proches de l'hôtel, puis départ sans stress.",
-    route: "Quitter l'hôtel environ 4 h avant un vol international.",
-    siteIds: ["gantry"],
+    summary: "Pas de visite ce jour-là : garder la matinée simple, check-out, transfert et marge pour l'aéroport.",
+    route: "Quitter l'hôtel environ 4 h avant un vol international, plus si bagages ou correspondances compliquées.",
+    siteIds: ["hotel", "airport"],
   },
 ];
 
@@ -585,43 +608,409 @@ const filters: Filter[] = [
   "Musées",
   "Quartiers",
 ];
+const dayColors = [
+  "#0f766e",
+  "#2563eb",
+  "#dc2626",
+  "#7c3aed",
+  "#ea580c",
+  "#0891b2",
+  "#16a34a",
+  "#db2777",
+  "#475569",
+];
 
 const siteById = new Map(sites.map((site) => [site.id, site]));
 const commonsSearchTerms = new Map<string, string>([
-  ["fireworks", "Macy's 4th of July Fireworks New York City"],
-  ["gantry", "Gantry Plaza State Park"],
-  ["times-square", "Times Square"],
-  ["bryant", "Bryant Park New York"],
-  ["library", "New York Public Library Main Branch"],
-  ["grand-central", "Grand Central Terminal"],
-  ["rockefeller", "Rockefeller Center New York"],
-  ["top-rock", "Top of the Rock New York"],
-  ["liberty", "Statue of Liberty 7"],
-  ["ellis", "Ellis Island"],
-  ["wall-street", "New York Stock Exchange Wall Street"],
-  ["oculus", "Oculus World Trade Center Transportation Hub"],
-  ["memorial911", "National September 11 Memorial"],
-  ["brooklyn-bridge", "Brooklyn Bridge"],
-  ["dumbo", "DUMBO Brooklyn Manhattan Bridge"],
-  ["carousel", "Jane's Carousel Brooklyn"],
-  ["bbpark", "Brooklyn Bridge Park Manhattan skyline"],
-  ["central-park", "Central Park New York"],
-  ["bethesda", "Bethesda Terrace Central Park"],
-  ["amnh", "American Museum of Natural History"],
-  ["met", "Metropolitan Museum of Art New York"],
-  ["hudson-yards", "Hudson Yards New York"],
-  ["vessel", "Vessel Hudson Yards"],
-  ["high-line", "High Line New York"],
-  ["chelsea-market", "Chelsea Market New York"],
-  ["little-island", "Little Island New York"],
-  ["moma-ps1", "MoMA PS1"],
-  ["flushing", "Main Street Flushing Queens"],
-  ["astoria", "Astoria Park Hell Gate Bridge"],
-  ["soho", "SoHo Cast Iron Historic District"],
-  ["chinatown", "Canal Street Chinatown New York"],
-  ["little-italy", "Mulberry Street Little Italy New York"],
-  ["washington-square", "Washington Square Park Arch"],
+  ["hotel", "Long Island City Queens skyline hotel"],
+  ["fireworks", "File:Fireworks over the East Village of New York City.JPG"],
+  ["gantry", "File:Pepsi-Cola sign in Gantry Plaza State Park, Long Island City, New York.jpg"],
+  ["times-square", "File:Times Square at night- Manhattan, New York City, United States of America (9867854326).jpg"],
+  ["bryant", "File:Bryant Park New York (11599442025).jpg"],
+  ["library", "File:New York Public Library Main Branch Exterior.jpg"],
+  ["grand-central", "File:Grand Central Terminal Main Concourse Jan 2006.jpg"],
+  ["rockefeller", "Rockefeller Center Prometheus"],
+  ["top-rock", "File:Top of the Rock, New York, United States (Unsplash NvGwP hw1iw).jpg"],
+  ["liberty", "File:Statue of Liberty 7.jpg"],
+  ["ellis", "File:Great Hall of the Ellis Island Main Building.jpg"],
+  ["wall-street", "File:New York Stock Exchange 02010.JPG"],
+  ["oculus", "File:One World Trade Center through the Oculus (91538).jpg"],
+  ["memorial911", "File:New York - National September 11 Memorial South Pool - April 2012 - 9693C.jpg"],
+  ["brooklyn-bridge", "File:Brooklyn Bridge, New York, United States (Unsplash DiBu1qTQQ8s).jpg"],
+  ["dumbo", "File:Adams Street beneath the Manhattan Bridge, Dumbo, Brooklyn, New York.jpg"],
+  ["carousel", "File:Jane's Carousel 2.jpg"],
+  ["bbpark", "File:Pont de Brooklyn de nuit - Octobre 2008 edit.jpg"],
+  ["central-park", "File:Central Park New York City New York 23 cropped.jpg"],
+  ["bethesda", "File:Bethesda Fountain (81527).jpg"],
+  ["amnh", "File:American Museum of Natural History, South Facade.jpg"],
+  ["met", "File:Metropolitan Museum of Art, New York City NY, entrance.jpg"],
+  ["hudson-yards", "File:10 Hudson Yards New York NY 2014 09 02 08.JPG"],
+  ["vessel", "File:The Vessel, Hudson Yards, New York City, June 2019.jpg"],
+  ["high-line", "File:The High Line, New York (17643199203).jpg"],
+  ["chelsea-market", "File:Chelsea Market entrance.jpg"],
+  ["little-island", "File:View of Lower Manhattan from Little Island, New York City, 20231001 1818 1506.jpg"],
+  ["moma-ps1", "File:MoMA PS1 rooftop August 2013 002.jpg"],
+  ["flushing", "File:Main Street, Flushing, Queens, New York City (1920).jpg"],
+  ["astoria", "File:Hell Gate Bridge (84459)p.jpg"],
+  ["soho", "File:SoHo Cast Iron Historic District 036.JPG"],
+  ["chinatown", "File:Chinatown, New York City - panoramio.jpg"],
+  ["little-italy", "File:Mulberry Street NYC c1900 LOC 3g04637u edit.jpg"],
+  ["washington-square", "File:Washington Square Park Arch, New York City (5269029966).jpg"],
+  ["airport", "File:Airtrain Terminal 4 JFK NY1.jpg"],
 ]);
+const siteHighlights = new Map<string, string[]>([
+  [
+    "hotel",
+    [
+      "Adresse à garder sous la main : 38-70 12th Street, Long Island City, Queens, NY 11101.",
+      "Repérer les deux stations utiles : 21 St-Queensbridge pour F/M et Queensboro Plaza pour 7/N/W.",
+      "Prévoir le retour hôtel comme pause possible les jours très chauds.",
+      "Sauvegarder l'adresse dans Google Maps / Apple Plans pour taxis et VTC.",
+      "Le dernier jour, partir depuis l'hôtel directement vers l'aéroport, sans visite ajoutée.",
+    ],
+  ],
+  [
+    "fireworks",
+    [
+      "Vérifier le lieu officiel du feu d'artifice 2026 avant de décider.",
+      "Rester côté Queens si la famille est fatiguée après l'arrivée.",
+      "Prévoir bouchons d'oreilles ou casque pour les enfants sensibles au bruit.",
+      "Éviter les zones ultra-denses de Midtown et Lower Manhattan le soir d'arrivée.",
+      "Préparer un plan retour simple vers l'hôtel avant de partir.",
+    ],
+  ],
+  [
+    "gantry",
+    [
+      "Photographier la skyline depuis les anciens portiques Gantry.",
+      "Marcher jusqu'au panneau Pepsi-Cola, très photogénique au coucher du soleil.",
+      "Repérer l'Empire State Building et le Chrysler Building de l'autre côté de l'East River.",
+      "Faire une pause glace ou boisson à Long Island City avant de rentrer.",
+      "Revenir de nuit pour les reflets lumineux sur Manhattan.",
+    ],
+  ],
+  [
+    "times-square",
+    [
+      "Monter sur les marches rouges TKTS pour la vue d'ensemble.",
+      "Regarder One Times Square, immeuble de la boule du Nouvel An.",
+      "Traverser les zones piétonnes entre Broadway et 7th Avenue.",
+      "Entrer rapidement dans M&M's World ou Disney Store si les enfants veulent une pause boutique.",
+      "Passer plutôt en fin de journée pour profiter des écrans sans y rester trop longtemps.",
+    ],
+  ],
+  [
+    "bryant",
+    [
+      "S'asseoir côté pelouse pour une vraie pause fraîcheur.",
+      "Observer la façade arrière de la New York Public Library.",
+      "Tester les chaises mobiles typiques du parc.",
+      "Chercher les petites tables à l'ombre pour goûter ou café.",
+      "Utiliser ce parc comme pause entre Times Square et Grand Central.",
+    ],
+  ],
+  [
+    "library",
+    [
+      "Photographier les lions Patience et Fortitude à l'entrée.",
+      "Entrer dans l'Astor Hall et lever les yeux sur le marbre.",
+      "Voir la Rose Main Reading Room si elle est accessible.",
+      "Passer par la boutique pour un souvenir calme et utile.",
+      "Limiter la visite à 30-45 minutes pour garder de l'énergie pour Midtown.",
+    ],
+  ],
+  [
+    "grand-central",
+    [
+      "Se placer au centre du Main Concourse pour le plafond zodiacal.",
+      "Repérer l'horloge opale du kiosque d'information.",
+      "Tester la Whispering Gallery près de l'Oyster Bar.",
+      "Chercher les glands et feuilles de chêne, symboles Vanderbilt.",
+      "Faire une pause au food court si chaleur ou pluie.",
+    ],
+  ],
+  [
+    "rockefeller",
+    [
+      "Descendre vers la Lower Plaza et la statue Prometheus.",
+      "Traverser les Channel Gardens vers la 5th Avenue.",
+      "Passer devant Radio City Music Hall pour la façade néon.",
+      "Repérer la patinoire ou son aménagement d'été selon la saison.",
+      "Garder Top of the Rock comme grand moment panoramique du quartier.",
+    ],
+  ],
+  [
+    "top-rock",
+    [
+      "Réserver un créneau proche du coucher du soleil.",
+      "Comparer la vue Central Park au nord et Empire State Building au sud.",
+      "Monter jusqu'au niveau extérieur du 70e étage pour la vue sans vitre.",
+      "Prévoir 45 à 75 minutes sur place, hors file d'attente.",
+      "Faire les photos famille avant que la terrasse ne soit trop dense.",
+    ],
+  ],
+  [
+    "liberty",
+    [
+      "Prendre un ferry tôt via Statue City Cruises, vendeur officiel.",
+      "Faire le tour de Liberty Island pour voir la statue sous plusieurs angles.",
+      "Visiter le Statue of Liberty Museum et voir la torche originale.",
+      "Monter au Liberty Vista pour la vue sur le port si accessible.",
+      "Réserver très en avance si vous voulez pedestal ou crown access.",
+    ],
+  ],
+  [
+    "ellis",
+    [
+      "Commencer par le Baggage Room au rez-de-chaussée.",
+      "Monter dans le Great Hall / Registry Room, coeur historique du musée.",
+      "Voir Through America's Gate pour comprendre le parcours des immigrants.",
+      "Passer devant l'American Immigrant Wall of Honor à l'extérieur.",
+      "Utiliser l'audio-guide inclus pour donner du contexte aux enfants.",
+    ],
+  ],
+  [
+    "wall-street",
+    [
+      "Photographier la façade du New York Stock Exchange.",
+      "Passer devant Federal Hall et la statue de George Washington.",
+      "Chercher Trinity Church au bout de Wall Street.",
+      "Faire un arrêt rapide au Charging Bull si l'itinéraire le permet.",
+      "Garder la visite courte : c'est surtout une séquence photo.",
+    ],
+  ],
+  [
+    "oculus",
+    [
+      "Entrer par le grand hall blanc pour l'effet architectural.",
+      "Photographier les nervures depuis le niveau principal.",
+      "Utiliser l'Oculus comme pause climatisée après le 9/11 Memorial.",
+      "Repérer les accès métro/PATH pour comprendre le hub.",
+      "Prendre une boisson ou un snack dans le centre commercial si besoin.",
+    ],
+  ],
+  [
+    "memorial911",
+    [
+      "Faire le tour du bassin nord puis du bassin sud en silence.",
+      "Chercher les roses blanches placées sur certains noms.",
+      "Expliquer brièvement le lieu aux enfants avant d'arriver.",
+      "Voir le Survivor Tree dans la plaza.",
+      "Décider à l'avance si le musée est adapté à l'âge et à l'énergie du groupe.",
+    ],
+  ],
+  [
+    "brooklyn-bridge",
+    [
+      "Commencer côté Manhattan pour finir à DUMBO.",
+      "Marcher sur la voie piétonne en restant attentif aux vélos.",
+      "S'arrêter au milieu pour les câbles et la skyline.",
+      "Photographier Lower Manhattan depuis l'approche Brooklyn.",
+      "Partir tôt le matin ou en fin de journée pour éviter la foule forte.",
+    ],
+  ],
+  [
+    "dumbo",
+    [
+      "Faire la photo classique à Washington Street avec le Manhattan Bridge.",
+      "Marcher sur les pavés autour de Water Street.",
+      "Monter vers Pebble Beach pour la vue sur Brooklyn Bridge.",
+      "Prévoir une pause à Time Out Market ou près du waterfront.",
+      "Rester jusqu'à la lumière dorée si tout le monde est encore en forme.",
+    ],
+  ],
+  [
+    "carousel",
+    [
+      "Voir le carrousel historique sous verrière.",
+      "Regarder la skyline depuis la promenade juste devant.",
+      "Faire un tour si les enfants en ont envie, sinon simple pause photo.",
+      "Combiner avec Pebble Beach et Brooklyn Bridge Park.",
+      "Vérifier les horaires le jour même avant de promettre l'activité.",
+    ],
+  ],
+  [
+    "bbpark",
+    [
+      "Marcher le long des piers pour varier les vues sur Manhattan.",
+      "Faire une pause à Pier 1 ou Pier 2 selon la fatigue.",
+      "Chercher un point de vue sur Statue de la Liberté au loin.",
+      "Prévoir glace ou snack avant le retour métro/ferry.",
+      "Choisir ce parc pour un coucher de soleil plus calme qu'à Manhattan.",
+    ],
+  ],
+  [
+    "central-park",
+    [
+      "Entrer par le sud ou l'est selon le musée choisi ensuite.",
+      "Traverser The Mall si vous voulez la grande allée iconique.",
+      "Passer par Bow Bridge pour une photo très classique.",
+      "Se limiter à une zone : Bethesda, The Lake, Ramble ou musée.",
+      "Prévoir eau, casquettes et pauses bancs en juillet.",
+    ],
+  ],
+  [
+    "bethesda",
+    [
+      "Descendre l'escalier vers la Bethesda Fountain.",
+      "Regarder l'Angel of the Waters au centre de la fontaine.",
+      "Passer sous l'arcade pour le plafond en tuiles Minton.",
+      "Écouter les musiciens souvent installés sous la terrasse.",
+      "Photographier The Lake depuis la terrasse supérieure.",
+    ],
+  ],
+  [
+    "amnh",
+    [
+      "Commencer par les Fossil Halls et le T. rex.",
+      "Voir la baleine bleue dans le Hall of Ocean Life.",
+      "Passer par le Rose Center / Hayden Planetarium si vous prenez le billet adapté.",
+      "Choisir 2 ou 3 halls maximum pour éviter la saturation.",
+      "Utiliser la boutique ou le food court comme pause familiale.",
+    ],
+  ],
+  [
+    "met",
+    [
+      "Voir le Temple of Dendur dans l'aile égyptienne.",
+      "Passer par les armures si les enfants aiment l'histoire.",
+      "Choisir quelques salles de peinture européenne, pas tout le musée.",
+      "Monter au rooftop si ouvert en saison.",
+      "Prévoir une sortie directe vers Central Park pour respirer après la visite.",
+    ],
+  ],
+  [
+    "hudson-yards",
+    [
+      "Arriver par la ligne 7 à 34 St-Hudson Yards.",
+      "Voir Vessel depuis l'extérieur et la place centrale.",
+      "Repérer The Shed et les tours modernes du quartier.",
+      "Faire une pause fraîcheur dans le centre commercial si besoin.",
+      "Commencer ici avant de descendre la High Line vers Chelsea.",
+    ],
+  ],
+  [
+    "vessel",
+    [
+      "Photographier la structure depuis la base.",
+      "Chercher les reflets cuivrés selon l'heure de la journée.",
+      "Vérifier l'accès intérieur avant la visite, les règles peuvent changer.",
+      "Le combiner avec Hudson Yards plutôt que d'en faire une visite séparée.",
+      "Utiliser ce point comme départ clair pour la High Line.",
+    ],
+  ],
+  [
+    "high-line",
+    [
+      "Marcher de Hudson Yards vers Chelsea pour suivre le bon sens du planning.",
+      "Observer les anciennes rails intégrées dans la promenade.",
+      "S'arrêter aux belvédères sur les rues de West Chelsea.",
+      "Regarder les installations d'art public en chemin.",
+      "Sortir vers Chelsea Market si la chaleur ou la faim arrive.",
+    ],
+  ],
+  [
+    "chelsea-market",
+    [
+      "Faire le tour des food stalls avant de choisir le déjeuner.",
+      "Prévoir une option simple pour chacun : tacos, pizza, bakery ou lobster roll.",
+      "Regarder les détails industriels du bâtiment.",
+      "Utiliser les toilettes et la clim avant de repartir.",
+      "Sortir côté 9th Avenue ou rejoindre Little Island selon l'énergie.",
+    ],
+  ],
+  [
+    "little-island",
+    [
+      "Monter les chemins pour les points de vue sur l'Hudson.",
+      "Regarder l'architecture en tulipes depuis l'extérieur.",
+      "Faire une courte pause assise dans l'amphithéâtre si ouvert.",
+      "Photographier le coucher de soleil côté fleuve.",
+      "Garder cette étape optionnelle après Chelsea Market.",
+    ],
+  ],
+  [
+    "moma-ps1",
+    [
+      "Voir la cour extérieure avant ou après les salles.",
+      "Se concentrer sur une exposition temporaire plutôt que tout faire.",
+      "Comparer l'ambiance avec les grands musées de Manhattan.",
+      "Prévoir une visite courte, idéale en journée Queens plus calme.",
+      "Vérifier horaires et expositions avant de partir.",
+    ],
+  ],
+  [
+    "flushing",
+    [
+      "Arriver par la ligne 7 jusqu'à Flushing-Main St.",
+      "Explorer Main Street et ses vitrines asiatiques.",
+      "Choisir un food court ou une adresse de dumplings/noodles.",
+      "Passer par un supermarché asiatique pour snacks et boissons.",
+      "Garder cette sortie comme expérience quartier plutôt que monument.",
+    ],
+  ],
+  [
+    "astoria",
+    [
+      "Aller à Astoria Park pour la vue sur Hell Gate Bridge.",
+      "Prévoir un dîner grec ou méditerranéen dans le quartier.",
+      "Marcher au bord de l'East River si la météo est agréable.",
+      "Photographier les ponts depuis le parc.",
+      "Choisir Astoria pour une soirée plus locale et moins touristique.",
+    ],
+  ],
+  [
+    "soho",
+    [
+      "Repérer les façades cast-iron autour de Greene Street.",
+      "Prévoir du temps libre shopping sans programme trop serré.",
+      "Photographier les escaliers de secours et pavés latéraux.",
+      "Passer par Prince Street ou Spring Street pour l'ambiance.",
+      "Combiner avec Washington Square plutôt que remonter trop loin.",
+    ],
+  ],
+  [
+    "chinatown",
+    [
+      "Marcher sur Canal Street pour l'ambiance dense.",
+      "Chercher un déjeuner simple : dumplings, noodles ou bakery.",
+      "Passer par Mott Street pour une rue plus typique.",
+      "Entrer dans une épicerie ou bakery pour snacks à partager.",
+      "Garder de la monnaie/carte prête : certains petits spots vont vite.",
+    ],
+  ],
+  [
+    "little-italy",
+    [
+      "Passer par Mulberry Street pour le décor historique.",
+      "Faire seulement une courte boucle depuis Chinatown.",
+      "Choisir dessert ou café plutôt qu'un gros repas touristique.",
+      "Regarder les enseignes et terrasses pour les photos.",
+      "Continuer vers SoHo ou Washington Square sans trop s'attarder.",
+    ],
+  ],
+  [
+    "washington-square",
+    [
+      "Photographier l'arche avec la perspective sur Fifth Avenue.",
+      "Faire une pause autour de la fontaine centrale.",
+      "Regarder les musiciens, joueurs d'échecs et performances de rue.",
+      "Utiliser le parc comme final vivant après SoHo/Chinatown.",
+      "Prévoir un snack ou une boisson dans Greenwich Village autour.",
+    ],
+  ],
+  [
+    "airport",
+    [
+      "Confirmer l'aéroport exact et le terminal la veille.",
+      "Quitter l'hôtel environ 4 h avant le vol international.",
+      "Garder passeports, billets, ESTA et batteries accessibles.",
+      "Prévoir marge supplémentaire si taxi, trafic ou bagages lourds.",
+      "Ne pas ajouter de visite : dernier jour dédié au départ.",
+    ],
+  ],
+]);
+const dayBySiteId = buildDayBySiteId();
 const completedKey = "nyc-2026-completed-sites";
 
 let currentFilter: Filter = "Tous";
@@ -641,7 +1030,7 @@ app.innerHTML = `
     <div class="hero-content">
       <p class="eyebrow">Planning familial interactif · 4 → 12 juillet 2026</p>
       <h1>New York en famille</h1>
-      <p>Un programme dynamique depuis l'hôtel au 38-70 12th Street, Queens : carte, filtres, fiches détaillées, photos chargées depuis Wikimedia Commons et checklist sauvegardée dans le navigateur.</p>
+      <p>Un programme dynamique depuis le Wingate by Wyndham Long Island City, 38-70 12th Street, Queens : carte, filtres, fiches détaillées, photos chargées depuis Wikimedia Commons et checklist sauvegardée dans le navigateur.</p>
       <div class="hero-actions">
         <a class="btn" href="#carte">Voir la carte</a>
         <a class="btn" href="#planning">Voir le planning</a>
@@ -651,6 +1040,7 @@ app.innerHTML = `
   </header>
   <main class="wrap">
     <section class="notice">
+      <div><strong>Hôtel :</strong> Wingate by Wyndham Long Island City, <strong>38-70 12th Street, Long Island City, Queens, NY 11101</strong>.</div>
       <div><strong>Base transport :</strong> stations utiles : <strong>21 St-Queensbridge</strong> pour F/M et <strong>Queensboro Plaza</strong> pour 7, N, W.</div>
       <div class="tip">Démarrez vers 9 h-9 h 30, gardez une vraie pause déjeuner et rentrez à l'hôtel si chaleur ou fatigue.</div>
     </section>
@@ -664,19 +1054,21 @@ app.innerHTML = `
       <div class="section-title">
         <div>
           <h2>Carte interactive des visites</h2>
-          <p>Carte dynamique Leaflet, comme la carte USA : zoom, tuiles OpenStreetMap et marqueurs géolocalisés.</p>
+          <p>Carte dynamique Leaflet avec OpenStreetMap par défaut, zoom souris/tactile et marqueurs géolocalisés par jour.</p>
         </div>
       </div>
       <div class="map-layout">
         <div class="ny-map" id="leafletMap" aria-label="Carte Leaflet interactive de New York">
         </div>
         <div class="map-list">
-          <b>Accès rapide aux fiches</b>
-          ${sites
-            .filter((site) => site.map)
-            .map((site) => `<a href="#${site.id}">${escapeHtml(site.title)} — ${site.borough}</a>`)
-            .join("")}
-          <p class="map-credit">Carte dynamique : <a href="https://leafletjs.com/" target="_blank" rel="noreferrer">Leaflet</a> + tuiles <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>.</p>
+          <b>Numéros sur la carte</b>
+          <div class="day-legend">
+            ${days.map(renderDayLegendItem).join("")}
+          </div>
+          <div class="map-activities">
+            ${days.map(renderMapActivityDay).join("")}
+          </div>
+          <p class="map-credit">Carte dynamique : <a href="https://leafletjs.com/" target="_blank" rel="noreferrer">Leaflet</a> + <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>. Calque satellite disponible dans le sélecteur.</p>
         </div>
       </div>
     </section>
@@ -687,7 +1079,7 @@ app.innerHTML = `
           <p>Chaque journée est générée depuis des données TypeScript : modifiez les tableaux dans <code>src/app.ts</code> pour changer le voyage.</p>
         </div>
       </div>
-      <div class="grid">${days.map(renderDay).join("")}</div>
+      <div class="itinerary-grid">${days.map(renderDay).join("")}</div>
     </section>
     <section id="details">
       <div class="section-title">
@@ -724,7 +1116,11 @@ hydrateDynamicImages();
 hydrateHeroImage();
 initLeafletMap();
 
-function renderDay(day: DayPlan): string {
+function renderDay(day: DayPlan, index: number): string {
+  const routeLinkDetails = getDayRouteLinkDetails(day);
+  const routeLink = routeLinkDetails
+    ? `<a class="route-link" href="${routeLinkDetails.url}" target="_blank" rel="noreferrer" data-current-route-site-id="${routeLinkDetails.siteId}">${escapeHtml(routeLinkDetails.label)}</a>`
+    : "";
   const links = day.siteIds
     .map((siteId) => siteById.get(siteId))
     .filter((site): site is Site => Boolean(site))
@@ -732,28 +1128,130 @@ function renderDay(day: DayPlan): string {
     .join("");
 
   return `
-    <article class="day ${day.layout ?? ""}" id="${day.id}">
-      ${renderDynamicImage({
-        alt: day.title,
-        fallbackImage: day.image,
-        query: getDayImageQuery(day),
-        slot: 0,
-      })}
+    <article class="day itinerary-card ${day.layout ?? ""}" id="${day.id}" style="--day-color: ${getDayColor(index)}">
+      <div class="day-media">
+        ${renderDynamicImage({
+          alt: day.title,
+          fallbackImage: day.image,
+          query: getDayImageQuery(day),
+          slot: 0,
+        })}
+      </div>
       <div class="content">
-        <span class="date">${escapeHtml(day.date)}</span>
-        <h3>${escapeHtml(day.title)}</h3>
+        <div class="day-heading">
+          <span class="day-number">${index + 1}</span>
+          <div>
+            <span class="date">${escapeHtml(day.date)}</span>
+            <h3>${escapeHtml(day.title)}</h3>
+          </div>
+        </div>
         <p>${escapeHtml(day.summary)}</p>
-        <div class="route"><b>Trajet :</b> ${escapeHtml(day.route)}</div>
+        <div class="route">
+          <span><b>Trajet :</b> ${escapeHtml(day.route)}</span>
+          ${routeLink}
+        </div>
         <div class="links">${links}</div>
-        <a class="image-credit" href="https://commons.wikimedia.org/" target="_blank" rel="noreferrer">Images : Wikimedia Commons</a>
       </div>
     </article>
   `;
 }
 
+function getDayRouteTarget(day: DayPlan): (Site & { map: MapPoint }) | undefined {
+  return day.siteIds
+    .map((siteId) => siteById.get(siteId))
+    .find((site): site is Site & { map: MapPoint } => Boolean(site && site.id !== "hotel" && site.map));
+}
+
+function getDayRouteLinkDetails(day: DayPlan): { label: string; siteId: string; url: string } | undefined {
+  if (day.id === "day-4") {
+    const hotel = siteById.get("hotel");
+
+    if (!hotel) {
+      return undefined;
+    }
+
+    return {
+      label: "Google Maps vers l'hôtel",
+      siteId: hotel.id,
+      url: buildGoogleMapsCurrentLocationRouteUrl(hotel),
+    };
+  }
+
+  const routeTarget = getDayRouteTarget(day);
+
+  if (!routeTarget) {
+    return undefined;
+  }
+
+  return {
+    label: `Google Maps vers ${routeTarget.title}`,
+    siteId: routeTarget.id,
+    url: buildGoogleMapsCurrentLocationRouteUrl(routeTarget),
+  };
+}
+
+function buildGoogleMapsCurrentLocationRouteUrl(site: Site, origin?: GeolocationCoordinates): string {
+  const params = new URLSearchParams({
+    api: "1",
+    destination: getGoogleMapsDestination(site),
+  });
+
+  if (origin) {
+    params.set("origin", `${origin.latitude},${origin.longitude}`);
+  }
+
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+}
+
+function getGoogleMapsDestination(site: Site): string {
+  if (site.map) {
+    return `${site.map.lat},${site.map.lng}`;
+  }
+
+  return `${site.title}, ${site.borough}, New York`;
+}
+
 function renderFilter(filter: Filter): string {
   const activeClass = filter === currentFilter ? " is-active" : "";
   return `<button class="filter${activeClass}" type="button" data-filter="${filter}">${filter}</button>`;
+}
+
+function renderDayLegendItem(day: DayPlan, index: number): string {
+  return `
+    <span class="day-legend-item">
+      <i style="--day-color: ${getDayColor(index)}"></i>
+      ${escapeHtml(day.date.replace(/ juillet$/, ""))}
+    </span>
+  `;
+}
+
+function renderMapActivityDay(day: DayPlan, index: number): string {
+  const mappedSites = day.siteIds
+    .map((siteId) => siteById.get(siteId))
+    .filter((site): site is Site & { map: MapPoint } => Boolean(site?.map));
+
+  if (mappedSites.length === 0) {
+    return "";
+  }
+
+  return `
+    <section class="map-activity-day" style="--day-color: ${getDayColor(index)}">
+      <h3>${escapeHtml(day.date)} <span>${escapeHtml(day.title)}</span></h3>
+      ${mappedSites.map((site) => renderMapActivityLink(site)).join("")}
+    </section>
+  `;
+}
+
+function renderMapActivityLink(site: Site & { map: MapPoint }): string {
+  return `
+    <a class="map-activity-link" href="#${site.id}">
+      <span class="map-activity-number">${escapeHtml(site.map.label)}</span>
+      <span class="map-activity-copy">
+        <strong>${escapeHtml(site.title)}</strong>
+        <small>${site.category} · ${site.duration}</small>
+      </span>
+    </a>
+  `;
 }
 
 function initLeafletMap(): void {
@@ -768,7 +1266,11 @@ function initLeafletMap(): void {
   tripMap = L.map(mapElement, {
     center: [40.741, -73.976],
     zoom: 12,
-    scrollWheelZoom: false,
+    scrollWheelZoom: true,
+    touchZoom: true,
+    dragging: true,
+    boxZoom: true,
+    doubleClickZoom: true,
     maxBounds: L.latLngBounds([40.55, -74.2], [40.92, -73.68]),
     maxBoundsViscosity: 0.55,
   });
@@ -786,10 +1288,44 @@ function initLeafletMap(): void {
     },
   );
 
-  cartoLayer.addTo(tripMap);
-  L.control.layers({ "Carte claire": cartoLayer, OpenStreetMap: osmLayer }, undefined, {
-    position: "topright",
-  }).addTo(tripMap);
+  const satelliteLayer = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {
+      maxZoom: 19,
+      attribution:
+        "Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community",
+    },
+  );
+
+  const subwayLayer = L.tileLayer("https://tile.tracestrack.com/subway-route/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    opacity: 0.9,
+    attribution: "Subway routes &copy; Tracestrack, &copy; OpenStreetMap contributors",
+  });
+
+  const busTramLayer = L.tileLayer("https://tile.tracestrack.com/bus-route/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    opacity: 0.78,
+    attribution: "Bus routes &copy; Tracestrack, &copy; OpenStreetMap contributors",
+  });
+
+  osmLayer.addTo(tripMap);
+  L.control
+    .layers(
+      {
+        OpenStreetMap: osmLayer,
+        "Carte claire": cartoLayer,
+        Satellite: satelliteLayer,
+      },
+      {
+        "Lignes de métro": subwayLayer,
+        "Lignes de bus / tram": busTramLayer,
+      },
+      {
+        position: "topright",
+      },
+    )
+    .addTo(tripMap);
   L.control.scale({ imperial: false }).addTo(tripMap);
 
   const markers = mappedSites.map((site) => {
@@ -813,11 +1349,12 @@ function initLeafletMap(): void {
 }
 
 function createMapIcon(site: Site & { map: MapPoint }): L.DivIcon {
-  const className = site.borough === "Queens" ? "map-marker queens-marker" : "map-marker";
+  const dayInfo = dayBySiteId.get(site.id);
+  const color = dayInfo ? getDayColor(dayInfo.index) : "#64748b";
 
   return L.divIcon({
-    className,
-    html: `<span>${escapeHtml(site.map.label)}</span>`,
+    className: "map-marker-icon",
+    html: `<div class="map-marker" style="--marker-color: ${color}"><span>${escapeHtml(site.map.label)}</span></div>`,
     iconSize: [34, 34],
     iconAnchor: [17, 34],
     popupAnchor: [0, -30],
@@ -825,9 +1362,13 @@ function createMapIcon(site: Site & { map: MapPoint }): L.DivIcon {
 }
 
 function renderMapPopup(site: Site): string {
+  const dayInfo = dayBySiteId.get(site.id);
+  const dayLabel = dayInfo ? `<span>${escapeHtml(dayInfo.day.date)} · ${escapeHtml(dayInfo.day.title)}</span>` : "";
+
   return `
     <div class="map-popup">
       <b>${escapeHtml(site.title)}</b>
+      ${dayLabel}
       <span>${site.borough} · ${site.category} · ${site.duration}</span>
       <a href="#${site.id}">Voir la fiche</a>
     </div>
@@ -838,6 +1379,24 @@ function markActiveSite(siteId: string): void {
   document.querySelectorAll(".site").forEach((siteCard) => {
     siteCard.classList.toggle("is-active", siteCard.id === siteId);
   });
+}
+
+function buildDayBySiteId(): Map<string, { day: DayPlan; index: number }> {
+  const map = new Map<string, { day: DayPlan; index: number }>();
+
+  days.forEach((day, index) => {
+    day.siteIds.forEach((siteId) => {
+      if (!map.has(siteId)) {
+        map.set(siteId, { day, index });
+      }
+    });
+  });
+
+  return map;
+}
+
+function getDayColor(index: number): string {
+  return dayColors[index % dayColors.length];
 }
 
 function renderSites(): void {
@@ -873,11 +1432,23 @@ function renderDynamicImage({
   slot: number;
   className?: string;
 }): string {
-  return `<img class="${className ?? ""} dynamic-image is-loading" src="${placeholderImage}" alt="${escapeHtml(alt)}" loading="lazy" data-image-query="${escapeHtml(query)}" data-image-slot="${slot}" data-fallback-image="${escapeHtml(fallbackImage)}">`;
+  return `<img class="${className ?? ""} dynamic-image is-loading" src="${createPlaceholderImage(alt)}" alt="${escapeHtml(alt)}" loading="lazy" data-image-query="${escapeHtml(query)}" data-image-slot="${slot}" data-fallback-image="${escapeHtml(fallbackImage)}">`;
 }
 
-function getSiteImageQuery(site: Site): string {
-  return site.imageQuery ?? commonsSearchTerms.get(site.id) ?? site.title;
+function getSiteImageQuery(site: Site, slot = 0): string {
+  if (site.imageQuery) {
+    return site.imageQuery;
+  }
+
+  if (slot === 0) {
+    return commonsSearchTerms.get(site.id) ?? site.title;
+  }
+
+  if (slot === 1) {
+    return `${site.title} ${site.borough} New York City`;
+  }
+
+  return `${site.title} ${site.category} travel photo New York`;
 }
 
 function getDayImageQuery(day: DayPlan): string {
@@ -886,34 +1457,42 @@ function getDayImageQuery(day: DayPlan): string {
 }
 
 function renderSite(site: Site, isCompleted: boolean): string {
+  const actionItems = getSiteHighlights(site);
+  const currentLocationUrl = buildGoogleMapsCurrentLocationRouteUrl(site);
+
   return `
     <article class="site" id="${site.id}">
       ${renderDynamicImage({
         alt: site.title,
         className: "cover",
         fallbackImage: site.image,
-        query: getSiteImageQuery(site),
+        query: getSiteImageQuery(site, 0),
         slot: 0,
       })}
       <div class="content">
-        <a class="toplink" href="#planning">↑ planning</a>
-        <span class="date">Fiche destination</span>
-        <h3>${escapeHtml(site.title)}</h3>
+        <div class="site-card-header">
+          <div>
+            <span class="date">Fiche destination</span>
+            <h3>${escapeHtml(site.title)}</h3>
+          </div>
+          <a class="toplink" href="#planning">planning</a>
+        </div>
         <div class="site-meta">
           <span>${site.borough}</span>
           <span>${site.category}</span>
           <span>${site.duration}</span>
         </div>
+        <a class="route-link site-route-link" href="${currentLocationUrl}" target="_blank" rel="noreferrer" data-current-route-site-id="${site.id}">
+          Google Maps depuis ma position
+        </a>
         <p>${escapeHtml(site.description)}</p>
-        <div class="route">
-          <b>À voir / faire :</b>
-          <ul>
-            <li>Prendre des photos et repérer les points de vue.</li>
-            <li>Prévoir une pause boisson en juillet.</li>
-            <li>Adapter la durée selon fatigue des enfants.</li>
-          </ul>
+        <div class="route top-five-card">
+          <b>${site.id === "airport" ? "Top 5 départ :" : "Top 5 à voir / faire :"}</b>
+          <ol class="top-five">
+            ${actionItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+          </ol>
         </div>
-        <p class="tip">${escapeHtml(site.tip)}</p>
+        <p class="tip tip-card"><b>Conseil famille :</b> ${escapeHtml(site.tip)}</p>
         <label class="check-row">
           <input type="checkbox" data-site-id="${site.id}" ${isCompleted ? "checked" : ""}>
           Marquer comme préparé / réservé
@@ -922,20 +1501,31 @@ function renderSite(site: Site, isCompleted: boolean): string {
           ${renderDynamicImage({
             alt: `${site.title} photo 1`,
             fallbackImage: site.image,
-            query: getSiteImageQuery(site),
+            query: getSiteImageQuery(site, 1),
             slot: 1,
           })}
           ${renderDynamicImage({
             alt: `${site.title} photo 2`,
             fallbackImage: site.image,
-            query: getSiteImageQuery(site),
+            query: getSiteImageQuery(site, 2),
             slot: 2,
           })}
         </div>
-        <a class="image-credit" href="https://commons.wikimedia.org/" target="_blank" rel="noreferrer">Images : Wikimedia Commons</a>
       </div>
     </article>
   `;
+}
+
+function getSiteHighlights(site: Site): string[] {
+  return (
+    siteHighlights.get(site.id) ?? [
+      "Repérer le meilleur point photo du lieu.",
+      "Prévoir une pause boisson en juillet.",
+      "Adapter la durée selon fatigue des enfants.",
+      "Vérifier les horaires avant de partir.",
+      "Garder un plan retour simple vers le métro.",
+    ]
+  );
 }
 
 function bindInteractions(): void {
@@ -974,6 +1564,50 @@ function bindInteractions(): void {
       completedSites.delete(input.dataset.siteId);
     }
     localStorage.setItem(completedKey, JSON.stringify([...completedSites]));
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element)) {
+      return;
+    }
+
+    const link = event.target.closest<HTMLAnchorElement>("[data-current-route-site-id]");
+
+    if (!link) {
+      return;
+    }
+
+    const site = siteById.get(link.dataset.currentRouteSiteId ?? "");
+
+    if (!site || !navigator.geolocation) {
+      return;
+    }
+
+    event.preventDefault();
+    const mapWindow = window.open(link.href, "_blank", "noopener,noreferrer");
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const routeUrl = buildGoogleMapsCurrentLocationRouteUrl(site, position.coords);
+
+        if (mapWindow) {
+          mapWindow.location.href = routeUrl;
+          return;
+        }
+
+        window.location.href = routeUrl;
+      },
+      () => {
+        if (!mapWindow) {
+          window.location.href = link.href;
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 1000 * 60 * 5,
+        timeout: 8000,
+      },
+    );
   });
 }
 
@@ -1081,7 +1715,9 @@ async function resolveDynamicImage(image: HTMLImageElement): Promise<void> {
 
   const slot = Number.parseInt(image.dataset.imageSlot ?? "0", 10);
   const commonsImages = await getCommonsImages(query);
-  const commonsImage = commonsImages[Number.isFinite(slot) ? slot : 0] ?? commonsImages[0];
+  const imageIndex = Number.isFinite(slot) ? slot : 0;
+  const commonsImage =
+    commonsImages[imageIndex] ?? (commonsImages.length > 0 ? commonsImages[imageIndex % commonsImages.length] : undefined);
 
   if (!commonsImage) {
     image.src = fallbackImage;
@@ -1092,7 +1728,6 @@ async function resolveDynamicImage(image: HTMLImageElement): Promise<void> {
   image.src = commonsImage.thumbUrl;
   image.dataset.originalImage = commonsImage.originalUrl;
   image.classList.remove("is-loading");
-  updateImageCredit(image, commonsImage);
 }
 
 async function getCommonsImages(query: string): Promise<CommonsImage[]> {
@@ -1104,15 +1739,38 @@ async function getCommonsImages(query: string): Promise<CommonsImage[]> {
   }
 
   try {
-    const response = await fetch(buildCommonsSearchUrl(query));
+    const imagesByUrl = new Map<string, CommonsImage>();
 
-    if (!response.ok) {
-      throw new Error(`Wikimedia Commons a répondu ${response.status}.`);
+    for (const requestUrl of buildCommonsRequestUrls(query)) {
+      const response = await fetch(requestUrl);
+
+      if (!response.ok) {
+        continue;
+      }
+
+      const contentType = response.headers.get("content-type") ?? "";
+      if (!contentType.includes("application/json")) {
+        continue;
+      }
+
+      const data = (await response.json()) as CommonsApiResponse;
+      const images = parseCommonsImages(data);
+
+      images.forEach((image) => {
+        if (!imagesByUrl.has(image.originalUrl)) {
+          imagesByUrl.set(image.originalUrl, image);
+        }
+      });
+
+      if (imagesByUrl.size >= 6) {
+        break;
+      }
     }
 
-    const data = (await response.json()) as CommonsApiResponse;
-    const images = parseCommonsImages(data);
-    writeCommonsImageCache(normalizedQuery, images);
+    const images = [...imagesByUrl.values()];
+    if (images.length > 0) {
+      writeCommonsImageCache(normalizedQuery, images);
+    }
     return images;
   } catch (error) {
     console.warn("Impossible de charger les images Commons", error);
@@ -1120,15 +1778,29 @@ async function getCommonsImages(query: string): Promise<CommonsImage[]> {
   }
 }
 
-function buildCommonsSearchUrl(query: string): string {
+function buildCommonsRequestUrls(query: string): string[] {
+  if (query.startsWith("File:")) {
+    return [buildCommonsFileUrl(query), ...buildCommonsSearchTexts(cleanCommonsFileQuery(query)).map(buildCommonsSearchUrl)];
+  }
+
+  return buildCommonsSearchTexts(query).map(buildCommonsSearchUrl);
+}
+
+function cleanCommonsFileQuery(query: string): string {
+  return query
+    .replace(/^File:/, "")
+    .replace(/\.(jpe?g|png|webp|tif|tiff)$/i, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function buildCommonsFileUrl(title: string): string {
   const params = new URLSearchParams({
     action: "query",
     format: "json",
     origin: "*",
-    generator: "search",
-    gsrnamespace: "6",
-    gsrlimit: "8",
-    gsrsearch: buildCommonsSearchText(query),
+    titles: title,
     prop: "imageinfo",
     iiprop: "url|mime|mediatype|extmetadata",
     iiurlwidth: "960",
@@ -1137,9 +1809,26 @@ function buildCommonsSearchUrl(query: string): string {
   return `${commonsApiUrl}?${params.toString()}`;
 }
 
-function buildCommonsSearchText(query: string): string {
+function buildCommonsSearchUrl(searchText: string): string {
+  const params = new URLSearchParams({
+    action: "query",
+    format: "json",
+    origin: "*",
+    generator: "search",
+    gsrnamespace: "6",
+    gsrlimit: "8",
+    gsrsearch: searchText,
+    prop: "imageinfo",
+    iiprop: "url|mime|mediatype|extmetadata",
+    iiurlwidth: "960",
+  });
+
+  return `${commonsApiUrl}?${params.toString()}`;
+}
+
+function buildCommonsSearchTexts(query: string): string[] {
   const quotedQuery = query.replace(/"/g, "").trim();
-  return `intitle:"${quotedQuery}" New York`;
+  return [`intitle:"${quotedQuery}" New York`, quotedQuery, `${quotedQuery} New York City`];
 }
 
 function parseCommonsImages(data: CommonsApiResponse): CommonsImage[] {
@@ -1160,7 +1849,6 @@ function parseCommonsImages(data: CommonsApiResponse): CommonsImage[] {
         thumbUrl: imageInfo.thumburl ?? imageInfo.url,
         originalUrl: imageInfo.url,
         descriptionUrl: imageInfo.descriptionurl,
-        credit: formatImageCredit(imageInfo),
       };
     })
     .filter((image): image is CommonsImage => Boolean(image));
@@ -1207,25 +1895,6 @@ function isCommonsImageCache(value: unknown): value is CommonsImageCache {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function updateImageCredit(image: HTMLImageElement, commonsImage: CommonsImage): void {
-  const article = image.closest("article");
-  const credit = article?.querySelector<HTMLAnchorElement>(".image-credit");
-
-  if (!credit) {
-    return;
-  }
-
-  credit.href = commonsImage.descriptionUrl;
-  credit.textContent = `Image : ${commonsImage.credit}`;
-}
-
-function formatImageCredit(imageInfo: CommonsApiImageInfo): string {
-  const license = stripHtml(imageInfo.extmetadata?.LicenseShortName?.value ?? "Wikimedia Commons");
-  const artist = stripHtml(imageInfo.extmetadata?.Artist?.value ?? "");
-
-  return artist ? `${artist} · ${license}` : license;
-}
-
 function setHeroBackground(hero: HTMLElement, imageUrl: string): void {
   hero.style.backgroundImage = `linear-gradient(180deg, rgba(11, 18, 32, 0.18), rgba(11, 18, 32, 0.8)), url("${imageUrl}")`;
 }
@@ -1234,7 +1903,17 @@ function bindImageFallbacks(): void {
   document.querySelectorAll<HTMLImageElement>("img").forEach((image) => {
     image.onerror = () => {
       const title = image.alt || "New York";
-      image.src = image.dataset.fallbackImage ?? createPlaceholderImage(title);
+      const fallbackImage = image.dataset.fallbackImage;
+      const currentSrc = image.getAttribute("src");
+
+      if (!fallbackImage || image.dataset.fallbackApplied === "true" || currentSrc === fallbackImage) {
+        image.src = createPlaceholderImage(title);
+        image.classList.remove("is-loading");
+        return;
+      }
+
+      image.src = fallbackImage;
+      image.dataset.fallbackApplied = "true";
       image.classList.remove("is-loading");
     };
   });
@@ -1243,12 +1922,6 @@ function bindImageFallbacks(): void {
 function createPlaceholderImage(title: string): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0f766e"/><stop offset="1" stop-color="#1f2937"/></linearGradient></defs><rect width="1200" height="700" fill="url(#g)"/><text x="60" y="330" font-family="Arial" font-size="58" fill="white" font-weight="700">${escapeHtml(title)}</text><text x="60" y="410" font-family="Arial" font-size="30" fill="#d1fae5">Recherche d'une photo Commons...</text></svg>`;
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-}
-
-function stripHtml(value: string): string {
-  const element = document.createElement("div");
-  element.innerHTML = value;
-  return element.textContent?.trim() ?? "";
 }
 
 function normalize(value: string): string {
