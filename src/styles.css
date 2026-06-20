@@ -539,6 +539,33 @@ select {
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
 }
 
+.ny-map .leaflet-control-layers {
+  max-width: min(260px, calc(100vw - 56px));
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.ny-map .leaflet-control-layers label {
+  margin: 4px 0;
+}
+
+.ny-map .leaflet-control-scale-line {
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  border: 0;
+  border-bottom: 3px solid #0f172a;
+  border-left: 3px solid #0f172a;
+  border-right: 3px solid #0f172a;
+  border-radius: 0;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+  font-weight: 900;
+  line-height: 1.2;
+  padding: 3px 8px 5px;
+}
+
 .ny-map .leaflet-popup-content {
   min-width: 170px;
   margin: 12px 14px;

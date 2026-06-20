@@ -1101,7 +1101,7 @@ app.innerHTML = `
       <div class="section-title">
         <div>
           <h2>Carte interactive des visites</h2>
-          <p>Carte dynamique Leaflet avec OpenStreetMap par défaut, zoom souris/tactile et marqueurs géolocalisés par jour.</p>
+          <p>Carte dynamique Leaflet avec OpenStreetMap par défaut, satellite, marqueurs par jour et calques métro / bus activables en haut à droite.</p>
         </div>
       </div>
       <div class="map-layout">
@@ -1115,7 +1115,7 @@ app.innerHTML = `
           <div class="map-activities">
             ${days.map(renderMapActivityDay).join("")}
           </div>
-          <p class="map-credit">Carte dynamique : <a href="https://leafletjs.com/" target="_blank" rel="noreferrer">Leaflet</a> + <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>. Calque satellite disponible dans le sélecteur.</p>
+          <p class="map-credit">Carte dynamique : <a href="https://leafletjs.com/" target="_blank" rel="noreferrer">Leaflet</a> + <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>. Dans le sélecteur ouvert sur la carte : OpenStreetMap, satellite, lignes de métro utiles et lignes de bus / tram.</p>
         </div>
       </div>
     </section>
@@ -1332,14 +1332,6 @@ function initLeafletMap(): void {
     attribution: "&copy; OpenStreetMap contributors",
   });
 
-  const cartoLayer = L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    {
-      maxZoom: 20,
-      attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-    },
-  );
-
   const satelliteLayer = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     {
@@ -1349,16 +1341,12 @@ function initLeafletMap(): void {
     },
   );
 
-  const subwayLayer = L.tileLayer("https://tile.tracestrack.com/subway-route/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    opacity: 0.9,
-    attribution: "Subway routes &copy; Tracestrack, &copy; OpenStreetMap contributors",
-  });
+  const subwayLayer = createUsefulSubwayLayer();
 
-  const busTramLayer = L.tileLayer("https://tile.tracestrack.com/bus-route/{z}/{x}/{y}.png", {
+  const busTramLayer = L.tileLayer("https://pt.facilmap.org/tile/{z}/{x}/{y}.png", {
     maxZoom: 19,
-    opacity: 0.78,
-    attribution: "Bus routes &copy; Tracestrack, &copy; OpenStreetMap contributors",
+    opacity: 0.92,
+    attribution: "Public transport &copy; OpenStreetMap contributors, FacilMap / OpenPTMap",
   });
 
   osmLayer.addTo(tripMap);
@@ -1366,19 +1354,19 @@ function initLeafletMap(): void {
     .layers(
       {
         OpenStreetMap: osmLayer,
-        "Carte claire": cartoLayer,
         Satellite: satelliteLayer,
       },
       {
-        "Lignes de métro": subwayLayer,
+        "Lignes de métro utiles": subwayLayer,
         "Lignes de bus / tram": busTramLayer,
       },
       {
+        collapsed: false,
         position: "topright",
       },
     )
     .addTo(tripMap);
-  L.control.scale({ imperial: false }).addTo(tripMap);
+  L.control.scale({ imperial: false, maxWidth: 160, position: "bottomleft" }).addTo(tripMap);
 
   const markers = mappedSites.map((site) => {
     const marker = L.marker([site.map.lat, site.map.lng], {
@@ -1398,6 +1386,63 @@ function initLeafletMap(): void {
   });
 
   setTimeout(() => tripMap?.invalidateSize(), 0);
+}
+
+function createUsefulSubwayLayer(): L.LayerGroup {
+  const layer = L.layerGroup();
+
+  addSubwayLine(layer, "7", "#b933ad", [
+    [40.759, -73.8297],
+    [40.7465, -73.8914],
+    [40.7517, -73.9407],
+    [40.7554, -73.9874],
+    [40.7538, -74.001],
+  ]);
+  addSubwayLine(layer, "F", "#ff6319", [
+    [40.757, -73.941],
+    [40.7646, -73.9661],
+    [40.7639, -73.9774],
+    [40.7253, -73.9962],
+    [40.7131, -74.0097],
+  ]);
+  addSubwayLine(layer, "N/W", "#fccc0a", [
+    [40.7568, -73.9296],
+    [40.7626, -73.9679],
+    [40.7546, -73.9868],
+    [40.7413, -73.9893],
+    [40.7048, -74.014],
+  ]);
+  addSubwayLine(layer, "4/5/6", "#00933c", [
+    [40.8041, -73.9376],
+    [40.7794, -73.9556],
+    [40.7527, -73.9772],
+    [40.7131, -74.0097],
+    [40.7048, -74.014],
+  ]);
+  addSubwayLine(layer, "R/W", "#fccc0a", [
+    [40.7626, -73.9679],
+    [40.7587, -73.9813],
+    [40.7357, -73.9911],
+    [40.7072, -74.0134],
+    [40.7031, -74.0128],
+  ]);
+
+  return layer;
+}
+
+function addSubwayLine(
+  layer: L.LayerGroup,
+  label: string,
+  color: string,
+  coordinates: [number, number][],
+): void {
+  L.polyline(coordinates, {
+    color,
+    opacity: 0.94,
+    weight: 6,
+  })
+    .bindTooltip(label, { sticky: true })
+    .addTo(layer);
 }
 
 function createMapIcon(site: Site & { map: MapPoint }): L.DivIcon {
