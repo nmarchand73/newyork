@@ -1,0 +1,594 @@
+:root {
+  --bg: #f6f1e8;
+  --ink: #172033;
+  --muted: #667085;
+  --card: #ffffff;
+  --accent: #0f766e;
+  --accent-strong: #0b5f59;
+  --accent-soft: #ecfdf5;
+  --blue: #2563eb;
+  --blue-soft: #eff6ff;
+  --line: #e5e7eb;
+  --shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
+  --radius: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  line-height: 1.55;
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.hero {
+  min-height: 62vh;
+  display: grid;
+  align-items: end;
+  padding: 64px 7vw;
+  color: white;
+  background:
+    linear-gradient(180deg, rgba(11, 18, 32, 0.18), rgba(11, 18, 32, 0.8)),
+    url("https://commons.wikimedia.org/wiki/Special:FilePath/Manhattan_Skyline_from_Brooklyn_Bridge_Park_November_2021.jpg")
+      center / cover;
+}
+
+.hero-content {
+  max-width: 1060px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin: 0 0 16px;
+  padding: 7px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 0.9rem;
+  font-weight: 800;
+  backdrop-filter: blur(12px);
+}
+
+.hero h1 {
+  margin: 0 0 16px;
+  font-size: clamp(2.35rem, 6vw, 5.25rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.hero p {
+  max-width: 840px;
+  margin: 0 0 22px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.15rem;
+}
+
+.hero-actions,
+.links,
+.chips,
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn,
+.pill-link,
+.chip,
+.filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 800;
+}
+
+.btn {
+  padding: 10px 16px;
+  background: white;
+  color: #0f172a;
+}
+
+.btn.secondary {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.wrap {
+  width: min(1200px, calc(100% - 36px));
+  margin: auto;
+  padding: 34px 0 52px;
+}
+
+.notice,
+.toolbar,
+.map-intro,
+.metro,
+.empty-state {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.notice {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 20px;
+  border-left: 7px solid var(--accent);
+}
+
+.notice strong {
+  color: var(--accent-strong);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 0 0 28px;
+}
+
+.stat {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.stat b {
+  display: block;
+  font-size: 1.85rem;
+  line-height: 1;
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 44px 0 16px;
+}
+
+.section-title h2 {
+  margin: 0;
+  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  letter-spacing: -0.035em;
+}
+
+.section-title p {
+  max-width: 640px;
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 16px;
+}
+
+.search {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #cbd5e1;
+  border-radius: 15px;
+  padding: 0 14px;
+  background: #f8fafc;
+}
+
+.filter {
+  cursor: pointer;
+  padding: 8px 12px;
+  color: #1e293b;
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.filter.is-active {
+  color: #065f46;
+  border-color: #86efac;
+  background: var(--accent-soft);
+}
+
+.grid,
+.details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.day,
+.site {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.day.is-active {
+  outline: 3px solid rgba(15, 118, 110, 0.28);
+}
+
+.day img,
+.site .cover {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: #dbeafe;
+}
+
+.content {
+  padding: 20px;
+}
+
+.date {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #065f46;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.day h3,
+.site h3 {
+  margin: 2px 0 8px;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.route {
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #f8fafc;
+  font-size: 0.95rem;
+}
+
+.route b {
+  color: var(--accent);
+}
+
+.pill-link,
+.chip {
+  padding: 7px 10px;
+  border-color: #c7d2fe;
+  background: #eef2ff;
+  font-size: 0.9rem;
+}
+
+.tip {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.full {
+  grid-column: span 3;
+}
+
+.two {
+  grid-column: span 2;
+}
+
+.map-intro {
+  padding: 22px;
+}
+
+.map-layout {
+  display: grid;
+  grid-template-columns: 1.7fr 0.9fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.ny-map {
+  position: relative;
+  min-height: 560px;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 38%, #ecfeff 38%, #ecfeff 100%);
+}
+
+.borough {
+  position: absolute;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 28px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.manhattan {
+  top: 8%;
+  left: 48%;
+  width: 16%;
+  height: 78%;
+  background: rgba(248, 250, 252, 0.86);
+  transform: rotate(14deg);
+}
+
+.brooklyn {
+  top: 59%;
+  left: 47%;
+  width: 30%;
+  height: 25%;
+  background: rgba(254, 249, 195, 0.78);
+  transform: rotate(-8deg);
+}
+
+.queens {
+  top: 26%;
+  left: 63%;
+  width: 28%;
+  height: 42%;
+  background: rgba(220, 252, 231, 0.82);
+  transform: rotate(6deg);
+}
+
+.map-label,
+.water-label {
+  position: absolute;
+  color: rgba(15, 23, 42, 0.48);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.water-label {
+  top: 48%;
+  left: 8%;
+  transform: rotate(-18deg);
+}
+
+.map-label {
+  font-size: 0.82rem;
+}
+
+.pin {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  color: white;
+  border: 3px solid white;
+  border-radius: 50% 50% 50% 0;
+  background: #ef4444;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
+  font-size: 0.76rem;
+  font-weight: 900;
+  transform: translate(-50%, -100%) rotate(-45deg);
+}
+
+.pin span {
+  transform: rotate(45deg);
+}
+
+.pin:hover,
+.pin:focus {
+  scale: 1.16;
+  background: var(--accent);
+  text-decoration: none;
+}
+
+.pin::after {
+  position: absolute;
+  top: 2px;
+  left: 30px;
+  padding: 5px 8px;
+  color: white;
+  white-space: nowrap;
+  pointer-events: none;
+  content: attr(data-name);
+  background: #0f172a;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  opacity: 0;
+  transform: rotate(45deg);
+}
+
+.pin:hover::after,
+.pin:focus::after {
+  opacity: 1;
+}
+
+.map-list {
+  max-height: 560px;
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #f8fafc;
+}
+
+.map-list a {
+  display: block;
+  margin: 4px 0;
+  padding: 9px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  font-weight: 800;
+}
+
+.map-list a:hover {
+  background: #eef2ff;
+  text-decoration: none;
+}
+
+.photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.photos img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 14px;
+  background: #dbeafe;
+}
+
+.site-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 8px 0 10px;
+}
+
+.site-meta span {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  color: #334155;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.check-row input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.toplink {
+  float: right;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.metro {
+  margin-top: 32px;
+  padding: 24px;
+}
+
+.empty-state {
+  display: none;
+  padding: 24px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty-state.is-visible {
+  display: block;
+}
+
+.footer {
+  padding: 28px 7vw 46px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 980px) {
+  .stats,
+  .grid,
+  .details,
+  .map-layout,
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .full,
+  .two {
+    grid-column: span 1;
+  }
+
+  .hero {
+    min-height: 52vh;
+  }
+
+  .day img {
+    height: 240px;
+  }
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    width: min(100% - 24px, 1200px);
+    padding-top: 24px;
+  }
+
+  .hero {
+    padding: 46px 18px;
+  }
+
+  .section-title {
+    display: block;
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .photos {
+    grid-template-columns: 1fr;
+  }
+
+  .photos img {
+    height: 210px;
+  }
+
+  .ny-map {
+    min-height: 520px;
+  }
+
+  .pin::after {
+    display: none;
+  }
+}

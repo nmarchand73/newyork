@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New York en famille — Planning interactif 2026</title>
+<style>
+:root{--bg:#f7f4ef;--ink:#1f2933;--muted:#667085;--card:#fff;--accent:#0f766e;--accent2:#0b5ed7;--line:#e5e7eb;--tag:#ecfdf5;--soft:#f8fafc}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}a{color:var(--accent2);text-decoration:none}a:hover{text-decoration:underline}.hero{min-height:58vh;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.72)),url('https://commons.wikimedia.org/wiki/Special:FilePath/Manhattan_Skyline_from_Brooklyn_Bridge_Park_November_2021.jpg') center/cover;color:white;display:grid;align-items:end;padding:56px 7vw}.hero h1{font-size:clamp(2.1rem,5vw,4.8rem);line-height:1.02;margin:0 0 14px}.hero p{max-width:900px;font-size:1.15rem;margin:0 0 18px}.btn{display:inline-block;background:#fff;color:#0f172a;border-radius:999px;padding:10px 14px;font-weight:800;margin:4px 6px 0 0}.wrap{max-width:1180px;margin:auto;padding:34px 20px}.notice{background:#fff;border-left:6px solid var(--accent);border-radius:14px;padding:18px 20px;margin-bottom:28px;box-shadow:0 8px 24px rgba(15,23,42,.08)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.day,.site{background:var(--card);border-radius:22px;overflow:hidden;box-shadow:0 12px 30px rgba(15,23,42,.08);border:1px solid var(--line)}.day img,.site .cover{width:100%;height:220px;object-fit:cover;display:block;background:#dbeafe}.day .content,.site .content{padding:20px}.date{display:inline-block;background:var(--tag);color:#065f46;padding:6px 10px;border-radius:999px;font-weight:800;font-size:.86rem;margin-bottom:10px}.day h2,.site h2{margin:3px 0 8px;font-size:1.35rem}.route{background:var(--soft);border:1px solid #e2e8f0;border-radius:14px;padding:12px;margin:12px 0;font-size:.95rem}.route b{color:#0f766e}.day ul,.site ul{padding-left:20px;margin:10px 0}.tip{color:var(--muted);font-size:.94rem}.full{grid-column:span 3}.two{grid-column:span 2}.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.links a{background:#eef2ff;border:1px solid #c7d2fe;padding:7px 10px;border-radius:999px;font-weight:700;font-size:.9rem}.section-title{margin:44px 0 16px}.details{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.photos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.photos img{width:100%;height:150px;object-fit:cover;border-radius:14px;background:#dbeafe}.toplink{float:right;font-size:.9rem;font-weight:700}.metro{margin-top:32px;background:#fff;border-radius:22px;padding:24px;border:1px solid var(--line)}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{background:#eef2ff;border:1px solid #c7d2fe;padding:7px 10px;border-radius:999px;font-weight:600}.footer{padding:28px 7vw 46px;color:#667085;text-align:center}
+.map-intro{background:#fff;border:1px solid var(--line);border-radius:26px;padding:22px;margin:0 0 30px;box-shadow:0 12px 30px rgba(15,23,42,.08)}.map-intro h2{margin:0 0 8px}.map-layout{display:grid;grid-template-columns:1.7fr .9fr;gap:18px;align-items:stretch}.ny-map{position:relative;min-height:560px;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 38%,#ecfeff 38%,#ecfeff 100%);border:1px solid #cbd5e1}.borough{position:absolute;border-radius:28px;background:rgba(255,255,255,.72);border:1px solid rgba(15,23,42,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}.manhattan{left:48%;top:8%;width:16%;height:78%;transform:rotate(14deg);background:rgba(248,250,252,.86)}.brooklyn{left:47%;top:59%;width:30%;height:25%;transform:rotate(-8deg);background:rgba(254,249,195,.78)}.queens{left:63%;top:26%;width:28%;height:42%;transform:rotate(6deg);background:rgba(220,252,231,.82)}.water-label,.area-label{position:absolute;font-weight:800;color:rgba(15,23,42,.45);letter-spacing:.02em}.water-label{left:8%;top:48%;transform:rotate(-18deg);font-size:1.1rem}.area-label{font-size:.82rem}.pin{position:absolute;transform:translate(-50%,-100%);display:grid;place-items:center;width:34px;height:34px;border-radius:50% 50% 50% 0;background:#ef4444;color:#fff;font-weight:900;border:3px solid #fff;box-shadow:0 8px 18px rgba(15,23,42,.25);rotate:-45deg;z-index:4}.pin span{rotate:45deg;font-size:.76rem}.pin:hover,.pin:focus{scale:1.16;text-decoration:none;background:#0f766e}.pin::after{content:attr(data-name);position:absolute;left:30px;top:2px;rotate:45deg;background:#0f172a;color:white;white-space:nowrap;border-radius:999px;padding:5px 8px;font-size:.72rem;opacity:0;pointer-events:none}.pin:hover::after,.pin:focus::after{opacity:1}.map-list{background:var(--soft);border:1px solid #e2e8f0;border-radius:20px;padding:16px;overflow:auto;max-height:560px}.map-list a{display:block;padding:9px 10px;margin:4px 0;border-radius:12px;background:white;border:1px solid #e5e7eb;font-weight:700}.map-list a:hover{background:#eef2ff;text-decoration:none}.legend{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.legend span{background:#ecfdf5;border:1px solid #bbf7d0;border-radius:999px;padding:6px 9px;font-weight:700;font-size:.86rem}
+@media(max-width:900px){.grid,.details,.map-layout{grid-template-columns:1fr}.full,.two{grid-column:span 1}.hero{min-height:48vh}.day img{height:240px}.photos{grid-template-columns:1fr}.photos img{height:210px}.ny-map{min-height:520px}.pin::after{display:none}}
+</style>
+</head>
+<body id="top">
+<header class="hero">
+  <div>
+    <h1>New York en famille<br>4 → 12 juillet 2026</h1>
+    <p>Planning interactif depuis votre hôtel au 38-70 12th Street, Queens. Chaque destination est cliquable et renvoie vers une fiche avec photos, détails et conseils.</p>
+    <a class="btn" href="#carte">Voir la carte</a><a class="btn" href="#planning">Voir le planning</a><a class="btn" href="#details">Voir les fiches détaillées</a>
+  </div>
+</header>
+<main class="wrap">
+<section class="notice">
+  <b>Base transport :</b> stations utiles : <b>21 St–Queensbridge</b> pour F/M et <b>Queensboro Plaza</b> pour 7, N, W. Tous les lieux ci-dessous sont reliés par des liens internes : cliquez sur un nom pour voir les photos et détails.
+</section>
+<section class="map-intro" id="carte">
+  <h2>Carte interactive des visites</h2>
+  <p class="tip">Cliquez sur un marqueur ou sur un nom dans la liste : la page descend directement vers la fiche détaillée avec photos et conseils. Carte schématique centrée sur Manhattan, Brooklyn et Queens.</p>
+  <div class="legend"><span>Point de départ : hôtel à Long Island City</span><span>Manhattan</span><span>Brooklyn</span><span>Queens</span></div>
+  <div class="map-layout">
+    <div class="ny-map" role="img" aria-label="Carte schématique interactive de New York">
+      <div class="borough manhattan"></div><div class="borough brooklyn"></div><div class="borough queens"></div>
+      <div class="water-label">East River / Hudson</div>
+      <div class="area-label" style="left:51%;top:5%">Manhattan</div><div class="area-label" style="left:69%;top:24%">Queens</div><div class="area-label" style="left:55%;top:84%">Brooklyn</div>
+      <a class="pin" href="#gantry" data-name="Hôtel / Gantry Plaza" style="left:70%;top:43%"><span>H</span></a>
+      <a class="pin" href="#times-square" data-name="Times Square" style="left:53%;top:31%"><span>1</span></a>
+      <a class="pin" href="#grand-central" data-name="Grand Central" style="left:56%;top:35%"><span>2</span></a>
+      <a class="pin" href="#top-rock" data-name="Top of the Rock" style="left:54%;top:27%"><span>3</span></a>
+      <a class="pin" href="#central-park" data-name="Central Park" style="left:52%;top:18%"><span>4</span></a>
+      <a class="pin" href="#amnh" data-name="Museum of Natural History" style="left:49%;top:16%"><span>5</span></a>
+      <a class="pin" href="#met" data-name="MET" style="left:55%;top:17%"><span>6</span></a>
+      <a class="pin" href="#hudson-yards" data-name="Hudson Yards" style="left:49%;top:41%"><span>7</span></a>
+      <a class="pin" href="#high-line" data-name="High Line / Chelsea" style="left:48%;top:49%"><span>8</span></a>
+      <a class="pin" href="#soho" data-name="SoHo" style="left:52%;top:60%"><span>9</span></a>
+      <a class="pin" href="#chinatown" data-name="Chinatown" style="left:54%;top:66%"><span>10</span></a>
+      <a class="pin" href="#liberty" data-name="Statue de la Liberté" style="left:40%;top:82%"><span>11</span></a>
+      <a class="pin" href="#memorial911" data-name="9/11 Memorial" style="left:50%;top:72%"><span>12</span></a>
+      <a class="pin" href="#brooklyn-bridge" data-name="Brooklyn Bridge" style="left:58%;top:70%"><span>13</span></a>
+      <a class="pin" href="#dumbo" data-name="DUMBO" style="left:62%;top:73%"><span>14</span></a>
+      <a class="pin" href="#flushing" data-name="Flushing" style="left:87%;top:47%"><span>15</span></a>
+      <a class="pin" href="#astoria" data-name="Astoria" style="left:71%;top:31%"><span>16</span></a>
+    </div>
+    <div class="map-list">
+      <b>Accès rapide aux fiches</b>
+      <a href="#gantry">Hôtel / Gantry Plaza — Queens</a><a href="#times-square">Times Square</a><a href="#grand-central">Grand Central</a><a href="#top-rock">Top of the Rock</a><a href="#central-park">Central Park</a><a href="#amnh">Museum of Natural History</a><a href="#met">MET</a><a href="#hudson-yards">Hudson Yards</a><a href="#high-line">High Line / Chelsea</a><a href="#liberty">Statue de la Liberté</a><a href="#memorial911">9/11 Memorial</a><a href="#brooklyn-bridge">Brooklyn Bridge</a><a href="#dumbo">DUMBO</a><a href="#soho">SoHo</a><a href="#chinatown">Chinatown</a><a href="#flushing">Flushing</a><a href="#astoria">Astoria</a>
+    </div>
+  </div>
+</section>
+
+<section id="planning" class="grid">
+  <article class="day full"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Macy%27s_4th_of_July_Fireworks_2011_-_New_York_City.jpg"><div class="content"><span class="date">Samedi 4 juillet</span><h2>Arrivée, douanes et installation</h2><p>Arrivée à 19h : prévoyez 2h à 2h30 pour douanes, bagages et transfert. Soirée légère.</p><div class="route"><b>Trajet :</b> selon aéroport : JFK = AirTrain + métro ; LaGuardia = bus + métro ; Newark = train + métro. Arrivée probable hôtel : 21h30–22h30.</div><div class="links"><a href="#gantry">Gantry Plaza</a><a href="#fireworks">Feu d’artifice</a></div></div></article>
+
+  <article class="day"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/1_times_square_night_2013.jpg"><div class="content"><span class="date">Dimanche 5 juillet</span><h2>Midtown spectaculaire</h2><div class="route"><b>Trajet :</b> Queensboro Plaza → <b>7/N/W</b> vers Manhattan.</div><div class="links"><a href="#times-square">Times Square</a><a href="#bryant">Bryant Park</a><a href="#library">NY Public Library</a><a href="#grand-central">Grand Central</a><a href="#rockefeller">Rockefeller Center</a><a href="#top-rock">Top of the Rock</a></div></div></article>
+
+  <article class="day"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Statue_of_Liberty_7.jpg"><div class="content"><span class="date">Lundi 6 juillet</span><h2>Statue & Lower Manhattan</h2><div class="route"><b>Trajet :</b> 21 St–Queensbridge → <b>F/M</b>, puis <b>R/W</b> ou <b>4/5</b> vers Bowling Green / Whitehall.</div><div class="links"><a href="#liberty">Statue de la Liberté</a><a href="#ellis">Ellis Island</a><a href="#wall-street">Wall Street</a><a href="#oculus">Oculus</a><a href="#memorial911">9/11 Memorial</a></div></div></article>
+
+  <article class="day"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Bridge_Postdlf.jpg"><div class="content"><span class="date">Mardi 7 juillet</span><h2>Brooklyn Bridge & DUMBO</h2><div class="route"><b>Trajet :</b> Queensboro Plaza → <b>7</b> jusqu’à Grand Central, puis <b>4/5/6</b> vers Brooklyn Bridge–City Hall.</div><div class="links"><a href="#brooklyn-bridge">Brooklyn Bridge</a><a href="#dumbo">DUMBO</a><a href="#carousel">Jane’s Carousel</a><a href="#bbpark">Brooklyn Bridge Park</a></div></div></article>
+
+  <article class="day"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Central_Park_New_York_City_New_York_23_crop.jpg"><div class="content"><span class="date">Mercredi 8 juillet</span><h2>Central Park + musée</h2><div class="route"><b>Trajet :</b> 21 St–Queensbridge → <b>F/M</b> vers 57 St ou Lexington Av/63 St.</div><div class="links"><a href="#central-park">Central Park</a><a href="#bethesda">Bethesda Terrace</a><a href="#amnh">Museum of Natural History</a><a href="#met">MET</a></div></div></article>
+
+  <article class="day"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/High_Line_20th_Street_looking_downtown.jpg"><div class="content"><span class="date">Jeudi 9 juillet</span><h2>High Line, Chelsea & Hudson Yards</h2><div class="route"><b>Trajet :</b> Queensboro Plaza → <b>7</b> direct jusqu’à 34 St–Hudson Yards.</div><div class="links"><a href="#hudson-yards">Hudson Yards</a><a href="#vessel">Vessel</a><a href="#high-line">High Line</a><a href="#chelsea-market">Chelsea Market</a><a href="#little-island">Little Island</a></div></div></article>
+
+  <article class="day"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gantry_Plaza_State_Park_2012.jpg"><div class="content"><span class="date">Vendredi 10 juillet</span><h2>Queens local & skyline</h2><div class="route"><b>Trajet :</b> marche locale ; Flushing par <b>7</b>, Astoria par <b>N/W</b>.</div><div class="links"><a href="#gantry">Gantry Plaza</a><a href="#moma-ps1">MoMA PS1</a><a href="#flushing">Flushing</a><a href="#astoria">Astoria</a></div></div></article>
+
+  <article class="day"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Canal_Street_Chinatown_New_York_City.jpg"><div class="content"><span class="date">Samedi 11 juillet</span><h2>SoHo, Chinatown, Little Italy</h2><div class="route"><b>Trajet :</b> 21 St–Queensbridge → <b>F/M</b> vers Broadway–Lafayette.</div><div class="links"><a href="#soho">SoHo</a><a href="#chinatown">Chinatown</a><a href="#little-italy">Little Italy</a><a href="#washington-square">Washington Square Park</a></div></div></article>
+
+  <article class="day"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/JFK_Airport_Terminal_4.jpg"><div class="content"><span class="date">Dimanche 12 juillet</span><h2>Dernière balade & départ</h2><div class="route"><b>Conseil :</b> quitter l’hôtel environ 4h avant un vol international.</div><div class="links"><a href="#gantry">Dernières photos à Gantry Plaza</a></div></div></article>
+</section>
+
+<h2 id="details" class="section-title">Fiches détaillées des destinations</h2>
+<section class="details">
+</section>
+
+<section class="metro">
+<h2>Lignes à retenir</h2>
+<div class="chips"><span class="chip">7 : Queens ↔ Grand Central / Times Sq / Hudson Yards</span><span class="chip">F/M : Queensbridge ↔ Midtown / Downtown</span><span class="chip">N/W : Queensboro Plaza ↔ Midtown</span><span class="chip">4/5/6 : axe Est de Manhattan</span><span class="chip">R/W : accès Bowling Green / Whitehall</span></div>
+<p class="tip">Démarrez vers 9h00–9h30, pause déjeuner longue, et retour possible à l’hôtel si chaleur ou fatigue.</p>
+</section>
+</main>
+<footer class="footer">Planning familial interactif — New York, juillet 2026</footer>
+<script>
+const sites=[
+['fireworks','Feu d’artifice du 4 juillet','https://commons.wikimedia.org/wiki/Special:FilePath/Macy%27s_4th_of_July_Fireworks_2011_-_New_York_City.jpg','À voir si vous avez encore de l’énergie le soir de l’arrivée, mais la foule est très importante. Depuis Queens, privilégier une vue locale plutôt qu’un grand déplacement.','Conseil famille : garder cette option seulement si tout le monde est en forme.'],
+['times-square','Times Square','https://commons.wikimedia.org/wiki/Special:FilePath/1_times_square_night_2013.jpg','Le New York lumineux et spectaculaire : écrans géants, magasins, ambiance permanente. Idéal pour le premier contact avec Manhattan.','Meilleur moment : fin d’après-midi ou soirée.'],
+['bryant','Bryant Park','https://commons.wikimedia.org/wiki/Special:FilePath/Bryant_Park_New_York_City.jpg','Parc agréable derrière la bibliothèque, parfait pour une pause fraîcheur, un café ou quelques photos.','À combiner avec la New York Public Library.'],
+['library','New York Public Library','https://commons.wikimedia.org/wiki/Special:FilePath/New_York_Public_Library_-_Main_Branch.jpg','Magnifique bâtiment Beaux-Arts, entrée impressionnante, lions iconiques et salles historiques.','Visite courte possible : 30 à 45 minutes.'],
+['grand-central','Grand Central Terminal','https://commons.wikimedia.org/wiki/Special:FilePath/Grand_Central_Terminal_Main_Concourse_Jan_2006.jpg','Grande gare mythique avec plafond étoilé, architecture spectaculaire et food court pratique.','Pause idéale si météo chaude ou pluie.'],
+['rockefeller','Rockefeller Center','https://commons.wikimedia.org/wiki/Special:FilePath/Rockefeller_Center_New_York.jpg','Complexe emblématique de Midtown : Channel Gardens, patinoire hors saison transformée, boutiques et animations.','Très photogénique autour de la 5th Avenue.'],
+['top-rock','Top of the Rock','https://commons.wikimedia.org/wiki/Special:FilePath/Top_of_the_Rock_View.jpg','Observatoire avec vue très lisible sur Central Park et l’Empire State Building. Bon choix en famille.','Réserver un créneau proche du coucher du soleil si possible.'],
+['liberty','Statue de la Liberté','https://commons.wikimedia.org/wiki/Special:FilePath/Statue_of_Liberty_7.jpg','Symbole de New York et des États-Unis. Le ferry donne aussi de superbes vues sur Manhattan.','Réserver le bateau tôt ; éviter les sacs volumineux.'],
+['ellis','Ellis Island','https://commons.wikimedia.org/wiki/Special:FilePath/Ellis_Island_Main_Building.jpg','Musée de l’immigration, émouvant et intéressant pour comprendre l’histoire des arrivées à New York.','Prévoir 1h à 1h30 selon l’intérêt des enfants.'],
+['wall-street','Wall Street','https://commons.wikimedia.org/wiki/Special:FilePath/New_York_Stock_Exchange_Front.jpg','Quartier financier : New York Stock Exchange, Federal Hall, rues étroites et ambiance business.','Visite courte, surtout pour les photos.'],
+['oculus','Oculus','https://commons.wikimedia.org/wiki/Special:FilePath/Oculus_World_Trade_Center_Transportation_Hub.jpg','Architecture blanche spectaculaire, centre commercial et gare sous le World Trade Center.','Très pratique pour pause climatisée.'],
+['memorial911','9/11 Memorial','https://commons.wikimedia.org/wiki/Special:FilePath/National_September_11_Memorial_%26_Museum.jpg','Lieu de mémoire sobre et impressionnant, avec les deux bassins à l’emplacement des tours.','Avec ados : expliquer avant la visite pour donner du contexte.'],
+['brooklyn-bridge','Brooklyn Bridge','https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Bridge_Postdlf.jpg','Traversée iconique à pied avec vues sur Manhattan, câbles et skyline.','Commencer côté Manhattan et terminer à DUMBO.'],
+['dumbo','DUMBO','https://commons.wikimedia.org/wiki/Special:FilePath/Manhattan_Bridge_from_Dumbo_Brooklyn.jpg','Quartier photo incontournable, notamment Washington Street avec le Manhattan Bridge.','Très fréquenté : venir matin ou fin de journée.'],
+['carousel','Jane’s Carousel','https://commons.wikimedia.org/wiki/Special:FilePath/Janes_Carousel_Brooklyn.jpg','Carrousel vintage sous verrière, au bord de l’East River. Même sans monter, le lieu est beau.','À combiner avec Brooklyn Bridge Park.'],
+['bbpark','Brooklyn Bridge Park','https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Bridge_Park_Manhattan_Skyline.jpg','Grand parc au bord de l’eau avec vues magnifiques sur Lower Manhattan.','Parfait pour repos, glace, photos et coucher de soleil.'],
+['central-park','Central Park','https://commons.wikimedia.org/wiki/Special:FilePath/Central_Park_New_York_City_New_York_23_crop.jpg','Le grand bol d’air de Manhattan : lacs, pelouses, ponts, artistes de rue.','Ne pas vouloir tout faire : viser une zone.'],
+['bethesda','Bethesda Terrace','https://commons.wikimedia.org/wiki/Special:FilePath/Bethesda_Terrace_and_Fountain,_Central_Park.jpg','Un des plus beaux endroits de Central Park : fontaine, arcade, musiciens, vue sur le lac.','Très beau en milieu de matinée.'],
+['amnh','American Museum of Natural History','https://commons.wikimedia.org/wiki/Special:FilePath/American_Museum_of_Natural_History_New_York_City.jpg','Dinosaures, planétarium, baleine bleue : excellent choix avec enfants/ados.','Choisir 2 ou 3 zones, pas tout le musée.'],
+['met','Metropolitan Museum of Art','https://commons.wikimedia.org/wiki/Special:FilePath/Metropolitan_Museum_of_Art_%28The_Met%29_-_Central_Park.jpg','Immense musée d’art : Égypte, armures, peinture européenne, rooftop selon saison.','À préférer si la famille aime l’histoire et l’art.'],
+['hudson-yards','Hudson Yards','https://commons.wikimedia.org/wiki/Special:FilePath/Hudson_Yards_from_High_Line_2019.jpg','Quartier moderne, buildings récents, accès direct à la High Line.','Bon point de départ avec la ligne 7.'],
+['vessel','Vessel','https://commons.wikimedia.org/wiki/Special:FilePath/Vessel_%28structure%29_from_Hudson_Yards.jpg','Structure monumentale de Hudson Yards, très photogénique depuis l’extérieur.','Vérifier les conditions d’accès avant visite.'],
+['high-line','High Line','https://commons.wikimedia.org/wiki/Special:FilePath/High_Line_20th_Street_looking_downtown.jpg','Ancienne voie ferrée transformée en promenade végétalisée au-dessus des rues.','Marcher de Hudson Yards vers Chelsea Market.'],
+['chelsea-market','Chelsea Market','https://commons.wikimedia.org/wiki/Special:FilePath/Chelsea_Market,_NYC.jpg','Marché couvert avec food stalls, boutiques et ambiance industrielle.','Très pratique pour déjeuner en famille.'],
+['little-island','Little Island','https://commons.wikimedia.org/wiki/Special:FilePath/Little_Island_New_York_City.jpg','Parc suspendu sur l’Hudson, original et agréable pour une pause.','À faire après Chelsea Market si tout le monde a encore envie de marcher.'],
+['gantry','Gantry Plaza State Park','https://commons.wikimedia.org/wiki/Special:FilePath/Gantry_Plaza_State_Park_2012.jpg','Vue magnifique sur la skyline de Manhattan depuis Long Island City, très proche de l’hôtel.','Parfait le premier soir, le matin du départ ou au coucher du soleil.'],
+['moma-ps1','MoMA PS1','https://commons.wikimedia.org/wiki/Special:FilePath/MoMA_PS1_courtyard.jpg','Centre d’art contemporain à Long Island City, plus alternatif que les grands musées classiques.','À faire si vous voulez une visite courte et locale.'],
+['flushing','Flushing','https://commons.wikimedia.org/wiki/Special:FilePath/Main_Street_Flushing_Queens_NY.jpg','Quartier vivant du Queens, connu pour sa cuisine asiatique et son ambiance très différente de Manhattan.','Y aller avec la ligne 7 jusqu’au terminus Flushing–Main St.'],
+['astoria','Astoria','https://commons.wikimedia.org/wiki/Special:FilePath/Astoria_Park_Hell_Gate_Bridge.jpg','Quartier agréable du Queens, restaurants grecs, Astoria Park et vue sur les ponts.','Bonne option dîner plus calme.'],
+['soho','SoHo','https://commons.wikimedia.org/wiki/Special:FilePath/SoHo_Cast_Iron_Historic_District.jpg','Boutiques, façades cast-iron, rues animées et très photogéniques.','Prévoir du temps libre pour shopping.'],
+['chinatown','Chinatown','https://commons.wikimedia.org/wiki/Special:FilePath/Canal_Street_Chinatown_New_York_City.jpg','Rues denses, restaurants, snacks, marchés et ambiance unique.','Idéal pour déjeuner simple et dépaysant.'],
+['little-italy','Little Italy','https://commons.wikimedia.org/wiki/Special:FilePath/Mulberry_Street_Little_Italy_New_York.jpg','Petite zone historique autour de Mulberry Street, restaurants italiens et décor touristique.','À voir en passant depuis Chinatown.'],
+['washington-square','Washington Square Park','https://commons.wikimedia.org/wiki/Special:FilePath/Washington_Square_Park_Arch.jpg','Parc vivant de Greenwich Village, arche célèbre, musiciens, étudiants et ambiance locale.','Très bon final après SoHo/Chinatown.']
+];
+const container=document.querySelector('.details');
+container.innerHTML=sites.map(([id,title,img,desc,tip])=>`<article class="site" id="${id}"><img class="cover" src="${img}" alt="${title}"><div class="content"><a class="toplink" href="#planning">↑ planning</a><span class="date">Fiche destination</span><h2>${title}</h2><p>${desc}</p><div class="route"><b>À voir / faire :</b><ul><li>Prendre des photos et repérer les points de vue.</li><li>Prévoir une pause boisson en juillet.</li><li>Adapter la durée selon fatigue des enfants.</li></ul></div><p class="tip">${tip}</p><div class="photos"><img src="${img}" alt="${title} photo 1"><img src="${img}" alt="${title} photo 2"></div></div></article>`).join('');
+function fallback(img){const title=img.alt||'New York';const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0f766e"/><stop offset="1" stop-color="#1f2937"/></linearGradient></defs><rect width="1200" height="700" fill="url(#g)"/><text x="60" y="330" font-family="Arial" font-size="58" fill="white" font-weight="700">${title.replace(/&/g,'&amp;')}</text><text x="60" y="410" font-family="Arial" font-size="30" fill="#d1fae5">Photo indisponible — cliquez / fiche destination</text></svg>`;img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)}
+document.querySelectorAll('img').forEach(img=>{img.onerror=()=>fallback(img)});
+</script>
+</body>
+</html>
