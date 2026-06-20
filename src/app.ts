@@ -1105,7 +1105,12 @@ app.innerHTML = `
         </div>
       </div>
       <div class="map-layout">
-        <div class="ny-map" id="leafletMap" aria-label="Carte Leaflet interactive de New York">
+        <div class="map-shell" id="mapShell">
+          <button class="map-maximize-button" type="button" data-map-maximize aria-expanded="false" aria-controls="leafletMap">
+            Agrandir la carte
+          </button>
+          <div class="ny-map" id="leafletMap" aria-label="Carte Leaflet interactive de New York">
+          </div>
         </div>
         <div class="map-list">
           <b>Numéros sur la carte</b>
@@ -1309,6 +1314,7 @@ function renderMapActivityLink(site: Site & { map: MapPoint }): string {
 function initLeafletMap(): void {
   const mapElement = document.querySelector<HTMLDivElement>("#leafletMap");
   const mappedSites = sites.filter((site): site is Site & { map: MapPoint } => Boolean(site.map));
+  const shouldCollapseLayers = window.matchMedia("(max-width: 640px)").matches;
 
   if (!mapElement || mappedSites.length === 0) {
     return;
@@ -1361,8 +1367,8 @@ function initLeafletMap(): void {
         "Lignes de bus / tram": busTramLayer,
       },
       {
-        collapsed: false,
-        position: "topright",
+        collapsed: shouldCollapseLayers,
+        position: "bottomright",
       },
     )
     .addTo(tripMap);
@@ -1386,6 +1392,24 @@ function initLeafletMap(): void {
   });
 
   setTimeout(() => tripMap?.invalidateSize(), 0);
+}
+
+function toggleMapMaximized(shouldMaximize?: boolean): void {
+  const mapShell = document.querySelector<HTMLDivElement>("#mapShell");
+  const button = document.querySelector<HTMLButtonElement>("[data-map-maximize]");
+
+  if (!mapShell || !button) {
+    return;
+  }
+
+  const isMaximized = shouldMaximize ?? !mapShell.classList.contains("is-map-maximized");
+
+  mapShell.classList.toggle("is-map-maximized", isMaximized);
+  document.body.classList.toggle("has-map-maximized", isMaximized);
+  button.setAttribute("aria-expanded", String(isMaximized));
+  button.textContent = isMaximized ? "Réduire la carte" : "Agrandir la carte";
+
+  setTimeout(() => tripMap?.invalidateSize(), 120);
 }
 
 function createUsefulSubwayLayer(): L.LayerGroup {
@@ -1700,6 +1724,10 @@ function bindInteractions(): void {
     );
   });
 
+  document.querySelector<HTMLButtonElement>("[data-map-maximize]")?.addEventListener("click", () => {
+    toggleMapMaximized();
+  });
+
   document.addEventListener("click", (event) => {
     if (!(event.target instanceof Element)) {
       return;
@@ -1722,6 +1750,7 @@ function bindInteractions(): void {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeImageLightbox();
+      toggleMapMaximized(false);
       return;
     }
 

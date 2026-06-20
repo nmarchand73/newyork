@@ -511,9 +511,15 @@ select {
   align-items: stretch;
 }
 
+.map-shell {
+  position: relative;
+  min-height: 560px;
+}
+
 .ny-map {
   position: relative;
   min-height: 560px;
+  height: 100%;
   overflow: hidden;
   border: 1px solid #cbd5e1;
   border-radius: 22px;
@@ -524,6 +530,51 @@ select {
 
 .ny-map:active {
   cursor: grabbing;
+}
+
+.map-maximize-button {
+  position: absolute;
+  z-index: 800;
+  top: 12px;
+  right: 12px;
+  padding: 10px 13px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+  color: #0f172a;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 900;
+  backdrop-filter: blur(10px);
+}
+
+.map-maximize-button:hover,
+.map-maximize-button:focus-visible {
+  background: white;
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+}
+
+.map-shell.is-map-maximized {
+  position: fixed;
+  z-index: 1200;
+  inset: 12px;
+  min-height: 0;
+  padding: 0;
+  border-radius: 24px;
+  background: white;
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.36);
+}
+
+.map-shell.is-map-maximized .ny-map {
+  min-height: 0;
+  height: 100%;
+  border-radius: 24px;
+}
+
+body.has-map-maximized {
+  overflow: hidden;
 }
 
 .ny-map .leaflet-container,
@@ -541,6 +592,7 @@ select {
 
 .ny-map .leaflet-control-layers {
   max-width: min(260px, calc(100vw - 56px));
+  margin-bottom: 24px;
   padding: 6px 8px;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(10px);
@@ -925,8 +977,37 @@ img[data-lightbox-image]:focus-visible {
     grid-template-columns: 1fr 1fr;
   }
 
+  .map-shell,
   .ny-map {
     min-height: 520px;
+  }
+
+  .map-shell.is-map-maximized {
+    inset: 8px;
+    border-radius: 18px;
+  }
+
+  .map-shell.is-map-maximized .ny-map {
+    border-radius: 18px;
+  }
+
+  .map-maximize-button {
+    max-width: calc(100% - 112px);
+    padding: 8px 11px;
+    font-size: 0.78rem;
+  }
+
+  .ny-map .leaflet-control-layers {
+    max-width: min(190px, calc(100vw - 92px));
+    margin-right: 4px;
+    margin-bottom: 28px;
+    padding: 4px 6px;
+    font-size: 0.74rem;
+  }
+
+  .ny-map .leaflet-control-layers-expanded {
+    max-height: 42vh;
+    overflow: auto;
   }
 
   .pin::after {
