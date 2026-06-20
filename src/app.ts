@@ -1107,6 +1107,11 @@ app.innerHTML = `
     </section>
   </main>
   <footer class="footer">Planning familial interactif — New York, juillet 2026</footer>
+  <div class="image-lightbox" id="imageLightbox" aria-hidden="true" role="dialog" aria-label="Photo en plein écran">
+    <button class="image-lightbox-close" type="button" aria-label="Fermer la photo">×</button>
+    <img src="" alt="">
+    <p></p>
+  </div>
 `;
 
 renderSites();
@@ -1432,7 +1437,7 @@ function renderDynamicImage({
   slot: number;
   className?: string;
 }): string {
-  return `<img class="${className ?? ""} dynamic-image is-loading" src="${createPlaceholderImage(alt)}" alt="${escapeHtml(alt)}" loading="lazy" data-image-query="${escapeHtml(query)}" data-image-slot="${slot}" data-fallback-image="${escapeHtml(fallbackImage)}">`;
+  return `<img class="${className ?? ""} dynamic-image is-loading" src="${createPlaceholderImage(alt)}" alt="${escapeHtml(alt)}" loading="lazy" tabindex="0" data-lightbox-image data-image-query="${escapeHtml(query)}" data-image-slot="${slot}" data-fallback-image="${escapeHtml(fallbackImage)}">`;
 }
 
 function getSiteImageQuery(site: Site, slot = 0): string {
@@ -1609,6 +1614,80 @@ function bindInteractions(): void {
       },
     );
   });
+
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element)) {
+      return;
+    }
+
+    const image = event.target.closest<HTMLImageElement>("img[data-lightbox-image]");
+
+    if (image) {
+      openImageLightbox(image);
+      return;
+    }
+
+    const lightbox = document.querySelector<HTMLDivElement>("#imageLightbox");
+
+    if (lightbox?.classList.contains("is-open") && event.target === lightbox) {
+      closeImageLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeImageLightbox();
+      return;
+    }
+
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    const image = event.target;
+
+    if (image instanceof HTMLImageElement && image.matches("img[data-lightbox-image]")) {
+      event.preventDefault();
+      openImageLightbox(image);
+    }
+  });
+
+  document.querySelector<HTMLButtonElement>(".image-lightbox-close")?.addEventListener("click", closeImageLightbox);
+}
+
+function openImageLightbox(sourceImage: HTMLImageElement): void {
+  const lightbox = document.querySelector<HTMLDivElement>("#imageLightbox");
+  const lightboxImage = lightbox?.querySelector<HTMLImageElement>("img");
+  const caption = lightbox?.querySelector<HTMLParagraphElement>("p");
+
+  if (!lightbox || !lightboxImage || !caption) {
+    return;
+  }
+
+  lightboxImage.src = sourceImage.dataset.originalImage ?? sourceImage.currentSrc ?? sourceImage.src;
+  lightboxImage.alt = sourceImage.alt;
+  caption.textContent = sourceImage.alt;
+  lightbox.classList.add("is-open");
+  lightbox.setAttribute("aria-hidden", "false");
+  document.body.classList.add("has-lightbox-open");
+  document.querySelector<HTMLButtonElement>(".image-lightbox-close")?.focus();
+}
+
+function closeImageLightbox(): void {
+  const lightbox = document.querySelector<HTMLDivElement>("#imageLightbox");
+  const lightboxImage = lightbox?.querySelector<HTMLImageElement>("img");
+
+  if (!lightbox?.classList.contains("is-open")) {
+    return;
+  }
+
+  lightbox.classList.remove("is-open");
+  lightbox.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("has-lightbox-open");
+
+  if (lightboxImage) {
+    lightboxImage.removeAttribute("src");
+  }
 }
 
 function matchesFilter(site: Site): boolean {
@@ -1721,6 +1800,7 @@ async function resolveDynamicImage(image: HTMLImageElement): Promise<void> {
 
   if (!commonsImage) {
     image.src = fallbackImage;
+    image.dataset.originalImage = fallbackImage;
     image.classList.remove("is-loading");
     return;
   }
