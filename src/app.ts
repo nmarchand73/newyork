@@ -52,6 +52,11 @@ type CommonsImageCache = Record<
   }
 >;
 
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+};
+
 type CommonsApiImageInfo = {
   thumburl?: string;
   url?: string;
@@ -1065,6 +1070,7 @@ let imageObserver: IntersectionObserver | null = null;
 const observedImages = new WeakSet<HTMLImageElement>();
 const commonsImageRequests = new Map<string, Promise<CommonsImage[]>>();
 let tripMap: L.Map | null = null;
+let deferredInstallPrompt: BeforeInstallPromptEvent | null = null;
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -1082,6 +1088,7 @@ app.innerHTML = `
         <a class="btn" href="#carte">Voir la carte</a>
         <a class="btn" href="#planning">Voir le planning</a>
         <a class="btn secondary" href="#details">Explorer les fiches</a>
+        <button class="btn install-button" type="button" data-install-app>Ajouter au téléphone</button>
       </div>
     </div>
   </header>
@@ -1159,6 +1166,14 @@ app.innerHTML = `
     </section>
   </main>
   <footer class="footer">Planning familial interactif — New York, juillet 2026</footer>
+  <div class="install-help" id="installHelp" aria-hidden="true" role="dialog" aria-label="Ajouter l'application au téléphone">
+    <div class="install-help-card">
+      <button class="install-help-close" type="button" aria-label="Fermer l'aide d'installation">×</button>
+      <h2>Ajouter au téléphone</h2>
+      <p><b>iPhone Safari :</b> touche le bouton Partager, puis <b>Sur l'écran d'accueil</b>.</p>
+      <p><b>Android Chrome :</b> ouvre le menu ⋮, puis <b>Ajouter à l'écran d'accueil</b> si le bouton ne lance pas l'installation automatiquement.</p>
+    </div>
+  </div>
   <div class="image-lightbox" id="imageLightbox" aria-hidden="true" role="dialog" aria-label="Photo en plein écran">
     <button class="image-lightbox-close" type="button" aria-label="Fermer la photo">×</button>
     <img src="" alt="">
@@ -1167,6 +1182,7 @@ app.innerHTML = `
 `;
 
 renderSites();
+registerServiceWorker();
 bindInteractions();
 bindImageFallbacks();
 hydrateDynamicImages();
@@ -1410,6 +1426,80 @@ function toggleMapMaximized(shouldMaximize?: boolean): void {
   button.textContent = isMaximized ? "Réduire la carte" : "Agrandir la carte";
 
   setTimeout(() => tripMap?.invalidateSize(), 120);
+}
+
+function registerServiceWorker(): void {
+  if (!("serviceWorker" in navigator)) {
+    return;
+  }
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch((error) => {
+      console.warn("Service worker non enregistré", error);
+    });
+  });
+}
+
+function isAppInstalled(): boolean {
+  const navigatorWithStandalone = navigator as Navigator & { standalone?: boolean };
+
+  return window.matchMedia("(display-mode: standalone)").matches || Boolean(navigatorWithStandalone.standalone);
+}
+
+function updateInstallButton(): void {
+  const button = document.querySelector<HTMLButtonElement>("[data-install-app]");
+
+  if (!button) {
+    return;
+  }
+
+  if (isAppInstalled()) {
+    button.textContent = "App ajoutée";
+    button.disabled = true;
+    return;
+  }
+
+  button.textContent = deferredInstallPrompt ? "Installer l'app" : "Ajouter au téléphone";
+  button.disabled = false;
+}
+
+async function handleInstallButtonClick(): Promise<void> {
+  if (deferredInstallPrompt) {
+    const installPrompt = deferredInstallPrompt;
+
+    deferredInstallPrompt = null;
+    await installPrompt.prompt();
+    await installPrompt.userChoice;
+    updateInstallButton();
+    return;
+  }
+
+  openInstallHelp();
+}
+
+function openInstallHelp(): void {
+  const help = document.querySelector<HTMLDivElement>("#installHelp");
+
+  if (!help) {
+    return;
+  }
+
+  help.classList.add("is-open");
+  help.setAttribute("aria-hidden", "false");
+  document.body.classList.add("has-install-help-open");
+  document.querySelector<HTMLButtonElement>(".install-help-close")?.focus();
+}
+
+function closeInstallHelp(): void {
+  const help = document.querySelector<HTMLDivElement>("#installHelp");
+
+  if (!help) {
+    return;
+  }
+
+  help.classList.remove("is-open");
+  help.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("has-install-help-open");
 }
 
 function createUsefulSubwayLayer(): L.LayerGroup {
@@ -1659,6 +1749,20 @@ function getTeenTip(site: Site): string {
 }
 
 function bindInteractions(): void {
+  updateInstallButton();
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event as BeforeInstallPromptEvent;
+    updateInstallButton();
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    updateInstallButton();
+    closeInstallHelp();
+  });
+
   document.querySelector<HTMLInputElement>("#search")?.addEventListener("input", (event) => {
     const input = event.currentTarget;
 
@@ -1728,6 +1832,12 @@ function bindInteractions(): void {
     toggleMapMaximized();
   });
 
+  document.querySelector<HTMLButtonElement>("[data-install-app]")?.addEventListener("click", () => {
+    void handleInstallButtonClick();
+  });
+
+  document.querySelector<HTMLButtonElement>(".install-help-close")?.addEventListener("click", closeInstallHelp);
+
   document.addEventListener("click", (event) => {
     if (!(event.target instanceof Element)) {
       return;
@@ -1744,12 +1854,20 @@ function bindInteractions(): void {
 
     if (lightbox?.classList.contains("is-open") && event.target === lightbox) {
       closeImageLightbox();
+      return;
+    }
+
+    const installHelp = document.querySelector<HTMLDivElement>("#installHelp");
+
+    if (installHelp?.classList.contains("is-open") && event.target === installHelp) {
+      closeInstallHelp();
     }
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeImageLightbox();
+      closeInstallHelp();
       toggleMapMaximized(false);
       return;
     }

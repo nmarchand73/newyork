@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="NYC 2026">
+  <rect width="512" height="512" rx="112" fill="#0f766e"/>
+  <path d="M86 358h340v34H86z" fill="#f8fafc" opacity=".92"/>
+  <path d="M128 324V176h48v148h32V132h52v192h28V210h46v114h50V358H96v-34z" fill="#f8fafc"/>
+  <circle cx="374" cy="138" r="38" fill="#facc15"/>
+  <text x="256" y="430" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="58" font-weight="900" fill="#f8fafc">NYC</text>
+</svg>
