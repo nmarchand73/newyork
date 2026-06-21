@@ -1799,9 +1799,8 @@ if (!app) {
 app.innerHTML = `
   <header class="hero is-loading-image" data-hero-image data-image-query="${escapeHtml(heroImageQuery)}" data-fallback-image="${heroImage}">
     <div class="hero-content">
-      <p class="eyebrow">Planning familial interactif · 4 → 12 juillet 2026</p>
       <h1>New York en famille</h1>
-      <p>Carte, planning et fiches pratiques pour vivre New York sans se disperser.</p>
+      <p>9 jours à New York, sans courir : une carte claire, des journées réalistes et les bonnes idées au bon endroit.</p>
       <div class="hero-actions">
         <a class="btn" href="#carte">Voir la carte</a>
         <a class="btn" href="#planning">Voir le planning</a>
