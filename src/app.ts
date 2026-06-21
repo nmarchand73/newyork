@@ -383,16 +383,28 @@ const sites: Site[] = [
     map: { label: "6", lat: 40.7794, lng: -73.9632 },
   },
   {
+    id: "intrepid",
+    title: "Intrepid Museum",
+    image:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/USS_Intrepid_%28CV-11%29_from_the_Hudson_River.jpg",
+    description:
+      "Porte-avions musée sur l'Hudson avec avions, sous-marin Growler et Space Shuttle Enterprise.",
+    tip: "À caser le matin : viser 2 h 30 à 3 h, acheter les billets à l'avance et vérifier les horaires/fermetures spéciales.",
+    borough: "Manhattan",
+    category: "Musée",
+    duration: "2 h 30-3 h",
+    map: { label: "7", lat: 40.7645, lng: -73.9996 },
+  },
+  {
     id: "hudson-yards",
     title: "Hudson Yards",
     image: "https://commons.wikimedia.org/wiki/Special:FilePath/Hudson_Yards_from_High_Line_2019.jpg",
     description:
-      "Quartier moderne, buildings récents, accès direct à la High Line.",
-    tip: "Bon point de départ avec la ligne 7, avant de descendre la High Line vers Chelsea.",
+      "Quartier moderne, buildings récents, Vessel en repère visuel et accès direct à la High Line.",
+    tip: "À garder en passage rapide après l'Intrepid : photo de Vessel, pause fraîcheur si besoin, puis High Line.",
     borough: "Manhattan",
     category: "Quartier",
-    duration: "45 min",
-    map: { label: "7", lat: 40.7538, lng: -74.001 },
+    duration: "30-45 min",
   },
   {
     id: "vessel",
@@ -413,10 +425,10 @@ const sites: Site[] = [
       "https://commons.wikimedia.org/wiki/Special:FilePath/High_Line_20th_Street_looking_downtown.jpg",
     description:
       "Ancienne voie ferrée transformée en promenade végétalisée au-dessus des rues.",
-    tip: "Marcher de Hudson Yards vers Chelsea Market pour finir sur une pause déjeuner/clim plus facile.",
+    tip: "Après l'Intrepid, marcher seulement le tronçon nord/central si le timing serre, puis sortir vers Chelsea Market.",
     borough: "Manhattan",
     category: "Parc",
-    duration: "1 h 15",
+    duration: "45 min-1 h",
     map: { label: "8", lat: 40.7479, lng: -74.0048 },
   },
   {
@@ -602,9 +614,9 @@ const days: DayPlan[] = [
     image:
       "https://commons.wikimedia.org/wiki/Special:FilePath/High_Line_20th_Street_looking_downtown.jpg",
     summary:
-      "New York version moderne : tours de Hudson Yards, Vessel en repère visuel, puis High Line au-dessus des rues. La journée marche bien parce qu'elle descend naturellement vers Chelsea Market pour manger, puis Little Island si le groupe veut encore de l'air et des vues sur l'Hudson.",
-    route: "Hôtel -> Queensboro Plaza -> 7 direct -> 34 St-Hudson Yards. Puis à pied : Hudson Yards -> High Line -> Chelsea Market.",
-    siteIds: ["hudson-yards", "vessel", "high-line", "chelsea-market", "little-island"],
+      "Journée Hudson très ado-compatible : commencer par l'Intrepid, vrai musée spectaculaire sur un porte-avions, puis garder Hudson Yards et Vessel en passage rapide. Ensuite, descendre un morceau de High Line vers Chelsea Market pour manger, avec Little Island seulement si le groupe a encore de l'énergie.",
+    route: "Hôtel -> Queensboro Plaza -> 7 direct -> 34 St-Hudson Yards, puis 15-20 min à pied ou M42/M50 vers l'Intrepid. Ensuite Hudson Yards -> High Line -> Chelsea Market.",
+    siteIds: ["intrepid", "hudson-yards", "high-line", "chelsea-market", "little-island"],
   },
   {
     id: "day-10",
@@ -685,6 +697,7 @@ const commonsSearchTerms = new Map<string, string>([
   ["bethesda", "File:Bethesda Fountain (81527).jpg"],
   ["amnh", "File:American Museum of Natural History, South Facade.jpg"],
   ["met", "File:Metropolitan Museum of Art, New York City NY, entrance.jpg"],
+  ["intrepid", "File:USS Intrepid (CV-11) from the Hudson River.jpg"],
   ["hudson-yards", "File:10 Hudson Yards New York NY 2014 09 02 08.JPG"],
   ["vessel", "File:The Vessel, Hudson Yards, New York City, June 2019.jpg"],
   ["high-line", "File:The High Line, New York (17643199203).jpg"],
@@ -921,10 +934,20 @@ const siteHighlights = new Map<string, string[]>([
     ],
   ],
   [
+    "intrepid",
+    [
+      "Monter sur le pont d'envol du porte-avions USS Intrepid.",
+      "Voir le Space Shuttle Enterprise dans le pavillon dédié.",
+      "Repérer les avions les plus impressionnants sur le flight deck.",
+      "Ajouter le sous-marin Growler seulement si la file et l'énergie le permettent.",
+      "Prévoir 2 h 30 à 3 h : en dessous, la visite devient trop frustrante.",
+    ],
+  ],
+  [
     "hudson-yards",
     [
-      "Arriver par la ligne 7 à 34 St-Hudson Yards.",
-      "Voir Vessel depuis l'extérieur et la place centrale.",
+      "Arriver depuis l'Intrepid ou par la ligne 7 à 34 St-Hudson Yards.",
+      "Voir Vessel depuis l'extérieur et la place centrale, sans y passer trop de temps.",
       "Repérer The Shed et les tours modernes du quartier.",
       "Faire une pause fraîcheur dans le centre commercial si besoin.",
       "Commencer ici avant de descendre la High Line vers Chelsea.",
@@ -943,7 +966,7 @@ const siteHighlights = new Map<string, string[]>([
   [
     "high-line",
     [
-      "Marcher de Hudson Yards vers Chelsea pour suivre le bon sens du planning.",
+      "Marcher de Hudson Yards vers Chelsea, mais raccourcir si l'Intrepid a pris du temps.",
       "Observer les anciennes rails intégrées dans la promenade.",
       "S'arrêter aux belvédères sur les rues de West Chelsea.",
       "Regarder les installations d'art public en chemin.",
@@ -1074,6 +1097,7 @@ const teenTips = new Map<string, string>([
   ["bethesda", "Sous l'arcade, écoute vraiment : musiciens, écho, plafond Minton. Mission simple : rester deux minutes sans téléphone et voir si le lieu tient tout seul."],
   ["amnh", "Best-of ado, pas marathon : T. rex, baleine bleue, météorites/espace. Chacun choisit un hall à défendre comme 'le plus cool' du musée."],
   ["met", "Trois hits, pas 200 salles : Temple of Dendur, armures, rooftop si ouvert. Mission : trouver une oeuvre qui pourrait être une pochette d'album ou de jeu."],
+  ["intrepid", "Mission techno/histoire : choisir ton trio gagnant entre porte-avions, Space Shuttle Enterprise, avions du pont et sous-marin Growler. Si tout intéresse, on priorise sans courir."],
   ["hudson-yards", "Regarde le quartier comme une ville construite au-dessus des rails : tours, The Shed, métro 7, Edge. Futuriste, cher, un peu science-fiction."],
   ["vessel", "Objet urbain à débat : beau, bizarre, controversé, accès encadré. Mission : photo depuis la base + avis honnête, monument iconique ou décor trop fabriqué ?"],
   ["high-line", "Promenade à scanner : rails conservés, art public, fenêtres d'immeubles, vues en hauteur. Repère le moment où la ville ressemble le plus à un décor de film."],
@@ -1345,6 +1369,13 @@ const parentInterestsBySite = new Map<string, ParentInterestPick>([
     },
   ],
   [
+    "intrepid",
+    {
+      papa: "Intrepid coche déjà le thème geek/tech : porte-avions, avions, navette spatiale et sous-marin ; B&H Photo Video reste le détour gear/photo le plus logique après.",
+      maman: "Après l'Intrepid, viser Hudson Yards ou The Shops at Hudson Yards pour pause au frais, sacs/accessoires et café.",
+    },
+  ],
+  [
     "vessel",
     {
       papa: "Vessel + Rogue Music si on veut synthés/claviers vintage ; Guitar Center Manhattan ou B&H Photo Video pour gear plus mainstream.",
@@ -1453,6 +1484,7 @@ const parentInterestAreaBySite = new Map<string, string>([
   ["bethesda", "central-uws"],
   ["amnh", "central-uws"],
   ["met", "met-ues"],
+  ["intrepid", "chelsea"],
   ["hudson-yards", "chelsea"],
   ["vessel", "chelsea"],
   ["high-line", "chelsea"],
@@ -1513,6 +1545,10 @@ const parentInterestPlaceQueries: [string, string][] = [
   ["Nintendo NY", "Nintendo NY, Rockefeller Center, New York, NY"],
   ["Tannen's Magic", "Tannen's Magic, New York, NY"],
   ["Radio City Music Hall", "Radio City Music Hall, New York, NY"],
+  ["Intrepid", "Intrepid Museum, Pier 86, W 46th Street, New York, NY"],
+  ["Intrepid Museum", "Intrepid Museum, Pier 86, W 46th Street, New York, NY"],
+  ["Space Shuttle Enterprise", "Space Shuttle Enterprise, Intrepid Museum, New York, NY"],
+  ["Growler", "USS Growler, Intrepid Museum, New York, NY"],
   ["B&H Photo Video", "B&H Photo Video, 420 9th Avenue, New York, NY"],
   ["Adorama", "Adorama, 42 West 18th Street, New York, NY"],
   ["SPYSCAPE", "SPYSCAPE, 928 8th Avenue, New York, NY"],
@@ -1643,6 +1679,7 @@ const teenInterestsBySite = new Map<string, TeenInterestPick>([
   ["bethesda", { text: "Après Bethesda : 16 Handles UWS pour frozen yogurt, Hex&Co. West Side pour jeux ; les pianos Sing for Hope 2026 sont une archive, pas un plan actif." }],
   ["amnh", { text: "AMNH + Hex&Co. West Side marche bien pour jeux ; 16 Handles UWS pour dessert ; Sing for Hope 2026 est terminé mais visible sur la carte." }],
   ["met", { text: "Après le Met : Hex&Co. Upper East Side pour jeux ; pour piano, le calque Sing for Hope sert surtout d'archive officielle 2026." }],
+  ["intrepid", { text: "Intrepid est probablement le meilleur stop ado/tech du séjour : Space Shuttle Enterprise, flight deck, avions, sous-marin Growler si la file reste raisonnable." }],
   ["hudson-yards", { text: "Hudson Yards : Edge pour sensation forte, Google Store Chelsea pour tech, B&H Photo Video si quelqu'un veut voir un énorme magasin photo/vidéo." }],
   ["vessel", { text: "Vessel + Edge pour photos/hauteur ; Google Store Chelsea pour gadgets, B&H Photo Video si le mood devient tech/photo." }],
   ["high-line", { text: "High Line : Pier 57 Rooftop pour vue gratuite, Barcade Chelsea pour arcade rétro, Adorama si on veut jeter un oeil gear/photo." }],
@@ -1766,6 +1803,7 @@ const secretCuriositiesBySite = new Map<string, SecretCuriosity>([
   ["bethesda", { title: "Des tuiles sous l'arche", text: "Le plafond de l'arcade Bethesda est en tuiles Minton, un détail décoratif rare à New York et souvent plus impressionnant que la fontaine elle-même." }],
   ["amnh", { title: "La baleine bleue flotte vraiment", text: "La célèbre baleine bleue est suspendue dans le Hall of Ocean Life. Son modèle date d'une époque où les scientifiques corrigeaient encore sa forme réelle." }],
   ["met", { title: "Un temple égyptien sauvé des eaux", text: "Le Temple of Dendur a été offert aux États-Unis après le sauvetage des monuments menacés par le barrage d'Assouan." }],
+  ["intrepid", { title: "Une navette spatiale sur un porte-avions", text: "L'Intrepid réunit trois imaginaires en un seul quai : porte-avions de guerre, sous-marin de la guerre froide et Space Shuttle Enterprise, premier orbiteur construit pour tester le programme spatial." }],
   ["hudson-yards", { title: "Une ville au-dessus des trains", text: "Hudson Yards est construit au-dessus d'un immense faisceau ferroviaire actif. Une grande partie du quartier repose sur une plateforme." }],
   ["vessel", { title: "Un monument devenu controversé", text: "Vessel devait être une sculpture urbaine ouverte. Son accès a été fortement restreint après plusieurs drames, ce qui change complètement son usage." }],
   ["high-line", { title: "La voie ferrée passait dans les usines", text: "L'ancienne ligne de fret traversait directement des bâtiments, dont le complexe Nabisco. La High Line était une infrastructure logistique avant d'être un parc suspendu." }],
@@ -1781,6 +1819,8 @@ const secretCuriositiesBySite = new Map<string, SecretCuriosity>([
   ["airport", { title: "Idlewild avant JFK", text: "L'aéroport JFK s'appelait Idlewild avant d'être renommé en 1963. Le nom original venait d'un ancien terrain de golf du secteur." }],
 ]);
 const dayBySiteId = buildDayBySiteId();
+const siteOrderByDay = buildSiteOrderByDay();
+const sourceSiteOrder = new Map(sites.map((site, index) => [site.id, index]));
 
 let currentFilter: Filter = "Tous";
 let currentSearch = "";
@@ -2468,6 +2508,33 @@ function buildDayBySiteId(): Map<string, { day: DayPlan; index: number }> {
   return map;
 }
 
+function buildSiteOrderByDay(): Map<string, number> {
+  const map = new Map<string, number>();
+  let order = 0;
+
+  days.forEach((day) => {
+    day.siteIds.forEach((siteId) => {
+      if (!map.has(siteId)) {
+        map.set(siteId, order);
+        order += 1;
+      }
+    });
+  });
+
+  return map;
+}
+
+function compareSitesByDayOrder(left: Site, right: Site): number {
+  const leftDayOrder = siteOrderByDay.get(left.id) ?? Number.MAX_SAFE_INTEGER;
+  const rightDayOrder = siteOrderByDay.get(right.id) ?? Number.MAX_SAFE_INTEGER;
+
+  if (leftDayOrder !== rightDayOrder) {
+    return leftDayOrder - rightDayOrder;
+  }
+
+  return (sourceSiteOrder.get(left.id) ?? 0) - (sourceSiteOrder.get(right.id) ?? 0);
+}
+
 function getDayColor(index: number): string {
   return dayColors[index % dayColors.length];
 }
@@ -2481,7 +2548,9 @@ function renderSites(): void {
   }
 
   const normalizedSearch = normalize(currentSearch);
-  const visibleSites = sites.filter((site) => matchesFilter(site) && matchesSearch(site, normalizedSearch));
+  const visibleSites = sites
+    .filter((site) => matchesFilter(site) && matchesSearch(site, normalizedSearch))
+    .sort(compareSitesByDayOrder);
 
   list.innerHTML = visibleSites
     .map((site) => renderSite(site))
