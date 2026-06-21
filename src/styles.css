@@ -502,6 +502,7 @@ select {
 .parent-interest-card {
   display: grid;
   gap: 10px;
+  min-width: 0;
   margin-top: 10px;
   padding: 12px;
   border: 1px solid #bfdbfe;
@@ -509,6 +510,7 @@ select {
   background: linear-gradient(180deg, #eff6ff, #ffffff);
   color: #1e3a8a;
   font-size: 0.9rem;
+  line-height: 1.45;
 }
 
 .parent-interest-heading {
@@ -521,13 +523,15 @@ select {
 
 .parent-interest-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
+  min-width: 0;
 }
 
 .parent-interest-item {
   display: grid;
   gap: 6px;
+  min-width: 0;
   margin: 0;
   padding: 10px;
   border: 1px solid #dbeafe;
@@ -548,6 +552,8 @@ select {
 .parent-interest-item p {
   margin: 0;
   color: #1e3a8a;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .parent-interest-item.teen-interest-item {
@@ -572,6 +578,7 @@ select {
 .parent-interest-card a {
   color: #1d4ed8;
   font-weight: 950;
+  overflow-wrap: anywhere;
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
@@ -592,6 +599,43 @@ select {
   background: linear-gradient(180deg, #faf5ff, #ffffff);
   color: #581c87;
   font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.music-venue-card {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #fed7aa;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fff7ed, #ffffff);
+  color: #7c2d12;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.music-venue-card b {
+  color: #c2410c;
+}
+
+.music-venue-card p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.music-venue-card a {
+  color: #c2410c;
+  font-weight: 950;
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+.music-venue-card a:hover,
+.music-venue-card a:focus-visible {
+  color: #9a3412;
 }
 
 .secret-curiosity-card b {
@@ -758,6 +802,23 @@ body.has-map-maximized {
   line-height: 1;
 }
 
+.piano-marker {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 2px solid #ffffff;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #7c3aed, #db2777);
+  box-shadow:
+    0 0 0 2px rgba(124, 58, 237, 0.24),
+    0 8px 18px rgba(15, 23, 42, 0.28);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
 .subway-line-label {
   display: inline-grid;
   min-width: 42px;
@@ -825,6 +886,16 @@ body.has-map-maximized {
 .map-popup span {
   color: var(--muted);
   font-size: 0.85rem;
+}
+
+.map-popup small {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.piano-popup b {
+  color: #7c3aed;
 }
 
 .map-popup a,
@@ -1384,16 +1455,18 @@ img[data-lightbox-image]:focus-visible {
     margin-top: 6px;
   }
 
-  .parent-interest-card {
+  .parent-interest-card,
+  .secret-curiosity-card,
+  .music-venue-card {
     gap: 6px;
     margin-top: 8px;
     padding: 9px;
     border-radius: 12px;
-    font-size: 0.8rem;
+    font-size: 0.86rem;
   }
 
   .parent-interest-heading {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
   }
 
   .parent-interest-grid {
@@ -1403,14 +1476,6 @@ img[data-lightbox-image]:focus-visible {
 
   .parent-interest-item {
     padding: 8px;
-  }
-
-  .secret-curiosity-card {
-    gap: 5px;
-    margin-top: 8px;
-    padding: 9px;
-    border-radius: 12px;
-    font-size: 0.8rem;
   }
 
   .route-link,
