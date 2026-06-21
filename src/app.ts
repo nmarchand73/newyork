@@ -1083,7 +1083,7 @@ app.innerHTML = `
     <div class="hero-content">
       <p class="eyebrow">Planning familial interactif · 4 → 12 juillet 2026</p>
       <h1>New York en famille</h1>
-      <p>Un programme dynamique depuis le Wingate by Wyndham Long Island City, 38-70 12th Street, Queens : carte, filtres, fiches détaillées, photos chargées depuis Wikimedia Commons et liens Google Maps.</p>
+      <p>Carte, planning et fiches pratiques pour vivre New York sans se disperser.</p>
       <div class="hero-actions">
         <a class="btn" href="#carte">Voir la carte</a>
         <a class="btn" href="#planning">Voir le planning</a>
@@ -1094,9 +1094,8 @@ app.innerHTML = `
   </header>
   <main class="wrap">
     <section class="notice">
-      <div><strong>Hôtel :</strong> Wingate by Wyndham Long Island City, <strong>38-70 12th Street, Long Island City, Queens, NY 11101</strong>.</div>
-      <div><strong>Base transport :</strong> stations utiles : <strong>21 St-Queensbridge</strong> pour F et <strong>Queensboro Plaza</strong> pour 7, N, W.</div>
-      <div class="tip">Démarrez vers 9 h-9 h 30, gardez une vraie pause déjeuner et rentrez à l'hôtel si chaleur ou fatigue.</div>
+      <div><strong>Base :</strong> Wingate Long Island City, près de <strong>21 St-Queensbridge</strong> et <strong>Queensboro Plaza</strong>.</div>
+      <div class="tip">Rythme conseillé : départ 9 h-9 h 30, vraie pause déjeuner, retour hôtel si chaleur ou fatigue.</div>
     </section>
     <section class="stats" aria-label="Résumé du voyage">
       <div class="stat"><b>${days.length}</b><span>jours sur place</span></div>
@@ -1108,7 +1107,7 @@ app.innerHTML = `
       <div class="section-title">
         <div>
           <h2>Carte interactive des visites</h2>
-          <p>Carte dynamique Leaflet avec OpenStreetMap par défaut, satellite, marqueurs par jour et calques métro / bus activables en haut à droite.</p>
+          <p>Carte dynamique avec marqueurs par jour, métro utile, bus/tram utiles et mode plein écran.</p>
         </div>
       </div>
       <div class="map-layout">
@@ -1127,7 +1126,7 @@ app.innerHTML = `
           <div class="map-activities">
             ${days.map(renderMapActivityDay).join("")}
           </div>
-          <p class="map-credit">Carte dynamique : <a href="https://leafletjs.com/" target="_blank" rel="noreferrer">Leaflet</a> + <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>. Dans le sélecteur ouvert sur la carte : OpenStreetMap, satellite, lignes de métro utiles et lignes de bus / tram.</p>
+          <p class="map-credit">Carte dynamique : <a href="https://leafletjs.com/" target="_blank" rel="noreferrer">Leaflet</a> + <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>. Dans le sélecteur : OpenStreetMap, satellite, lignes de métro utiles et bus / tram utiles.</p>
         </div>
       </div>
     </section>
@@ -1365,11 +1364,7 @@ function initLeafletMap(): void {
 
   const subwayLayer = createUsefulSubwayLayer();
 
-  const busTramLayer = L.tileLayer("https://pt.facilmap.org/tile/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    opacity: 0.92,
-    attribution: "Public transport &copy; OpenStreetMap contributors, FacilMap / OpenPTMap",
-  });
+  const busTramLayer = createUsefulBusTramLayer();
 
   osmLayer.addTo(tripMap);
   L.control
@@ -1380,7 +1375,7 @@ function initLeafletMap(): void {
       },
       {
         "Lignes de métro utiles": subwayLayer,
-        "Lignes de bus / tram": busTramLayer,
+        "Bus / tram utiles": busTramLayer,
       },
       {
         collapsed: shouldCollapseLayers,
@@ -1396,7 +1391,15 @@ function initLeafletMap(): void {
       title: site.title,
     }).bindPopup(renderMapPopup(site));
 
-    marker.on("click", () => markActiveSite(site.id));
+    marker.on("click", (event) => {
+      if (isMapMaximized()) {
+        L.DomEvent.stop(event.originalEvent);
+        goToSiteFromMap(site.id);
+        return;
+      }
+
+      markActiveSite(site.id);
+    });
     marker.addTo(tripMap as L.Map);
     return marker;
   });
@@ -1426,6 +1429,28 @@ function toggleMapMaximized(shouldMaximize?: boolean): void {
   button.textContent = isMaximized ? "Réduire la carte" : "Agrandir la carte";
 
   setTimeout(() => tripMap?.invalidateSize(), 120);
+}
+
+function isMapMaximized(): boolean {
+  return Boolean(document.querySelector<HTMLDivElement>("#mapShell")?.classList.contains("is-map-maximized"));
+}
+
+function goToSiteFromMap(siteId: string): void {
+  tripMap?.closePopup();
+  toggleMapMaximized(false);
+  markActiveSite(siteId);
+
+  window.setTimeout(() => {
+    const siteCard = document.getElementById(siteId);
+
+    if (!siteCard) {
+      window.location.hash = siteId;
+      return;
+    }
+
+    siteCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.pushState(null, "", `#${siteId}`);
+  }, 220);
 }
 
 function registerServiceWorker(): void {
@@ -1550,13 +1575,98 @@ function addSubwayLine(
   color: string,
   coordinates: [number, number][],
 ): void {
+  const labelCoordinate = coordinates[Math.floor(coordinates.length / 2)];
+
   L.polyline(coordinates, {
     color,
     opacity: 0.94,
-    weight: 6,
+    weight: 7,
   })
     .bindTooltip(label, { sticky: true })
     .addTo(layer);
+
+  L.marker(labelCoordinate, {
+    interactive: false,
+    icon: L.divIcon({
+      className: "subway-line-label-icon",
+      html: `<span class="subway-line-label" style="--subway-line-color: ${color}">${escapeHtml(label)}</span>`,
+      iconAnchor: [18, 18],
+      iconSize: [36, 36],
+    }),
+  }).addTo(layer);
+}
+
+function createUsefulBusTramLayer(): L.LayerGroup {
+  const layer = L.layerGroup();
+
+  addSurfaceTransitLine(layer, "Q32", "bus", "#2563eb", [
+    [40.7568, -73.9296],
+    [40.7587, -73.9813],
+    [40.7506, -73.9935],
+  ]);
+  addSurfaceTransitLine(layer, "Q69", "bus", "#2563eb", [
+    [40.7567, -73.9427],
+    [40.766, -73.921],
+    [40.7794, -73.915],
+  ]);
+  addSurfaceTransitLine(layer, "Q100", "bus", "#2563eb", [
+    [40.7567, -73.9427],
+    [40.766, -73.928],
+    [40.786, -73.912],
+  ]);
+  addSurfaceTransitLine(layer, "M15", "bus", "#2563eb", [
+    [40.8041, -73.9376],
+    [40.7794, -73.9556],
+    [40.7527, -73.9772],
+    [40.7131, -74.0097],
+  ]);
+  addSurfaceTransitLine(layer, "M20", "bus", "#2563eb", [
+    [40.758, -73.9855],
+    [40.7413, -74.002],
+    [40.7127, -74.0134],
+    [40.7048, -74.014],
+  ]);
+  addSurfaceTransitLine(layer, "B62", "bus", "#2563eb", [
+    [40.7567, -73.9427],
+    [40.722, -73.957],
+    [40.7043, -73.986],
+    [40.695, -73.99],
+  ]);
+  addSurfaceTransitLine(layer, "Tram", "tram", "#dc2626", [
+    [40.7616, -73.9644],
+    [40.7619, -73.9503],
+  ]);
+
+  return layer;
+}
+
+function addSurfaceTransitLine(
+  layer: L.LayerGroup,
+  label: string,
+  type: "bus" | "tram",
+  color: string,
+  coordinates: [number, number][],
+): void {
+  const labelCoordinate = coordinates[Math.floor(coordinates.length / 2)];
+
+  L.polyline(coordinates, {
+    color,
+    dashArray: type === "tram" ? "2 7" : "8 7",
+    opacity: 0.86,
+    weight: 5,
+  })
+    .bindTooltip(label, { sticky: true })
+    .addTo(layer);
+
+  L.marker(labelCoordinate, {
+    interactive: false,
+    icon: L.divIcon({
+      className: "surface-transit-label-icon",
+      html: `<span class="surface-transit-label is-${type}" style="--surface-line-color: ${color}">${escapeHtml(label)}</span>`,
+      iconAnchor: [22, 14],
+      iconSize: [44, 28],
+    }),
+  }).addTo(layer);
 }
 
 function createMapIcon(site: Site & { map: MapPoint }): L.DivIcon {
@@ -1567,8 +1677,8 @@ function createMapIcon(site: Site & { map: MapPoint }): L.DivIcon {
     className: "map-marker-icon",
     html: `<div class="map-marker" style="--marker-color: ${color}"><span>${escapeHtml(site.map.label)}</span></div>`,
     iconSize: [34, 34],
-    iconAnchor: [17, 34],
-    popupAnchor: [0, -30],
+    iconAnchor: [17, 17],
+    popupAnchor: [0, -18],
   });
 }
 
@@ -1687,9 +1797,15 @@ function renderSite(site: Site): string {
   const actionItems = getSiteHighlights(site);
   const teenTip = getTeenTip(site);
   const currentLocationUrl = buildGoogleMapsCurrentLocationRouteUrl(site);
+  const dayInfo = dayBySiteId.get(site.id);
+  const mapBadge = site.map
+    ? `<span class="site-map-number" aria-label="Repère sur la carte">${escapeHtml(site.map.label)}</span>`
+    : "";
+  const mapLabel = site.map ? `Repère carte ${site.map.label}` : "Fiche destination";
+  const dayLabel = dayInfo ? `${dayInfo.day.date} · ${dayInfo.day.title}` : "Hors planning";
 
   return `
-    <article class="site" id="${site.id}">
+    <article class="site" id="${site.id}" style="--site-color: ${dayInfo ? getDayColor(dayInfo.index) : "#0f766e"}">
       <div class="site-media">
         ${renderDynamicImage({
           alt: site.title,
@@ -1701,13 +1817,21 @@ function renderSite(site: Site): string {
       </div>
       <div class="content">
         <div class="site-card-header">
-          <div>
-            <span class="date">Fiche destination</span>
-            <h3>${escapeHtml(site.title)}</h3>
+          <div class="site-title-block">
+            <div class="site-title-row">
+              ${mapBadge}
+              <div>
+                <span class="date site-map-label-text">${escapeHtml(mapLabel)}</span>
+                <h3>${escapeHtml(site.title)}</h3>
+                <span class="site-day-label">${escapeHtml(dayLabel)}</span>
+              </div>
+            </div>
           </div>
-          <a class="toplink" href="#planning">planning</a>
+          <button class="toplink" type="button" data-site-back>← Retour</button>
         </div>
         <div class="site-meta">
+          <span class="site-meta-day">${escapeHtml(dayLabel)}</span>
+          ${site.map ? `<span class="site-meta-number">Repère ${escapeHtml(site.map.label)}</span>` : ""}
           <span>${site.borough}</span>
           <span>${site.category}</span>
           <span>${site.duration}</span>
@@ -1840,6 +1964,28 @@ function bindInteractions(): void {
 
   document.addEventListener("click", (event) => {
     if (!(event.target instanceof Element)) {
+      return;
+    }
+
+    const siteHashLink = event.target.closest<HTMLAnchorElement>('a[href^="#"]');
+
+    if (siteHashLink && isMapMaximized()) {
+      const siteId = siteHashLink.getAttribute("href")?.slice(1);
+
+      if (siteId && siteById.has(siteId)) {
+        event.preventDefault();
+        goToSiteFromMap(siteId);
+        return;
+      }
+    }
+
+    if (event.target.closest<HTMLButtonElement>("[data-site-back]")) {
+      if (window.history.length > 1) {
+        window.history.back();
+        return;
+      }
+
+      window.location.hash = "carte";
       return;
     }
 

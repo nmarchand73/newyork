@@ -55,10 +55,10 @@ select {
 }
 
 .hero {
-  min-height: 62vh;
+  min-height: 50vh;
   display: grid;
   align-items: end;
-  padding: 64px 7vw;
+  padding: 48px 7vw;
   color: white;
   background:
     linear-gradient(180deg, rgba(11, 18, 32, 0.18), rgba(11, 18, 32, 0.8)),
@@ -91,17 +91,17 @@ select {
 }
 
 .hero h1 {
-  margin: 0 0 16px;
-  font-size: clamp(2.35rem, 6vw, 5.25rem);
+  margin: 0 0 12px;
+  font-size: clamp(2.25rem, 5.6vw, 4.8rem);
   line-height: 1;
   letter-spacing: -0.055em;
 }
 
 .hero p {
-  max-width: 840px;
-  margin: 0 0 22px;
+  max-width: 620px;
+  margin: 0 0 18px;
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1.15rem;
+  font-size: 1.08rem;
 }
 
 .hero-actions,
@@ -166,10 +166,12 @@ select {
 
 .notice {
   display: grid;
-  gap: 10px;
-  margin-bottom: 24px;
-  padding: 20px;
-  border-left: 7px solid var(--accent);
+  grid-template-columns: 1.15fr 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border-left: 5px solid var(--accent);
 }
 
 .notice strong {
@@ -261,6 +263,7 @@ select {
 
 .itinerary-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
 }
 
 .details {
@@ -297,8 +300,9 @@ select {
 
 .itinerary-card {
   display: grid;
+  align-content: start;
   grid-template-columns: 0.86fr 1.14fr;
-  min-height: 290px;
+  align-items: start;
 }
 
 .itinerary-card.full {
@@ -308,7 +312,7 @@ select {
 
 .day-media {
   overflow: hidden;
-  min-height: 100%;
+  line-height: 0;
 }
 
 .site-media {
@@ -317,8 +321,7 @@ select {
 }
 
 .day-media img {
-  height: 100%;
-  min-height: 290px;
+  height: clamp(200px, 22vw, 260px);
 }
 
 .day-heading {
@@ -372,10 +375,6 @@ select {
   flex: 1;
   flex-direction: column;
   padding: 20px;
-}
-
-.site {
-  min-height: 930px;
 }
 
 .site > .content > p:not(.tip-card) {
@@ -448,7 +447,6 @@ select {
 }
 
 .top-five-card {
-  flex: 1;
   background: linear-gradient(180deg, #f8fafc, #ffffff);
 }
 
@@ -643,18 +641,72 @@ body.has-map-maximized {
   height: 34px;
   color: white;
   border: 3px solid white;
-  border-radius: 50% 50% 50% 0;
+  border-radius: 50%;
   background: var(--marker-color, #ef4444);
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.28);
   font-size: 0.76rem;
   font-weight: 900;
-  transform: rotate(-45deg);
 }
 
 .map-marker span {
-  transform: rotate(45deg);
+  display: grid;
+  place-items: center;
   font-size: 0.95rem;
   line-height: 1;
+}
+
+.subway-line-label {
+  display: inline-grid;
+  min-width: 42px;
+  height: 24px;
+  place-items: center;
+  padding: 0 9px;
+  border: 2px solid rgba(15, 23, 42, 0.85);
+  border-radius: 7px;
+  background: var(--subway-line-color, #0f172a);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.95),
+    0 8px 18px rgba(15, 23, 42, 0.32);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 950;
+  line-height: 1;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.subway-line-label[style*="#fccc0a"] {
+  border-color: rgba(15, 23, 42, 0.9);
+  color: #111827;
+}
+
+.surface-transit-label {
+  display: inline-grid;
+  min-width: 44px;
+  height: 24px;
+  place-items: center;
+  padding: 0 8px;
+  border: 2px solid white;
+  border-radius: 4px;
+  background: var(--surface-line-color, #2563eb);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.28);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 950;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.surface-transit-label.is-bus::before {
+  content: "BUS";
+  margin-right: 4px;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  opacity: 0.86;
+}
+
+.surface-transit-label.is-tram {
+  border-radius: 999px;
 }
 
 .map-popup {
@@ -940,6 +992,45 @@ img[data-lightbox-image]:focus-visible {
   justify-content: space-between;
 }
 
+.site-title-block {
+  min-width: 0;
+}
+
+.site-title-row {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+}
+
+.site-map-number {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 3px solid white;
+  border-radius: 999px;
+  background: var(--site-color, var(--accent));
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+  color: white;
+  font-size: 1rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.site-map-label-text {
+  color: var(--site-color, var(--accent));
+  font-weight: 950;
+}
+
+.site-day-label {
+  display: inline-block;
+  margin-top: 2px;
+  color: #475569;
+  font-size: 0.88rem;
+  font-weight: 850;
+}
+
 .site-meta span {
   padding: 5px 8px;
   border-radius: 999px;
@@ -949,13 +1040,32 @@ img[data-lightbox-image]:focus-visible {
   font-weight: 800;
 }
 
+.site-meta .site-meta-number {
+  background: color-mix(in srgb, var(--site-color, var(--accent)) 14%, white);
+  color: var(--site-color, var(--accent));
+}
+
+.site-meta .site-meta-day {
+  background: color-mix(in srgb, var(--site-color, var(--accent)) 20%, white);
+  color: #0f172a;
+}
+
 .toplink {
   flex: 0 0 auto;
+  border: 0;
   font-size: 0.9rem;
   font-weight: 800;
   border-radius: 999px;
   padding: 5px 9px;
   background: #f1f5f9;
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.toplink:hover,
+.toplink:focus-visible {
+  background: #e0f2fe;
+  text-decoration: underline;
 }
 
 .metro {
@@ -1008,7 +1118,9 @@ img[data-lightbox-image]:focus-visible {
   }
 
   .full,
-  .two {
+  .two,
+  .itinerary-card.full,
+  .itinerary-card.two {
     grid-column: span 1;
   }
 
@@ -1017,35 +1129,166 @@ img[data-lightbox-image]:focus-visible {
     grid-template-columns: 1fr;
   }
 
+  .itinerary-card .content {
+    padding-top: 8px;
+  }
+
   .site {
     min-height: auto;
   }
 
   .hero {
-    min-height: 52vh;
+    min-height: 46vh;
+  }
+
+  .notice {
+    grid-template-columns: 1fr;
   }
 
   .day img {
-    height: 240px;
+    height: clamp(145px, 28vw, 180px);
+    object-position: center 42%;
   }
 }
 
 @media (max-width: 640px) {
   .wrap {
     width: min(100% - 24px, 1200px);
-    padding-top: 24px;
+    padding-top: 18px;
   }
 
   .hero {
-    padding: 46px 18px;
+    min-height: 42vh;
+    padding: 38px 18px;
   }
 
   .section-title {
     display: block;
+    margin: 30px 0 12px;
   }
 
   .stats {
     grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .stat {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .itinerary-grid,
+  .details {
+    gap: 12px;
+  }
+
+  .day,
+  .site {
+    border-radius: 18px;
+  }
+
+  .content {
+    padding: 14px;
+  }
+
+  .itinerary-card .content {
+    padding-top: 8px;
+  }
+
+  .day img,
+  .site .cover {
+    height: 170px;
+  }
+
+  .day img {
+    height: clamp(125px, 34vw, 150px);
+    object-position: center 38%;
+  }
+
+  .day-media img {
+    min-height: 0;
+  }
+
+  .day-heading {
+    gap: 9px;
+    margin-bottom: 6px;
+  }
+
+  .day-number,
+  .site-map-number {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+  }
+
+  .site-title-row {
+    gap: 9px;
+  }
+
+  .date {
+    margin-bottom: 5px;
+    padding: 4px 8px;
+    font-size: 0.76rem;
+  }
+
+  .site-day-label {
+    font-size: 0.78rem;
+  }
+
+  .day h3,
+  .site h3 {
+    margin-bottom: 5px;
+    font-size: 1.12rem;
+  }
+
+  .site-card-header {
+    gap: 8px;
+  }
+
+  .site-meta {
+    gap: 5px;
+    margin: 6px 0 8px;
+  }
+
+  .site-meta span {
+    padding: 4px 7px;
+    font-size: 0.72rem;
+  }
+
+  .route {
+    gap: 7px;
+    margin: 8px 0;
+    padding: 9px;
+    border-radius: 13px;
+    font-size: 0.86rem;
+  }
+
+  .top-five {
+    gap: 4px;
+    margin-top: 6px;
+    padding-left: 18px;
+  }
+
+  .tip-card {
+    margin-top: 8px;
+    padding: 9px;
+    border-radius: 12px;
+  }
+
+  .teen-tip-card {
+    margin-top: 6px;
+  }
+
+  .route-link,
+  .pill-link,
+  .chip,
+  .filter,
+  .toplink {
+    min-height: 32px;
+    padding: 5px 8px;
+    font-size: 0.76rem;
   }
 
   .map-shell,
