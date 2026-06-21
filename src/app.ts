@@ -52,6 +52,20 @@ type CommonsImageCache = Record<
   }
 >;
 
+type ParentInterestPick = {
+  papa: string;
+  maman: string;
+};
+
+type SecretCuriosity = {
+  title: string;
+  text: string;
+};
+
+type TeenInterestPick = {
+  text: string;
+};
+
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
@@ -1062,6 +1076,569 @@ const teenTips = new Map<string, string>([
   ["washington-square", "Ambiance campus/NYU : arche, fontaine, musiciens, joueurs d'échecs. Bon spot pour juste rester et regarder la ville vivre."],
   ["airport", "Check avant départ : passeport, chargeur, écouteurs, batterie, gourde vide. Si tu oublies un câble, tu dépends des autres."],
 ]);
+
+const parentInterestsByArea = new Map<string, ParentInterestPick>([
+  [
+    "lic",
+    {
+      papa:
+        "Artbook @ MoMA PS1 pour livres d'art/photographie un peu pointus, puis Best Buy LIC si envie de gadgets rapides.",
+      maman:
+        "LIC Bar ou Debbie's pour une pause musique locale ; à garder en soirée si l'énergie est encore là.",
+    },
+  ],
+  [
+    "midtown",
+    {
+      papa:
+        "Argosy Book Store pour vieux livres, cartes anciennes et éditions rares ; Kinokuniya près de Bryant Park pour livres/design/gadgets japonais.",
+      maman:
+        "Michael's Luxury Consignment côté Madison pour sacs de luxe vintage, ou Jazz Record Center si elle préfère une vraie parenthèse musique.",
+    },
+  ],
+  [
+    "downtown",
+    {
+      papa:
+        "The Mysterious Bookshop à Tribeca pour polars, Sherlockiana et éditions signées ; Holographic Studios côté East Village si le thème UAP/illusion le motive.",
+      maman:
+        "Brookfield Place et Oculus pour sacs/boutiques au frais ; City Winery ou un spot live Downtown si on veut finir en musique.",
+    },
+  ],
+  [
+    "brooklyn",
+    {
+      papa:
+        "Art of Play à Brooklyn Heights pour magie, puzzles et curiosités ; POWERHOUSE Arena à DUMBO pour beaux livres et photo.",
+      maman:
+        "Glam Expressway à DUMBO pour accessoires/sacs plus originaux ; St. Ann's Warehouse ou Vinyl + Thread pour une piste musique.",
+    },
+  ],
+  [
+    "central-uws",
+    {
+      papa:
+        "Westsider Books près de l'AMNH pour vieux livres/occasion et disques ; Golden Sound Electronics pour audio vintage et réparation.",
+      maman:
+        "Westsider Records pour fouiller musique/vinyles ; The Niche Shop UWS/UES si elle veut regarder sacs et vintage.",
+    },
+  ],
+  [
+    "met-ues",
+    {
+      papa:
+        "Librairie du Met et Neue Galerie Design Shop pour beaux livres/art ancien ; Argosy reste le meilleur crochet vieux livres si on descend Midtown.",
+      maman:
+        "Madison Avenue autour du Met pour sacs et vitrines premium ; pause musique possible via événements du Met ou Lincoln Center plus au sud-ouest.",
+    },
+  ],
+  [
+    "chelsea",
+    {
+      papa:
+        "192 Books pour livres art/photo, PayMore Chelsea pour gadgets d'occasion, Rogue Music pour synthés/pro-audio vintage.",
+      maman:
+        "What Goes Around Comes Around ou The RealReal pour sacs vintage/luxe ; Chelsea Guitars ou Jazz Record Center pour musique.",
+    },
+  ],
+  [
+    "queens",
+    {
+      papa:
+        "Artbook @ MoMA PS1 à LIC ; Micro Center ou boutiques de Main Street à Flushing si le sujet gadgets prend le dessus.",
+      maman:
+        "HiFi Records et Q.E.D. à Astoria pour musique/live ; à Flushing, Spin Music Discs ou Tune CD Store près de Roosevelt Ave.",
+    },
+  ],
+  [
+    "soho-village",
+    {
+      papa:
+        "The Mysterious Bookshop à Tribeca, Aeon Bookstore pour occultisme/esotérisme, Mercer Street Books pour vieux livres et vinyles.",
+      maman:
+        "MZ Wallace SoHo, Bag-all Bleecker ou What Goes Around Comes Around pour sacs ; Washington Square donne souvent musique de rue.",
+    },
+  ],
+  [
+    "jfk",
+    {
+      papa:
+        "InMotion ou iStore dans le terminal pour gadgets de voyage ; Hot Beat Electronics à Jamaica seulement si grosse marge avant l'aéroport.",
+      maman:
+        "Dernier jour sans détour : boutiques terminal pour accessoires/sacs pratiques, ou playlist calme avant embarquement.",
+    },
+  ],
+]);
+
+const parentInterestsBySite = new Map<string, ParentInterestPick>([
+  [
+    "hotel",
+    {
+      papa: "Depuis l'hôtel, viser Best Buy LIC pour gadgets rapides, Quackade pour arcade/VR, ou Artbook @ MoMA PS1 si le mood est livres design/tech.",
+      maman: "Garder LIC Bar ou Debbie's en option musique locale le soir, sans retraverser Manhattan.",
+    },
+  ],
+  [
+    "fireworks",
+    {
+      papa: "Avant le feu, option geek courte : Best Buy LIC pour accessoires, ou Quackade pour une dose arcade/VR avant la foule.",
+      maman: "Pour l'ambiance musique sans gros détour, regarder LIC Bar après la foule, ou Debbie's si un concert est programmé.",
+    },
+  ],
+  [
+    "gantry",
+    {
+      papa: "Depuis Gantry, combo skyline + geek : Quackade pour arcade/VR ou Artbook @ MoMA PS1 pour livres photo/design très pointus.",
+      maman: "Depuis Gantry, LIC Bar est le choix le plus proche pour musique live ou verre tranquille.",
+    },
+  ],
+  [
+    "times-square",
+    {
+      papa: "Midtown Comics Times Square pour comics/pop culture, tm:rw pour simulateurs/VR, puis Nintendo NY si on remonte vers Rockefeller.",
+      maman: "Bryant Park / Times Square permet un crochet vers Strand Times Square Kiosk pour livres-cadeaux ou Michael's Luxury Consignment plus chic.",
+    },
+  ],
+  [
+    "bryant",
+    {
+      papa: "Kinokuniya est juste en face pour manga, papeterie japonaise et petits gadgets ; Nintendo NY ajoute le stop gaming facile.",
+      maman: "Kinokuniya côté papeterie/cadeaux, puis Michael's Luxury Consignment si elle veut une piste sacs vintage.",
+    },
+  ],
+  [
+    "library",
+    {
+      papa: "Après les salles historiques, New York Public Library Shop pour livres/cadeaux, puis Kinokuniya pour manga/gadgets ou Argosy Book Store pour rare.",
+      maman: "New York Public Library Shop pour beaux objets, ou Michael's Luxury Consignment si elle préfère sacs vintage.",
+    },
+  ],
+  [
+    "grand-central",
+    {
+      papa: "Apple Grand Central pour gadgets dans un décor iconique, puis Nintendo NY ou Midtown Comics Times Square si envie gaming/pop culture.",
+      maman: "Grand Central Market pour pause élégante ; Michael's Luxury Consignment reste le meilleur crochet sacs proche Midtown East.",
+    },
+  ],
+  [
+    "rockefeller",
+    {
+      papa: "Nintendo NY pour jeux/merch exclusifs, Tannen's Magic pour le côté illusion, ou B&H Photo Video si la fibre photo/tech prend le dessus.",
+      maman: "Madison Avenue et Michael's Luxury Consignment pour sacs ; Radio City Music Hall si elle veut une touche musique/show.",
+    },
+  ],
+  [
+    "top-rock",
+    {
+      papa: "Avant/après la vue, Nintendo NY est le stop geek le plus simple ; Tannen's Magic ajoute magie/illusion, B&H Photo Video le côté matos photo.",
+      maman: "Autour de Rockefeller, regarder Michael's Luxury Consignment pour sacs ou Radio City Music Hall pour l'ambiance musique.",
+    },
+  ],
+  [
+    "liberty",
+    {
+      papa: "Au retour ferry, The Mysterious Bookshop pour mystère/polars ; Mercer Labs si on veut une expérience immersive très techno.",
+      maman: "Après Battery Park, Brookfield Place est le plus pratique pour sacs/boutiques au frais.",
+    },
+  ],
+  [
+    "ellis",
+    {
+      papa: "Après Ellis Island, The Mysterious Bookshop colle au thème enquête/archives ; Mercer Labs donne une option immersive plus futuriste.",
+      maman: "Brookfield Place donne une pause sacs/boutiques simple avant de continuer Downtown.",
+    },
+  ],
+  [
+    "wall-street",
+    {
+      papa: "The Mysterious Bookshop pour polar/enquête, Holographic Studios pour illusion 3D, ou Spy Shop NY si le délire gadgets d'espionnage motive.",
+      maman: "Oculus et Brookfield Place sont les options sacs/accessoires les plus proches et climatisées.",
+    },
+  ],
+  [
+    "oculus",
+    {
+      papa: "Depuis Oculus, Mercer Labs est le choix geek immersif ; The Mysterious Bookshop reste le détour mystère à pied.",
+      maman: "Oculus même pour shopping rapide ; Brookfield Place si elle veut un cadre plus calme et premium.",
+    },
+  ],
+  [
+    "memorial911",
+    {
+      papa: "Après le Memorial, rester sobre : The Mysterious Bookshop pour pause calme, ou Mercer Labs si on veut changer d'ambiance sans partir loin.",
+      maman: "Brookfield Place permet une respiration au bord de l'eau avec boutiques et sacs sans repartir loin.",
+    },
+  ],
+  [
+    "brooklyn-bridge",
+    {
+      papa: "Côté Brooklyn, Art of Play pour magie/puzzles premium, VRBar pour réalité virtuelle, Area 53 DUMBO pour laser tag.",
+      maman: "En descendant vers DUMBO, Glam Expressway pour accessoires/sacs originaux, puis St. Ann's Warehouse côté musique/scène.",
+    },
+  ],
+  [
+    "dumbo",
+    {
+      papa: "DUMBO est très geek-friendly : VRBar pour VR, Area 53 DUMBO pour laser tag, Art of Play pour magie/puzzles.",
+      maman: "Glam Expressway est le stop sacs/accessoires local ; Vinyl + Thread si elle veut fouiller musique/vinyles.",
+    },
+  ],
+  [
+    "carousel",
+    {
+      papa: "Depuis Jane's Carousel, VRBar et Area 53 DUMBO sont les meilleurs détours actifs ; Art of Play si on préfère curiosités/magie.",
+      maman: "Glam Expressway est à quelques rues pour accessoires ; St. Ann's Warehouse si une programmation musicale colle.",
+    },
+  ],
+  [
+    "bbpark",
+    {
+      papa: "Après la promenade, Art of Play pour puzzles/magie, 3rd Place From the Sun pour jeux de société, ou VRBar pour VR.",
+      maman: "Glam Expressway pour une boutique sacs/accessoires locale, ou Vinyl + Thread pour musique et vintage.",
+    },
+  ],
+  [
+    "central-park",
+    {
+      papa: "Côté ouest, Hex&Co. West Side pour jeux de société/D&D, Westsider Books pour vieux livres, Golden Sound Electronics pour audio vintage.",
+      maman: "Westsider Records pour musique sur l'UWS, ou The Niche Shop si elle préfère sacs/vintage.",
+    },
+  ],
+  [
+    "bethesda",
+    {
+      papa: "Depuis Bethesda, Hex&Co. West Side est le stop jeux le plus fun ; Westsider Books reste l'option vieux livres.",
+      maman: "Les musiciens autour de Bethesda font déjà la pause musique ; Westsider Records prolonge le thème.",
+    },
+  ],
+  [
+    "amnh",
+    {
+      papa: "Après l'AMNH, Hex&Co. West Side pour jeux/D&D, Westsider Books pour vieux livres, Golden Sound Electronics pour audio vintage.",
+      maman: "Westsider Records est le stop musique le plus naturel après l'AMNH ; The Niche Shop pour sacs/vintage UWS.",
+    },
+  ],
+  [
+    "met",
+    {
+      papa: "Après le Met, Hex&Co. Upper East Side pour jeux de société ; Librairie du Met pour beaux livres et design ancien.",
+      maman: "Madison Avenue autour du Met pour vitrines et sacs ; Lincoln Center pour une vraie option musique plus tard.",
+    },
+  ],
+  [
+    "hudson-yards",
+    {
+      papa: "B&H Photo Video est le temple geek photo/vidéo, Google Store Chelsea le stop hardware moderne, Rogue Music le coin synthés/pro-audio.",
+      maman: "The Shops at Hudson Yards pour sacs/accessoires, ou The RealReal Chelsea pour luxe seconde main.",
+    },
+  ],
+  [
+    "vessel",
+    {
+      papa: "Vessel + B&H Photo Video font un combo architecture/gadgets ; Google Store Chelsea pour tester du matos récent, PayMore Chelsea pour tech d'occasion.",
+      maman: "The Shops at Hudson Yards pour sacs ; What Goes Around Comes Around si on descend vers Chelsea/SoHo vintage.",
+    },
+  ],
+  [
+    "high-line",
+    {
+      papa: "High Line puis Google Store Chelsea pour hardware moderne, PayMore Chelsea pour gadgets d'occasion, Barcade Chelsea pour arcade rétro.",
+      maman: "Chelsea Market puis The RealReal Chelsea pour sacs ; Chelsea Guitars si elle veut une touche musique.",
+    },
+  ],
+  [
+    "chelsea-market",
+    {
+      papa: "À Chelsea Market : Google Store Chelsea pour gadgets, Barcade Chelsea pour arcade rétro, Rogue Music si synthés/pro-audio l'appellent.",
+      maman: "The RealReal Chelsea ou What Goes Around Comes Around pour sacs vintage/luxe ; Chelsea Guitars pour musique.",
+    },
+  ],
+  [
+    "little-island",
+    {
+      papa: "Après Little Island, Pier 57 Rooftop pour vue, puis Google Store Chelsea ou Barcade Chelsea selon humeur tech ou arcade.",
+      maman: "Chelsea Guitars ou Jazz Record Center pour musique ; The RealReal Chelsea pour sacs.",
+    },
+  ],
+  [
+    "moma-ps1",
+    {
+      papa: "Artbook @ MoMA PS1 pour art/tech visuel, puis Quackade ou Best Buy LIC si envie arcade/gadgets.",
+      maman: "Debbie's ou LIC Bar pour musique locale en soirée après PS1.",
+    },
+  ],
+  [
+    "flushing",
+    {
+      papa: "Micro Center pour vraie chasse composants/gadgets, Gaming Dojo pour esport PC, Up One Flushing pour claw machines/collectibles.",
+      maman: "Spin Music Discs ou Tune CD Store près de Roosevelt Ave pour musique ; boutiques Main Street pour accessoires.",
+    },
+  ],
+  [
+    "astoria",
+    {
+      papa: "Gaming City pour arcade, HiFi Records pour audio/vinyles, Q.E.D. si un show geek/quiz tombe bien.",
+      maman: "HiFi Records pour musique, puis Q.E.D. pour spectacle local dans un format léger.",
+    },
+  ],
+  [
+    "soho",
+    {
+      papa: "SoHo/NoHo : Up One SoHo pour claw collectibles, 8 Bit And Up pour jeux rétro, Forbidden Planet pour comics/sci-fi.",
+      maman: "MZ Wallace SoHo, Bag-all Bleecker et What Goes Around Comes Around couvrent parfaitement sacs/accessoires.",
+    },
+  ],
+  [
+    "chinatown",
+    {
+      papa: "Chinatown : OS NYC pour gaming lounge, Chinatown Fair pour arcade old-school, Aeon Bookstore pour occultisme/esotérisme.",
+      maman: "Canal/SoHo mène vite vers MZ Wallace SoHo ou What Goes Around Comes Around pour sacs.",
+    },
+  ],
+  [
+    "little-italy",
+    {
+      papa: "Depuis Mulberry, Up One SoHo pour collectibles, Chinatown Fair pour arcade old-school, The Mysterious Bookshop pour polar.",
+      maman: "Remonter vers SoHo pour MZ Wallace SoHo ou What Goes Around Comes Around ; Washington Square pour musique de rue.",
+    },
+  ],
+  [
+    "washington-square",
+    {
+      papa: "Depuis Washington Square : Hex&Co. Union Square pour jeux, Forbidden Planet pour comics/sci-fi, 8 Bit And Up pour rétro gaming.",
+      maman: "Washington Square offre souvent musique de rue ; Bag-all Bleecker et MZ Wallace SoHo restent proches pour sacs.",
+    },
+  ],
+  [
+    "airport",
+    {
+      papa: "InMotion ou iStore dans le terminal pour gadgets de voyage ; Hot Beat Electronics seulement si très grosse marge à Jamaica.",
+      maman: "Pour le départ, rester terminal : iStore / InMotion pour accessoires pratiques, pas de détour sacs risqué.",
+    },
+  ],
+]);
+
+const parentInterestAreaBySite = new Map<string, string>([
+  ["hotel", "lic"],
+  ["fireworks", "lic"],
+  ["gantry", "lic"],
+  ["times-square", "midtown"],
+  ["bryant", "midtown"],
+  ["library", "midtown"],
+  ["grand-central", "midtown"],
+  ["rockefeller", "midtown"],
+  ["top-rock", "midtown"],
+  ["liberty", "downtown"],
+  ["ellis", "downtown"],
+  ["wall-street", "downtown"],
+  ["oculus", "downtown"],
+  ["memorial911", "downtown"],
+  ["brooklyn-bridge", "brooklyn"],
+  ["dumbo", "brooklyn"],
+  ["carousel", "brooklyn"],
+  ["bbpark", "brooklyn"],
+  ["central-park", "central-uws"],
+  ["bethesda", "central-uws"],
+  ["amnh", "central-uws"],
+  ["met", "met-ues"],
+  ["hudson-yards", "chelsea"],
+  ["vessel", "chelsea"],
+  ["high-line", "chelsea"],
+  ["chelsea-market", "chelsea"],
+  ["little-island", "chelsea"],
+  ["moma-ps1", "queens"],
+  ["flushing", "queens"],
+  ["astoria", "queens"],
+  ["soho", "soho-village"],
+  ["chinatown", "soho-village"],
+  ["little-italy", "soho-village"],
+  ["washington-square", "soho-village"],
+  ["airport", "jfk"],
+]);
+const parentInterestPlaceQueries: [string, string][] = [
+  ["The Mysterious Bookshop", "The Mysterious Bookshop, 58 Warren Street, New York, NY"],
+  ["What Goes Around Comes Around", "What Goes Around Comes Around, SoHo, New York, NY"],
+  ["Artbook @ MoMA PS1", "Artbook at MoMA PS1, 22-25 Jackson Avenue, Long Island City, NY"],
+  ["Holographic Studios", "Holographic Studios, 172 East 2nd Street, New York, NY"],
+  ["Michael's Luxury Consignment", "Michael's Luxury Consignment, Madison Avenue, New York, NY"],
+  ["Jazz Record Center", "Jazz Record Center, 236 West 26th Street, New York, NY"],
+  ["Golden Sound Electronics", "Golden Sound Electronics, 2206 Broadway, New York, NY"],
+  ["POWERHOUSE Arena", "POWERHOUSE Arena, 28 Adams Street, Brooklyn, NY"],
+  ["Brookfield Place", "Brookfield Place, 230 Vesey Street, New York, NY"],
+  ["Mercer Street Books", "Mercer Street Books, 206 Mercer Street, New York, NY"],
+  ["Washington Square", "Washington Square Park, New York, NY"],
+  ["Chelsea Guitars", "Chelsea Guitars, 224 West 23rd Street, New York, NY"],
+  ["Westsider Records", "Westsider Records, 233 West 72nd Street, New York, NY"],
+  ["Westsider Books", "Westsider Books, 2246 Broadway, New York, NY"],
+  ["MZ Wallace SoHo", "MZ Wallace SoHo, New York, NY"],
+  ["Bag-all Bleecker", "Bag-all, Bleecker Street, New York, NY"],
+  ["Spin Music Discs", "Spin Music Discs, 136-20 Roosevelt Avenue, Flushing, NY"],
+  ["Tune CD Store", "Tune CD Store, 136-20 Roosevelt Avenue, Flushing, NY"],
+  ["Argosy Book Store", "Argosy Book Store, 116 East 59th Street, New York, NY"],
+  ["Kinokuniya", "Kinokuniya New York, 1073 Avenue of the Americas, New York, NY"],
+  ["Art of Play", "Art of Play, 69 Atlantic Avenue, Brooklyn, NY"],
+  ["Glam Expressway", "Glam Expressway, 145 Front Street, Brooklyn, NY"],
+  ["St. Ann's Warehouse", "St. Ann's Warehouse, 45 Water Street, Brooklyn, NY"],
+  ["Vinyl + Thread", "Vinyl + Thread, DUMBO, Brooklyn, NY"],
+  ["Neue Galerie Design Shop", "Neue Galerie Design Shop, New York, NY"],
+  ["PayMore Chelsea", "PayMore Chelsea, West 23rd Street, New York, NY"],
+  ["Rogue Music", "Rogue Music Store, 220 West 30th Street, New York, NY"],
+  ["The RealReal", "The RealReal Chelsea, New York, NY"],
+  ["The Shops at Hudson Yards", "The Shops at Hudson Yards, New York, NY"],
+  ["Micro Center", "Micro Center, 71-43 Kissena Boulevard, Flushing, NY"],
+  ["Eglance Bookstore", "Eglance Bookstore, 133-47 41st Avenue, Flushing, NY"],
+  ["HiFi Records", "HiFi Records, 23-19 Steinway Street, Astoria, NY"],
+  ["Q.E.D.", "Q.E.D. Astoria, 27-16 23rd Avenue, Astoria, NY"],
+  ["Midtown Comics Times Square", "Midtown Comics Times Square, New York, NY"],
+  ["Drama Book Shop", "Drama Book Shop, New York, NY"],
+  ["Strand Times Square Kiosk", "Strand Book Store Times Square Kiosk, New York, NY"],
+  ["New York Public Library Shop", "New York Public Library Shop, New York, NY"],
+  ["Apple Grand Central", "Apple Grand Central, New York, NY"],
+  ["Grand Central Market", "Grand Central Market, New York, NY"],
+  ["Nintendo NY", "Nintendo NY, Rockefeller Center, New York, NY"],
+  ["Tannen's Magic", "Tannen's Magic, New York, NY"],
+  ["Radio City Music Hall", "Radio City Music Hall, New York, NY"],
+  ["B&H Photo Video", "B&H Photo Video, 420 9th Avenue, New York, NY"],
+  ["The Niche Shop", "The Niche Shop, Upper West Side, New York, NY"],
+  ["Librairie du Met", "The Met Store, Metropolitan Museum of Art, New York, NY"],
+  ["Aeon Bookstore", "Aeon Bookstore, 151 East Broadway, New York, NY"],
+  ["InMotion", "InMotion JFK Terminal 5, Jamaica, NY"],
+  ["iStore", "iStore JFK Terminal 8, Jamaica, NY"],
+  ["Hot Beat Electronics", "Hot Beat Electronics, 166-05 Jamaica Avenue, Jamaica, NY"],
+  ["LIC Bar", "LIC Bar, Long Island City, NY"],
+  ["Debbie's", "Debbie's, 27-24 Jackson Avenue, Long Island City, NY"],
+  ["Oculus", "Oculus, World Trade Center, New York, NY"],
+  ["City Winery", "City Winery New York City"],
+  ["Madison Avenue", "Madison Avenue near Metropolitan Museum of Art, New York, NY"],
+  ["Met", "The Metropolitan Museum of Art, New York, NY"],
+  ["Lincoln Center", "Lincoln Center, New York, NY"],
+  ["Best Buy LIC", "Best Buy Long Island City, Queens, NY"],
+  ["8 Bit And Up", "8 Bit And Up Video Games, 86 East 3rd Street, New York, NY"],
+  ["Forbidden Planet", "Forbidden Planet, 832 Broadway, New York, NY"],
+  ["Spy Shop NY", "Spy Shop NY, New York, NY"],
+  ["JD Sports Times Square", "JD Sports Times Square, 1466 Broadway, New York, NY"],
+  ["Nike House of Innovation", "Nike House of Innovation, 650 5th Avenue, New York, NY"],
+  ["Black Tap", "Black Tap Craft Burgers and Beer Midtown, New York, NY"],
+  ["Lady M Bryant Park", "Lady M Bryant Park, New York, NY"],
+  ["tm:rw", "tm:rw Times Square, New York, NY"],
+  ["OS NYC", "OS NYC, 50 Bowery, New York, NY"],
+  ["Chinatown Fair", "Chinatown Fair Family Fun Center, 8 Mott Street, New York, NY"],
+  ["Up One SoHo", "Up One SoHo, 474 Broadway, New York, NY"],
+  ["Up One Flushing", "Up One Flushing, 136-17 39th Avenue, Flushing, NY"],
+  ["Kitsby", "Kitsby Studio, 393 Broadway, New York, NY"],
+  ["Area 53 DUMBO", "Area 53 DUMBO, 53 Bridge Street, Brooklyn, NY"],
+  ["VRBar", "VRBar, 65 Jay Street, Brooklyn, NY"],
+  ["3rd Place From the Sun", "3rd Place From the Sun, DUMBO, Brooklyn, NY"],
+  ["Teen Tech Center", "Brooklyn Public Library Teen Tech Center, 1 John Street, Brooklyn, NY"],
+  ["Van Leeuwen DUMBO", "Van Leeuwen Ice Cream DUMBO, 1 Water Street, Brooklyn, NY"],
+  ["Hex&Co. West Side", "Hex&Co West Side, 2911 Broadway, New York, NY"],
+  ["Hex&Co. Upper East Side", "Hex&Co Upper East Side, 1462 1st Avenue, New York, NY"],
+  ["Hex&Co. Union Square", "Hex&Co Union Square, 801 Broadway, New York, NY"],
+  ["16 Handles UWS", "16 Handles Upper West Side, 325 Amsterdam Avenue, New York, NY"],
+  ["Mochi Dolci", "Mochi Dolci, Upper West Side, New York, NY"],
+  ["Barcade Chelsea", "Barcade Chelsea, New York, NY"],
+  ["Google Store Chelsea", "Google Store Chelsea, 76 9th Avenue, New York, NY"],
+  ["Doughnuttery", "Doughnuttery Chelsea Market, New York, NY"],
+  ["L'Arte del Gelato", "L'Arte del Gelato Chelsea Market, New York, NY"],
+  ["Pier 57 Rooftop", "Pier 57 Rooftop Park, New York, NY"],
+  ["Gaming City", "Gaming City USA, 36-10 31st Street, Astoria, NY"],
+  ["Gaming Dojo", "Gaming Dojo, 36-29 Main Street, Flushing, NY"],
+  ["Quackade", "Quackade, 44-47 23rd Street, Long Island City, NY"],
+  ["Midtown Comics Times Square", "Midtown Comics Times Square, New York, NY"],
+  ["Drama Book Shop", "Drama Book Shop, New York, NY"],
+  ["Kinokuniya", "Kinokuniya New York, 1073 Avenue of the Americas, New York, NY"],
+  ["Apple Grand Central", "Apple Grand Central, New York, NY"],
+  ["Tannen's Magic", "Tannen's Magic, New York, NY"],
+  ["B&H Photo Video", "B&H Photo Video, 420 9th Avenue, New York, NY"],
+  ["Mercer Labs", "Mercer Labs, 21 Dey Street, New York, NY"],
+  ["Holographic Studios", "Holographic Studios, 172 East 2nd Street, New York, NY"],
+  ["Spy Shop NY", "Spy Shop NY, New York, NY"],
+  ["Art of Play", "Art of Play, 69 Atlantic Avenue, Brooklyn, NY"],
+  ["8 Bit And Up", "8 Bit And Up Video Games, 86 East 3rd Street, New York, NY"],
+  ["Forbidden Planet", "Forbidden Planet, 832 Broadway, New York, NY"],
+  ["Spot Dessert Bar", "Spot Dessert Bar Flushing, Queens, NY"],
+  ["Gong Gan", "Gong Gan Flushing, Queens, NY"],
+  ["Mercer Labs", "Mercer Labs, 21 Dey Street, New York, NY"],
+  ["Museum of Ice Cream", "Museum of Ice Cream, 558 Broadway, New York, NY"],
+  ["Color Factory", "Color Factory NYC, 251 Spring Street, New York, NY"],
+  ["Edge", "Edge, 30 Hudson Yards, New York, NY"],
+];
+
+const teenInterestsBySite = new Map<string, TeenInterestPick>([
+  ["hotel", { text: "Depuis l'hôtel : Quackade pour arcade/VR à LIC, ou Gaming City à Astoria si on veut une vraie salle de jeux." }],
+  ["fireworks", { text: "Avant/après le feu : Quackade si on reste côté LIC, sinon simple mission photo skyline + snack." }],
+  ["gantry", { text: "Gantry marche bien en mode photo challenge ; Quackade est le bonus arcade le plus proche." }],
+  ["times-square", { text: "JD Sports Times Square pour sneakers, tm:rw pour simu/VR, Black Tap pour milkshake XXL." }],
+  ["bryant", { text: "Lady M Bryant Park pour dessert, Nintendo NY pour gaming/merch, Nike House of Innovation pour sneakers." }],
+  ["library", { text: "Après la NYPL : Lady M Bryant Park pour dessert propre, Nintendo NY si l'énergie gaming remonte." }],
+  ["grand-central", { text: "Grand Central se combine avec Nintendo NY ou Nike House of Innovation : old NYC puis culture ado." }],
+  ["rockefeller", { text: "Nintendo NY est le stop ado évident ; compléter avec Nike House of Innovation si shopping sneakers." }],
+  ["top-rock", { text: "Après la vue : Nintendo NY pour merch/gaming, puis Black Tap si tout le monde vote dessert spectaculaire." }],
+  ["liberty", { text: "Après ferry Downtown : Mercer Labs pour expérience immersive, ou Brookfield Place pour pause food/photo." }],
+  ["ellis", { text: "Après Ellis Island : Mercer Labs si on veut du spectaculaire indoor proche WTC sans changer de zone." }],
+  ["wall-street", { text: "Wall Street + WTC : Mercer Labs pour immersif, ou OS NYC en remontant vers Chinatown pour gaming." }],
+  ["oculus", { text: "Depuis Oculus : Mercer Labs est le meilleur choix expérience immersive ; Brookfield Place pour pause au frais." }],
+  ["memorial911", { text: "Après le Memorial : garder un rythme calme, Mercer Labs si on veut rester Downtown." }],
+  ["brooklyn-bridge", { text: "Côté Brooklyn : Area 53 DUMBO pour laser tag/mini bowling, VRBar pour réalité virtuelle." }],
+  ["dumbo", { text: "DUMBO : Area 53 DUMBO, VRBar ou 3rd Place From the Sun selon arcade, VR ou jeux de société." }],
+  ["carousel", { text: "Après Jane's Carousel : Van Leeuwen DUMBO pour glace, puis Area 53 DUMBO si on veut bouger." }],
+  ["bbpark", { text: "Brooklyn Bridge Park : Van Leeuwen DUMBO pour dessert, Teen Tech Center si ouvert et adapté aux 13-18." }],
+  ["central-park", { text: "Côté UWS : Hex&Co. West Side pour jeux/D&D, 16 Handles UWS ou Mochi Dolci pour dessert." }],
+  ["bethesda", { text: "Après Bethesda : 16 Handles UWS pour frozen yogurt ou Hex&Co. West Side si on veut une pause jeux." }],
+  ["amnh", { text: "AMNH + Hex&Co. West Side marche bien pour jeux de société ; dessert facile à 16 Handles UWS." }],
+  ["met", { text: "Après le Met : Hex&Co. Upper East Side pour jeux de société ou pause dessert côté Museum Mile." }],
+  ["hudson-yards", { text: "Hudson Yards : Edge pour sensation forte, puis Google Store Chelsea si envie tech/photo." }],
+  ["vessel", { text: "Vessel + Edge pour photos/hauteur ; Google Store Chelsea est le stop gadget le plus logique." }],
+  ["high-line", { text: "High Line : Pier 57 Rooftop pour vue gratuite, Barcade Chelsea pour arcade rétro." }],
+  ["chelsea-market", { text: "Chelsea Market : Doughnuttery ou L'Arte del Gelato pour dessert, Barcade Chelsea si on veut jouer." }],
+  ["little-island", { text: "Little Island : Pier 57 Rooftop pour vue, puis Barcade Chelsea si besoin d'arcade." }],
+  ["moma-ps1", { text: "Après PS1 : Quackade pour arcade/VR à LIC, ou Gaming City à Astoria si on prolonge côté Queens." }],
+  ["flushing", { text: "Flushing : Gaming Dojo, Up One Flushing, Spot Dessert Bar ou Gong Gan selon gaming/claw/dessert." }],
+  ["astoria", { text: "Astoria : Gaming City pour arcade, puis Spot Dessert Bar si on veut finir sucré." }],
+  ["soho", { text: "SoHo : Up One SoHo pour claw machines/collectibles, Kitsby pour atelier créatif, Museum of Ice Cream pour photo/dessert." }],
+  ["chinatown", { text: "Chinatown : Chinatown Fair pour arcade old-school, OS NYC pour gaming lounge, puis bubble tea/snacks autour." }],
+  ["little-italy", { text: "Little Italy : Up One SoHo ou Kitsby à quelques minutes, puis gelato/dessert dans le quartier." }],
+  ["washington-square", { text: "Washington Square : Hex&Co. Union Square pour jeux, ou Color Factory / Museum of Ice Cream vers SoHo." }],
+  ["airport", { text: "Dernier jour : pas de détour. InMotion / iStore au terminal pour écouteurs, chargeur ou accessoire de dernière minute." }],
+]);
+
+const secretCuriositiesBySite = new Map<string, SecretCuriosity>([
+  ["hotel", { title: "Sous le Queensboro Bridge", text: "Long Island City garde des morceaux industriels discrets : sous les voies et autour de Queens Plaza, on voit encore le New York des ateliers et entrepôts derrière les tours neuves." }],
+  ["fireworks", { title: "Le spectacle change de rivière", text: "Le feu du 4 juillet n'est pas toujours tiré au même endroit : East River ou Hudson selon les années. Vérifier l'emplacement officiel transforme le repérage en vraie mission locale." }],
+  ["gantry", { title: "Les portiques qui chargeaient les wagons", text: "Les grands gantries rouges servaient à transférer des wagons de chemin de fer vers des barges. Le parc est littéralement construit sur une ancienne mécanique portuaire." }],
+  ["times-square", { title: "Un ancien quartier de théâtres plus sombre", text: "Times Square s'appelait Longacre Square avant le New York Times. Derrière les écrans LED, l'histoire du lieu passe par journaux, théâtres, peep-shows et rénovation géante." }],
+  ["bryant", { title: "Un réservoir sous vos pieds", text: "Avant Bryant Park, le Croton Reservoir occupait le site : une énorme réserve d'eau au XIXe siècle. La bibliothèque voisine a hérité de ce socle monumental." }],
+  ["library", { title: "Winnie l'ourson habite ici", text: "La vraie peluche ayant inspiré Winnie-the-Pooh est conservée à la New York Public Library. Un détail improbable au milieu du marbre et des lions." }],
+  ["grand-central", { title: "La galerie des murmures", text: "Dans la Whispering Gallery, deux personnes placées dans des coins opposés peuvent s'entendre grâce à la voûte. Petit bug acoustique parfait à tester." }],
+  ["rockefeller", { title: "Un rooftop garden presque caché", text: "Rockefeller Center possède des jardins suspendus privés visibles depuis certaines hauteurs. Ils rappellent l'ambition art-déco originale : une ville dans la ville." }],
+  ["top-rock", { title: "Le meilleur angle n'est pas forcément au centre", text: "Depuis Top of the Rock, l'intérêt secret est d'avoir l'Empire State Building dans l'axe. C'est souvent plus photogénique que d'être au plus haut possible." }],
+  ["liberty", { title: "La torche originale n'est plus dehors", text: "La torche actuelle n'est pas celle de 1886. L'ancienne torche est conservée dans le musée de Liberty Island." }],
+  ["ellis", { title: "Les noms n'étaient pas changés comme dans la légende", text: "Contrairement au mythe, les agents d'Ellis Island ne changeaient généralement pas les noms : ils vérifiaient les listes de passagers déjà écrites avant l'arrivée." }],
+  ["wall-street", { title: "Le mur a vraiment existé", text: "Wall Street tire son nom d'un mur de défense construit par les Hollandais au XVIIe siècle, bien avant les traders et les gratte-ciel." }],
+  ["oculus", { title: "Une gare dessinée comme un symbole", text: "L'Oculus a été imaginé comme une colombe ou des ailes ouvertes. C'est une architecture de transport, mais aussi un mémorial indirect." }],
+  ["memorial911", { title: "Le Survivor Tree", text: "Le poirier rescapé retrouvé dans les décombres a été soigné puis replanté sur le site. C'est l'un des détails les plus forts du Memorial." }],
+  ["brooklyn-bridge", { title: "Une cave à vin dans le pont", text: "Les ancrages du Brooklyn Bridge ont autrefois abrité des caves louées à des marchands de vin pour financer le pont." }],
+  ["dumbo", { title: "DUMBO est un acronyme", text: "DUMBO signifie Down Under the Manhattan Bridge Overpass. Le nom était à l'origine presque une blague pour rendre le quartier moins attractif aux promoteurs." }],
+  ["carousel", { title: "Un carrousel sauvé d'un autre État", text: "Jane's Carousel date de 1922 et vient d'Ohio. Il a été restauré pendant des années avant d'arriver dans son écrin de verre à Brooklyn." }],
+  ["bbpark", { title: "Des quais transformés en parc", text: "Brooklyn Bridge Park n'est pas un parc naturel : ce sont d'anciens piers industriels reconvertis, avec une écologie recréée au bord de l'East River." }],
+  ["central-park", { title: "Un village disparu", text: "Avant Central Park, Seneca Village occupait une partie du site. C'était une communauté majoritairement afro-américaine, effacée lors de la création du parc." }],
+  ["bethesda", { title: "Des tuiles sous l'arche", text: "Le plafond de l'arcade Bethesda est en tuiles Minton, un détail décoratif rare à New York et souvent plus impressionnant que la fontaine elle-même." }],
+  ["amnh", { title: "La baleine bleue flotte vraiment", text: "La célèbre baleine bleue est suspendue dans le Hall of Ocean Life. Son modèle date d'une époque où les scientifiques corrigeaient encore sa forme réelle." }],
+  ["met", { title: "Un temple égyptien sauvé des eaux", text: "Le Temple of Dendur a été offert aux États-Unis après le sauvetage des monuments menacés par le barrage d'Assouan." }],
+  ["hudson-yards", { title: "Une ville au-dessus des trains", text: "Hudson Yards est construit au-dessus d'un immense faisceau ferroviaire actif. Une grande partie du quartier repose sur une plateforme." }],
+  ["vessel", { title: "Un monument devenu controversé", text: "Vessel devait être une sculpture urbaine ouverte. Son accès a été fortement restreint après plusieurs drames, ce qui change complètement son usage." }],
+  ["high-line", { title: "Des rails sauvés par les habitants", text: "La High Line devait être démolie. Des riverains l'ont défendue après avoir vu une végétation spontanée pousser sur les rails abandonnés." }],
+  ["chelsea-market", { title: "Le berceau de l'Oreo", text: "Chelsea Market occupe l'ancienne usine Nabisco. C'est ici que les Oreo ont été inventés au début du XXe siècle." }],
+  ["little-island", { title: "Un parc sur des tulipes de béton", text: "Little Island repose sur des piliers en forme de tulipes. Sous le décor ludique, c'est une prouesse d'ingénierie sur l'Hudson." }],
+  ["moma-ps1", { title: "Une ancienne école devenue laboratoire", text: "MoMA PS1 occupe une ancienne école publique. Le nom PS1 vient de Public School 1, pas d'une console de jeu." }],
+  ["flushing", { title: "Le vrai centre du monde en Queens", text: "Flushing est l'un des quartiers les plus polyglottes de New York. On y trouve des couches chinoises, coréennes, taïwanaises et plus encore dans quelques rues." }],
+  ["astoria", { title: "Le vieux cinéma de New York", text: "Astoria a longtemps été un centre de production cinéma. Les Kaufman Astoria Studios ont accueilli films, télévision et productions mythiques." }],
+  ["soho", { title: "Les façades sont en fonte", text: "Les immeubles cast-iron de SoHo semblent en pierre, mais beaucoup sont des façades de fonte moulée : industriel, décoratif et très new-yorkais." }],
+  ["chinatown", { title: "Doyers Street et le Bloody Angle", text: "Doyers Street, petite rue courbe de Chinatown, était surnommée Bloody Angle à cause des violences de gangs au début du XXe siècle." }],
+  ["little-italy", { title: "Un quartier devenu symbole", text: "Little Italy était beaucoup plus vaste autrefois. Aujourd'hui, Mulberry Street concentre surtout une mémoire et une mise en scène de l'ancien quartier italien." }],
+  ["washington-square", { title: "Un ancien cimetière sous le parc", text: "Washington Square Park a servi de cimetière public. Des milliers de corps reposent encore sous le parc actuel." }],
+  ["airport", { title: "Idlewild avant JFK", text: "L'aéroport JFK s'appelait Idlewild avant d'être renommé en 1963. Le nom original venait d'un ancien terrain de golf du secteur." }],
+]);
 const dayBySiteId = buildDayBySiteId();
 
 let currentFilter: Filter = "Tous";
@@ -1796,6 +2373,9 @@ function getDayFallbackImage(day: DayPlan): string {
 function renderSite(site: Site): string {
   const actionItems = getSiteHighlights(site);
   const teenTip = getTeenTip(site);
+  const teenInterests = getTeenInterests(site);
+  const parentInterests = getParentInterests(site);
+  const secretCuriosity = getSecretCuriosity(site);
   const currentLocationUrl = buildGoogleMapsCurrentLocationRouteUrl(site);
   const dayInfo = dayBySiteId.get(site.id);
   const mapBadge = site.map
@@ -1848,6 +2428,27 @@ function renderSite(site: Site): string {
         </div>
         <p class="tip tip-card"><b>Conseil famille :</b> ${escapeHtml(site.tip)}</p>
         <p class="tip tip-card teen-tip-card"><b>Mission ados :</b> ${escapeHtml(teenTip)}</p>
+        <div class="parent-interest-card">
+          <div class="parent-interest-heading">Centres d'intérêt proches</div>
+          <div class="parent-interest-grid">
+            <section class="parent-interest-item teen-interest-item">
+              <span class="parent-interest-label">Ados</span>
+              <p>${linkParentInterestPlaces(teenInterests.text)}</p>
+            </section>
+            <section class="parent-interest-item">
+              <span class="parent-interest-label">Papa</span>
+              <p>${linkParentInterestPlaces(parentInterests.papa)}</p>
+            </section>
+            <section class="parent-interest-item">
+              <span class="parent-interest-label">Maman</span>
+              <p>${linkParentInterestPlaces(parentInterests.maman)}</p>
+            </section>
+          </div>
+        </div>
+        <div class="secret-curiosity-card">
+          <b>Curiosité secrète : ${escapeHtml(secretCuriosity.title)}</b>
+          <p>${escapeHtml(secretCuriosity.text)}</p>
+        </div>
       </div>
     </article>
   `;
@@ -1870,6 +2471,68 @@ function getTeenTip(site: Site): string {
     teenTips.get(site.id) ??
     "Choisis un rôle simple : meilleur spot photo, itinéraire Google Maps ou repérage de la prochaine pause."
   );
+}
+
+function getTeenInterests(site: Site): TeenInterestPick {
+  return (
+    teenInterestsBySite.get(site.id) ?? {
+      text: "Chercher un spot proche pour photo, dessert, gaming ou shopping sans rallonger la journée.",
+    }
+  );
+}
+
+function getParentInterests(site: Site): ParentInterestPick {
+  const siteInterests = parentInterestsBySite.get(site.id);
+
+  if (siteInterests) {
+    return siteInterests;
+  }
+
+  const area = parentInterestAreaBySite.get(site.id);
+
+  if (area) {
+    const interests = parentInterestsByArea.get(area);
+
+    if (interests) {
+      return interests;
+    }
+  }
+
+  return {
+    papa: "Chercher le meilleur détour livres rares, mystère ou gadget à moins de 20 minutes du lieu.",
+    maman: "Repérer une boutique sacs/accessoires ou une pause musique proche, sans rallonger la journée.",
+  };
+}
+
+function getSecretCuriosity(site: Site): SecretCuriosity {
+  return (
+    secretCuriositiesBySite.get(site.id) ?? {
+      title: "Détail caché",
+      text: "Chercher un détail d'architecture, une ancienne fonction du lieu ou une plaque discrète : New York cache souvent son histoire à hauteur de trottoir.",
+    }
+  );
+}
+
+function linkParentInterestPlaces(text: string): string {
+  let linkedText = escapeHtml(text);
+
+  parentInterestPlaceQueries.forEach(([label, query]) => {
+    const escapedLabel = escapeHtml(label);
+    const link = `<a href="${buildGoogleMapsSearchUrl(query)}" target="_blank" rel="noreferrer">${escapedLabel}</a>`;
+
+    linkedText = linkedText.replaceAll(escapedLabel, link);
+  });
+
+  return linkedText;
+}
+
+function buildGoogleMapsSearchUrl(query: string): string {
+  const params = new URLSearchParams({
+    api: "1",
+    query,
+  });
+
+  return `https://www.google.com/maps/search/?${params.toString()}`;
 }
 
 function bindInteractions(): void {

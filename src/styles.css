@@ -499,6 +499,109 @@ select {
   color: #4338ca;
 }
 
+.parent-interest-card {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #eff6ff, #ffffff);
+  color: #1e3a8a;
+  font-size: 0.9rem;
+}
+
+.parent-interest-heading {
+  color: #1e40af;
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.parent-interest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.parent-interest-item {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.parent-interest-label {
+  width: fit-content;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 0.72rem;
+  font-weight: 950;
+}
+
+.parent-interest-item p {
+  margin: 0;
+  color: #1e3a8a;
+}
+
+.parent-interest-item.teen-interest-item {
+  border-color: #a7f3d0;
+  background: linear-gradient(180deg, #ecfdf5, #ffffff);
+}
+
+.teen-interest-item .parent-interest-label {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.teen-interest-item p,
+.teen-interest-item a {
+  color: #064e3b;
+}
+
+.parent-interest-card b {
+  color: #1d4ed8;
+}
+
+.parent-interest-card a {
+  color: #1d4ed8;
+  font-weight: 950;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+.parent-interest-card a:hover,
+.parent-interest-card a:focus-visible {
+  color: #1e40af;
+}
+
+.secret-curiosity-card {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #d8b4fe;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #faf5ff, #ffffff);
+  color: #581c87;
+  font-size: 0.9rem;
+}
+
+.secret-curiosity-card b {
+  color: #7e22ce;
+}
+
+.secret-curiosity-card p {
+  margin: 0;
+}
+
 .full {
   grid-column: span 3;
 }
@@ -1279,6 +1382,35 @@ img[data-lightbox-image]:focus-visible {
 
   .teen-tip-card {
     margin-top: 6px;
+  }
+
+  .parent-interest-card {
+    gap: 6px;
+    margin-top: 8px;
+    padding: 9px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+  }
+
+  .parent-interest-heading {
+    font-size: 0.7rem;
+  }
+
+  .parent-interest-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .parent-interest-item {
+    padding: 8px;
+  }
+
+  .secret-curiosity-card {
+    gap: 5px;
+    margin-top: 8px;
+    padding: 9px;
+    border-radius: 12px;
+    font-size: 0.8rem;
   }
 
   .route-link,
