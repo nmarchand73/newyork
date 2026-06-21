@@ -1127,7 +1127,7 @@ const parentInterestsByArea = new Map<string, ParentInterestPick>([
     "midtown",
     {
       papa:
-        "Argosy Book Store pour vieux livres, cartes anciennes et éditions rares ; Kinokuniya près de Bryant Park pour livres/design/gadgets japonais.",
+        "Argosy Book Store pour vieux livres/cartes anciennes ; Fred Wilson Chess Books et Strand Book Store si Papa veut vraiment livres d'échecs et raretés.",
       maman:
         "Michael's Luxury Consignment côté Madison pour sacs de luxe vintage, ou Jazz Record Center si elle préfère une vraie parenthèse musique.",
     },
@@ -1154,7 +1154,7 @@ const parentInterestsByArea = new Map<string, ParentInterestPick>([
     "central-uws",
     {
       papa:
-        "Westsider Books près de l'AMNH pour vieux livres/occasion et disques ; Golden Sound Electronics pour audio vintage et réparation.",
+        "Westsider Books près de l'AMNH pour vieux livres/occasion ; Fred Wilson Chess Books ou Strand Book Store si le thème échecs mérite un vrai détour.",
       maman:
         "Westsider Records pour fouiller musique/vinyles ; The Niche Shop UWS/UES si elle veut regarder sacs et vintage.",
     },
@@ -1163,7 +1163,7 @@ const parentInterestsByArea = new Map<string, ParentInterestPick>([
     "met-ues",
     {
       papa:
-        "Librairie du Met et Neue Galerie Design Shop pour beaux livres/art ancien ; Argosy reste le meilleur crochet vieux livres si on descend Midtown.",
+        "Librairie du Met et Neue Galerie Design Shop pour beaux livres ; Argosy ou Fred Wilson Chess Books si Papa veut vieux livres et échecs.",
       maman:
         "Madison Avenue autour du Met pour sacs et vitrines premium ; pause musique possible via événements du Met ou Lincoln Center plus au sud-ouest.",
     },
@@ -1238,21 +1238,21 @@ const parentInterestsBySite = new Map<string, ParentInterestPick>([
   [
     "bryant",
     {
-      papa: "Guitar Center Manhattan et Rogue Music sont les meilleurs détours synthés/claviers depuis Bryant ; Kinokuniya reste bonus gadgets japonais.",
+      papa: "Depuis Bryant, Kinokuniya pour livres/design ; Fred Wilson Chess Books ou Strand Book Store si Papa veut une vraie piste livres d'échecs.",
       maman: "Kinokuniya côté papeterie/cadeaux, puis Michael's Luxury Consignment si elle veut une piste sacs vintage.",
     },
   ],
   [
     "library",
     {
-      papa: "Après la NYPL, viser Guitar Center Manhattan pour tester des claviers récents ; Rogue Music si le but est vintage synth/pro-audio.",
+      papa: "Après la NYPL, pousser le thème livres : Argosy Book Store pour ancien/rare, Fred Wilson Chess Books pour échecs, Strand Book Store pour gros choix.",
       maman: "New York Public Library Shop pour beaux objets, ou Michael's Luxury Consignment si elle préfère sacs vintage.",
     },
   ],
   [
     "grand-central",
     {
-      papa: "Depuis Grand Central, Guitar Center Manhattan pour claviers/synthés modernes ; Apple Grand Central seulement pour le côté gadget grand public.",
+      papa: "Depuis Grand Central, Argosy pour vieux livres ; Fred Wilson Chess Books ou Strand Book Store si on descend vers Union Square pour échecs.",
       maman: "Grand Central Market pour pause élégante ; Michael's Luxury Consignment reste le meilleur crochet sacs proche Midtown East.",
     },
   ],
@@ -1336,21 +1336,21 @@ const parentInterestsBySite = new Map<string, ParentInterestPick>([
   [
     "central-park",
     {
-      papa: "Côté ouest, Hex&Co. West Side pour jeux de société/D&D, Westsider Books pour vieux livres, Golden Sound Electronics pour audio vintage.",
+      papa: "Côté ouest, Hex&Co. West Side pour jeux ; Westsider Books pour vieux livres. Pour les échecs sérieux : Fred Wilson Chess Books ou Marshall Chess Club.",
       maman: "Westsider Records pour musique sur l'UWS, ou The Niche Shop si elle préfère sacs/vintage.",
     },
   ],
   [
     "bethesda",
     {
-      papa: "Depuis Bethesda, Hex&Co. West Side est le stop jeux le plus fun ; Westsider Books reste l'option vieux livres.",
+      papa: "Depuis Bethesda, Hex&Co. West Side est le stop jeux ; Westsider Books pour vieux livres, ou Fred Wilson Chess Books si les échecs passent avant tout.",
       maman: "Les musiciens autour de Bethesda font déjà la pause musique ; Westsider Records prolonge le thème.",
     },
   ],
   [
     "amnh",
     {
-      papa: "Après l'AMNH, Hex&Co. West Side pour jeux/D&D, Westsider Books pour vieux livres, Golden Sound Electronics pour audio vintage.",
+      papa: "Après l'AMNH, Hex&Co. West Side pour jeux, Westsider Books pour vieux livres ; Fred Wilson Chess Books reste le détour échecs/livres le plus pointu.",
       maman: "Westsider Records est le stop musique le plus naturel après l'AMNH ; The Niche Shop pour sacs/vintage UWS.",
     },
   ],
@@ -1427,28 +1427,28 @@ const parentInterestsBySite = new Map<string, ParentInterestPick>([
   [
     "soho",
     {
-      papa: "Depuis SoHo, Forbidden Planet pour comics/sci-fi, 8 Bit And Up pour rétro gaming ; Rogue Music reste le vrai détour synthés/claviers vintage.",
+      papa: "Depuis SoHo, Forbidden Planet pour comics/sci-fi ; Chess Forum, Marshall Chess Club ou Fred Wilson Chess Books si Papa veut échecs et livres.",
       maman: "MZ Wallace SoHo, Bag-all Bleecker et What Goes Around Comes Around couvrent parfaitement sacs/accessoires.",
     },
   ],
   [
     "chinatown",
     {
-      papa: "Chinatown : OS NYC pour gaming moderne, Chinatown Fair pour arcade historique ; pour synthés, garder Rogue Music ou Control selon le temps.",
+      papa: "Chinatown : OS NYC et Chinatown Fair côté gaming ; pour échecs/livres, Chess Forum et Fred Wilson Chess Books sont les meilleurs détours Village/Union Square.",
       maman: "Canal/SoHo mène vite vers MZ Wallace SoHo ou What Goes Around Comes Around pour sacs.",
     },
   ],
   [
     "little-italy",
     {
-      papa: "Depuis Mulberry, Up One SoHo pour collectibles, Chinatown Fair pour arcade old-school, The Mysterious Bookshop pour polar.",
+      papa: "Depuis Mulberry, The Mysterious Bookshop pour polar ; Chess Forum ou Marshall Chess Club si l'envie échecs prend le dessus.",
       maman: "Remonter vers SoHo pour MZ Wallace SoHo ou What Goes Around Comes Around ; Washington Square pour musique de rue.",
     },
   ],
   [
     "washington-square",
     {
-      papa: "Depuis Washington Square : Forbidden Planet pour comics/pop culture, 8 Bit And Up pour rétro gaming ; Rogue Music si l'objectif est synthés/claviers.",
+      papa: "Depuis Washington Square : Marshall Chess Club et Chess Forum pour échecs, Fred Wilson Chess Books pour livres spécialisés ; Strand Book Store reste tout proche.",
       maman: "Washington Square offre souvent musique de rue ; Bag-all Bleecker et MZ Wallace SoHo restent proches pour sacs.",
     },
   ],
@@ -1514,6 +1514,10 @@ const parentInterestPlaceQueries: [string, string][] = [
   ["Chelsea Guitars", "Chelsea Guitars, 224 West 23rd Street, New York, NY"],
   ["Westsider Records", "Westsider Records, 233 West 72nd Street, New York, NY"],
   ["Westsider Books", "Westsider Books, 2246 Broadway, New York, NY"],
+  ["Fred Wilson Chess Books", "Fred Wilson Chess Books, 41 Union Square West, New York, NY"],
+  ["Marshall Chess Club", "Marshall Chess Club, 23 West 10th Street, New York, NY"],
+  ["Chess Forum", "Chess Forum, 219 Thompson Street, New York, NY"],
+  ["Strand Book Store", "Strand Book Store, 828 Broadway, New York, NY"],
   ["MZ Wallace SoHo", "MZ Wallace SoHo, New York, NY"],
   ["Bag-all Bleecker", "Bag-all, Bleecker Street, New York, NY"],
   ["Spin Music Discs", "Spin Music Discs, 136-20 Roosevelt Avenue, Flushing, NY"],
@@ -1650,6 +1654,11 @@ const parentInterestPlaceQueries: [string, string][] = [
   ["Forbidden Planet", "Forbidden Planet, 832 Broadway, New York, NY"],
   ["Spot Dessert Bar", "Spot Dessert Bar Flushing, Queens, NY"],
   ["Gong Gan", "Gong Gan Flushing, Queens, NY"],
+  ["Brooklyn Speed", "Brooklyn Speed, Long Island City, Queens, NY"],
+  ["Indian Larry Motorcycles", "Indian Larry Motorcycles, Brooklyn, NY"],
+  ["Brooklyn Mayd", "Brooklyn Mayd Powersports, Brooklyn, NY"],
+  ["Cycle Therapy NYC", "Cycle Therapy NYC, New York, NY"],
+  ["Ducati NYC", "Ducati NYC, New York, NY"],
   ["Mercer Labs", "Mercer Labs, 21 Dey Street, New York, NY"],
   ["Museum of Ice Cream", "Museum of Ice Cream, 558 Broadway, New York, NY"],
   ["Color Factory", "Color Factory NYC, 251 Spring Street, New York, NY"],
@@ -1657,9 +1666,9 @@ const parentInterestPlaceQueries: [string, string][] = [
 ];
 
 const teenInterestsBySite = new Map<string, TeenInterestPick>([
-  ["hotel", { text: "Depuis l'hôtel : Quackade pour arcade/VR à LIC, ou Gaming City à Astoria si on veut une vraie salle de jeux." }],
-  ["fireworks", { text: "Avant/après le feu : Quackade si on reste côté LIC, sinon simple mission photo skyline + snack." }],
-  ["gantry", { text: "Gantry marche bien en mode photo challenge ; Quackade est le bonus arcade le plus proche." }],
+  ["hotel", { text: "Depuis l'hôtel : Quackade pour arcade/VR à LIC ; Brooklyn Speed côté Queens/LIC si les motos custom/vintage les intriguent vraiment." }],
+  ["fireworks", { text: "Avant/après le feu : Quackade si on reste côté LIC ; sinon simple mission photo skyline + repérage motos/scooters custom dans le quartier." }],
+  ["gantry", { text: "Gantry marche bien en mode photo challenge ; Quackade est le bonus arcade proche, Brooklyn Speed l'option moto custom si horaires compatibles." }],
   ["times-square", { text: "Times Square : Midtown Comics pour manga/comics, tm:rw pour simu/VR, Black Tap pour milkshake XXL ; Sing for Hope Pianos 2026 est terminé mais visible en calque archive." }],
   ["bryant", { text: "Bryant : Kinokuniya pour manga/papeterie japonaise, Nintendo NY pour merch/gaming ; Bryant Park Piano est surtout un concert à écouter." }],
   ["library", { text: "Après la NYPL : Kinokuniya pour manga + papeterie, Lady M pour dessert, Nintendo NY si l'énergie gaming remonte." }],
@@ -1671,25 +1680,25 @@ const teenInterestsBySite = new Map<string, TeenInterestPick>([
   ["wall-street", { text: "Wall Street + WTC : Mercer Labs pour immersif, SPYSCAPE pour mission espionnage, ou OS NYC en remontant vers Chinatown pour gaming." }],
   ["oculus", { text: "Depuis Oculus : Mercer Labs est le meilleur choix immersif ; SPYSCAPE marche si on veut défis, profil d'espion et côté jeu." }],
   ["memorial911", { text: "Après le Memorial : rester calme ; Mercer Labs seulement si tout le monde veut repartir sur du visuel/immersif Downtown." }],
-  ["brooklyn-bridge", { text: "Côté Brooklyn : Area 53 DUMBO pour laser tag/mini bowling, VRBar pour réalité virtuelle." }],
-  ["dumbo", { text: "DUMBO : Area 53 DUMBO, VRBar ou 3rd Place From the Sun selon arcade, VR ou jeux de société." }],
-  ["carousel", { text: "Après Jane's Carousel : Van Leeuwen DUMBO pour glace, puis Area 53 DUMBO si on veut bouger." }],
-  ["bbpark", { text: "Brooklyn Bridge Park : Van Leeuwen DUMBO pour dessert, Teen Tech Center si ouvert et adapté aux 13-18." }],
+  ["brooklyn-bridge", { text: "Côté Brooklyn : Area 53 DUMBO pour bouger ; Indian Larry Motorcycles ou Brooklyn Mayd si on veut un détour motos custom/powersports." }],
+  ["dumbo", { text: "DUMBO : Area 53 DUMBO, VRBar ou 3rd Place From the Sun ; pour motos custom, viser Indian Larry Motorcycles plus loin dans Brooklyn." }],
+  ["carousel", { text: "Après Jane's Carousel : Van Leeuwen DUMBO pour glace, puis Area 53 DUMBO ; Indian Larry Motorcycles seulement si on accepte un vrai détour." }],
+  ["bbpark", { text: "Brooklyn Bridge Park : Van Leeuwen DUMBO pour dessert ; Indian Larry Motorcycles / Brooklyn Mayd si le thème motos custom devient prioritaire." }],
   ["central-park", { text: "Côté UWS : Hex&Co. West Side pour jeux/D&D, 16 Handles UWS pour dessert ; le calque Sing for Hope montre l'archive 2026, plus jouable après le 7 juin." }],
   ["bethesda", { text: "Après Bethesda : 16 Handles UWS pour frozen yogurt, Hex&Co. West Side pour jeux ; les pianos Sing for Hope 2026 sont une archive, pas un plan actif." }],
   ["amnh", { text: "AMNH + Hex&Co. West Side marche bien pour jeux ; 16 Handles UWS pour dessert ; Sing for Hope 2026 est terminé mais visible sur la carte." }],
   ["met", { text: "Après le Met : Hex&Co. Upper East Side pour jeux ; pour piano, le calque Sing for Hope sert surtout d'archive officielle 2026." }],
-  ["intrepid", { text: "Intrepid est probablement le meilleur stop ado/tech du séjour : Space Shuttle Enterprise, flight deck, avions, sous-marin Growler si la file reste raisonnable." }],
-  ["hudson-yards", { text: "Hudson Yards : Edge pour sensation forte, Google Store Chelsea pour tech, B&H Photo Video si quelqu'un veut voir un énorme magasin photo/vidéo." }],
+  ["intrepid", { text: "Intrepid est probablement le meilleur stop ado/tech du séjour : avions, sous-marin, Space Shuttle ; Cycle Therapy NYC si on veut voir gear/motos côté Manhattan." }],
+  ["hudson-yards", { text: "Hudson Yards : Edge pour sensation forte, Google Store Chelsea pour tech ; Cycle Therapy NYC ou Ducati NYC si le mood motos/sportives prend le dessus." }],
   ["vessel", { text: "Vessel + Edge pour photos/hauteur ; Google Store Chelsea pour gadgets, B&H Photo Video si le mood devient tech/photo." }],
-  ["high-line", { text: "High Line : Pier 57 Rooftop pour vue gratuite, Barcade Chelsea pour arcade rétro, Adorama si on veut jeter un oeil gear/photo." }],
-  ["chelsea-market", { text: "Chelsea Market : Doughnuttery ou L'Arte del Gelato pour dessert, Barcade Chelsea pour jouer ; B&H n'est pas loin pour les fans de gear." }],
-  ["little-island", { text: "Little Island : Pier 57 Rooftop pour vue, Barcade Chelsea si besoin d'arcade, Google Store Chelsea pour une pause gadgets." }],
-  ["moma-ps1", { text: "Après PS1 : Quackade pour arcade/VR à LIC, Gaming City à Astoria ; Control si le côté synthés/modulaire intrigue aussi les ados." }],
+  ["high-line", { text: "High Line : Pier 57 Rooftop pour vue gratuite, Barcade Chelsea pour arcade rétro ; Ducati NYC / Cycle Therapy NYC pour motos et gear côté Manhattan." }],
+  ["chelsea-market", { text: "Chelsea Market : Doughnuttery ou L'Arte del Gelato pour dessert, Barcade Chelsea pour jouer ; Ducati NYC ou Cycle Therapy NYC si les motos motivent." }],
+  ["little-island", { text: "Little Island : Pier 57 Rooftop pour vue, Barcade Chelsea si besoin d'arcade, Google Store Chelsea ou Ducati NYC pour pause tech/motos." }],
+  ["moma-ps1", { text: "Après PS1 : Quackade pour arcade/VR à LIC, Gaming City à Astoria ; Brooklyn Speed si le côté motos custom/vintage intrigue." }],
   ["flushing", { text: "Flushing : Gaming Dojo pour PC/esport, Up One Flushing pour collectibles/claw machines, Micro Center pour hardware, puis Spot Dessert Bar." }],
-  ["astoria", { text: "Astoria : Gaming City pour arcade, Quackade côté LIC si on veut VR/claw machines ; Beethoven Pianos est plutôt showroom." }],
-  ["soho", { text: "SoHo : Up One SoHo pour claw machines/collectibles, Museum of Ice Cream pour photo/dessert, Forbidden Planet tout près si comics/manga." }],
-  ["chinatown", { text: "Chinatown : Chinatown Fair pour arcade old-school, OS NYC pour gaming lounge, puis bubble tea/snacks autour." }],
+  ["astoria", { text: "Astoria : Gaming City pour arcade, Quackade côté LIC si on veut VR/claw machines ; Brooklyn Speed si les motos custom passent avant le piano." }],
+  ["soho", { text: "SoHo : Up One SoHo pour collectibles, Forbidden Planet pour comics/manga ; Cycle Therapy NYC si l'envie motos/gear prend le dessus." }],
+  ["chinatown", { text: "Chinatown : Chinatown Fair pour arcade old-school, OS NYC pour gaming lounge ; Cycle Therapy NYC reste le détour motos le plus proche côté Manhattan." }],
   ["little-italy", { text: "Little Italy : Up One SoHo ou Kitsby à quelques minutes, puis gelato/dessert dans le quartier." }],
   ["washington-square", { text: "Washington Square : Hex&Co. Union Square pour jeux, Color Factory / Museum of Ice Cream vers SoHo, ou piano de rue si un musicien est autour de l'arche." }],
   ["airport", { text: "Dernier jour : pas de détour. InMotion / iStore au terminal pour écouteurs, chargeur ou accessoire de dernière minute." }],
